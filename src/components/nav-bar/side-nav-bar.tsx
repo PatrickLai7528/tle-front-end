@@ -5,12 +5,16 @@ import {
   LaptopOutlined,
   NotificationOutlined
 } from "@ant-design/icons";
+import { sideMenuConfigs } from "../../configs/side-menu.config";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 const { SubMenu } = Menu;
 
 export interface ISideNavBarProps {}
 
 const SideNavBar: FunctionComponent<ISideNavBarProps> = memo(
   (props: ISideNavBarProps) => {
+    const { t } = useTranslation();
     return (
       <Menu
         mode="inline"
@@ -18,12 +22,20 @@ const SideNavBar: FunctionComponent<ISideNavBarProps> = memo(
         defaultOpenKeys={["sub1"]}
         style={{ height: "100%", borderRight: 0 }}
       >
+        {sideMenuConfigs.map(config => {
+          return (
+            <Menu.Item key={config.label}>
+              {config.icon}
+              <Link to={config.route}>{t(config.label)}</Link>
+            </Menu.Item>
+          );
+        })}
         <SubMenu
           key="sub1"
           title={
             <span>
               <UserOutlined />
-              subnav 1
+              1subnav
             </span>
           }
         >

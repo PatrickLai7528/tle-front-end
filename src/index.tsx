@@ -1,12 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.scss";
-import * as serviceWorker from "./serviceWorker";
 import { Provider as ReactReduxProvider } from "react-redux";
-import { Routes } from "./routes";
-import { store } from "./store";
 import { BrowserRouter as Router } from "react-router-dom";
-
+import "./i18n";
+import "./index.scss";
+import { Routes } from "./routes";
+import * as serviceWorker from "./serviceWorker";
+import { store } from "./store";
 ReactDOM.render(
   <ReactReduxProvider store={store}>
     <Router>

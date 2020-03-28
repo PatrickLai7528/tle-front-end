@@ -8,7 +8,7 @@ const Home: FunctionComponent<IHomeProps> = memo((props: IHomeProps) => {
     <div>
       {/* add other component here */}
       Home
-      <Link to={"/other"}>test</Link>
+      <Link to={"/authed/other"}>test</Link>
     </div>
   );
 });

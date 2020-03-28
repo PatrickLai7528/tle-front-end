@@ -1,7 +1,11 @@
-import React, { FunctionComponent, memo } from "react";
 import { Layout } from "antd";
-import { TopNavBar, SideNavBar } from "./../components/nav-bar";
+import React, { FunctionComponent, memo } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { AuthView } from "../views/auth";
+import { SideNavBar, TopNavBar } from "./../components/nav-bar";
 import Content from "./content";
+import { AuthRedirectView } from "../views/auth-redirect";
+import { RequireAuth } from "../components/require-auth";
 
 const { Header, Sider } = Layout;
 
@@ -9,19 +13,45 @@ export interface IRoutesProps {}
 
 const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
   return (
-    <Layout style={{ minHeight: "100vmin" }}>
-      <Header className="header">
-        <TopNavBar />
-      </Header>
-      <Layout>
-        <Sider width={200} className="site-layout-background">
-          <SideNavBar />
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Content />
-        </Layout>
-      </Layout>
-    </Layout>
+    <Switch>
+      <Route exact path="/user/login" component={AuthView} />
+      <Route
+        exact
+        path="/auth/redirect"
+        component={(props: any) => (
+          <AuthRedirectView
+            {...props}
+            successRedirect={"/authed/"}
+            failureRedirect={"/user/auth"}
+          />
+        )}
+      />
+      <Route
+        path="/authed/*"
+        component={() => {
+          return (
+            <RequireAuth>
+              <Layout style={{ minHeight: "100vmin", padding: 0, margin: 0 }}>
+                <Header className="header">
+                  <TopNavBar />
+                </Header>
+                <Layout style={{ padding: 0, margin: 0 }}>
+                  <Sider width={200} className="site-layout-background">
+                    <SideNavBar />
+                  </Sider>
+                  <Layout style={{ padding: "10px" }}>
+                    <Content />
+                  </Layout>
+                </Layout>
+              </Layout>
+            </RequireAuth>
+          );
+        }}
+      />
+      <Route exact path={"/"}>
+        <Redirect to={"/user/login"} />
+      </Route>
+    </Switch>
   );
 });
 
