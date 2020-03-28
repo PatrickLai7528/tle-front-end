@@ -1,19 +1,18 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Steps, Typography, PageHeader, Button } from "antd";
+import { Button, PageHeader, Typography } from "antd";
 import React, { FC, memo, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps } from "react-router-dom";
+import { ImportProcessStep } from "../../components/import-process-step";
 import { ConnectedProccessiveLoadingFileTree } from "../../components/proccessive-loading-file-tree";
 import { ImportProccess as ImportProccessType } from "../../store/import-repository/types";
-import { GitHubAPIRepositoryResponse, IBranch, ICommit } from "../../types";
+import { IBranch, ICommit } from "../../types";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
 import "./style.scss";
-import { ImportProcessStep } from "../../components/import-process-step";
-import { CommitMessage } from "../../components/commit-message";
 
 export interface IStateProps {
   // repository?: IImportedRepository;
 
-  repositoryRes: GitHubAPIRepositoryResponse;
+  repositoryRes: IGHRepositoryRes;
 
   importProccess?: ImportProccessType;
   branches?: IBranch[];
@@ -22,7 +21,7 @@ export interface IStateProps {
 }
 
 export interface IDispatchProps {
-  startImport: (repositoryRes: GitHubAPIRepositoryResponse) => void;
+  startImport: (repositoryRes: IGHRepositoryRes) => void;
   cloneBranches: () => void;
   cloneCommits: () => void;
   cloneFileStructure: () => void;

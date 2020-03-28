@@ -1,5 +1,4 @@
-import { GitHubAPIRepositoriesResponse } from "./../../types/index";
-
+import { IGHRepositoryRes } from "./../../types/github-api/repository";
 export const SEARCH_GITHUB_REPOSITORY = "SEARCH_GITHUB_REPOSITORY";
 export const SAERCH_GITHUB_REPOSITORY_SUCCESS =
   "SEARCH_GITHUB_REPOSITORY_SUCCESS";
@@ -9,7 +8,7 @@ export const SEARCH_GITHUB_REPOSITORY_FAILURE =
 export interface ISearchRepositoryState {
   error?: boolean | string;
   loading?: boolean;
-  searchResult?: GitHubAPIRepositoriesResponse;
+  searchResult?: IGHRepositoryRes;
   searchHistory: string[];
 }
 
@@ -19,7 +18,7 @@ export interface ISearchGitHubRepositoryAction {
 
 export interface ISearchGitHubRepositorySuccessAction {
   type: typeof SAERCH_GITHUB_REPOSITORY_SUCCESS;
-  payload: GitHubAPIRepositoriesResponse;
+  payload: IGHRepositoryRes;
 }
 
 export interface ISearchGitHubRepositoryFailureAction {

@@ -1,9 +1,5 @@
-import {
-  IBranch,
-  ICommit,
-  IFileTreeNode,
-  GitHubAPIRepositoryResponse
-} from "./../../types/index";
+import { IGHRepositoryRes } from "./../../types/github-api/repository";
+import { IBranch, ICommit, IFileTreeNode } from "./../../types/index";
 import { IImportedRepository } from "../../types";
 
 export const START_IMPORT_REPOSITORY = "START_IMPORT_REPOSITORY";
@@ -36,7 +32,7 @@ export interface IImportRepositoryState {
   importProccess?: ImportProccess;
 
   importedRepository?: IImportedRepository;
-  repositoryResponse?: GitHubAPIRepositoryResponse;
+  repositoryResponse?: IGHRepositoryRes;
 
   importProcessModalVisible?: boolean;
 
@@ -53,7 +49,7 @@ export interface IImportRepositoryState {
 
 export interface IStartImportRepositoryAction {
   type: typeof START_IMPORT_REPOSITORY;
-  payload: GitHubAPIRepositoryResponse;
+  payload: IGHRepositoryRes;
 }
 
 export interface IImportRepositorySuccessAction {

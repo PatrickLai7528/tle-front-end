@@ -1,27 +1,24 @@
-import React, { FunctionComponent, memo, useMemo, useCallback } from "react";
-import { Button, Avatar, Popconfirm, Divider, List } from "antd";
-import { colorByLanguage, ProgramLanguage } from "../../utils/language-color";
-import { LoadMore } from "../load-more";
-import {
-  GitHubAPIRepositoriesResponse,
-  GitHubAPIRepositoryResponse
-} from "../../types";
+import { Button, Divider, List, Popconfirm } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
+import React, { FunctionComponent, memo, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { RepositoryAvatar } from "../repository-avatar";
-import { LanguageBadge } from "../ language-badge";
-import { RepositoryDescription } from "../repository-description";
 import { Link } from "react-router-dom";
+import { LanguageBadge } from "../ language-badge";
+import { ProgramLanguage } from "../../utils/language-color";
+import { LoadMore } from "../load-more";
+import { RepositoryAvatar } from "../repository-avatar";
+import { RepositoryDescription } from "../repository-description";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
 
 export interface IStateProps {
   loading: boolean;
   loadMoreTimes: number;
-  repositoryList: GitHubAPIRepositoriesResponse;
+  repositoryList: IGHRepositoryRes[];
 }
 
 export interface IDispatchProps {
   loadMoreRepositories: (loadMoreTimes: number) => void;
-  toggleModal: (repo: GitHubAPIRepositoryResponse) => void;
+  toggleModal: (repo: IGHRepositoryRes) => void;
 }
 
 export interface IOwnProps {}
@@ -63,7 +60,7 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
         loadMore={wrappedLoadMore}
         pagination={paginationConfig}
         dataSource={repositoryList}
-        renderItem={(item: GitHubAPIRepositoryResponse) => {
+        renderItem={(item: IGHRepositoryRes) => {
           const { name, language, description, html_url: htmlUrl, id } = item;
           return (
             <List.Item

@@ -1,7 +1,5 @@
-import {
-  GitHubAPIRepositoryResponse,
-  IImportedRepository
-} from "./../../types/index";
+import { IGHRepositoryRes } from "./../../types/github-api/repository";
+import { IImportedRepository } from "./../../types/index";
 export const FETCH_REPOSITORY_FROM_GITHUB = "FETCH_REPOSITORY_FROM_GITHUB";
 export const FETCH_REPOSITORY_FROM_GITHUB_SUCCESS =
   "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS";
@@ -21,7 +19,7 @@ export const FETCH_IMPORTED_REPOSITORY_LIST_FAILURE =
 export interface IRepositoryManagementState {
   loading?: boolean;
   error?: boolean | string;
-  rawRepositories: GitHubAPIRepositoryResponse[];
+  rawRepositories: IGHRepositoryRes[];
   loadMoreTimes: number;
   importedRepositoryList: IImportedRepository[];
 }
@@ -45,7 +43,7 @@ export interface IFetchRepositoryFromGitHubAction {
 
 export interface IFetchRepositoryFromGitHubSuccessAction {
   type: typeof FETCH_REPOSITORY_FROM_GITHUB_SUCCESS;
-  payload: GitHubAPIRepositoryResponse[];
+  payload: IGHRepositoryRes[];
 }
 
 export interface IFetchRepositoryFromGitHubFailureAction {

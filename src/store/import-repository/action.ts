@@ -1,6 +1,6 @@
+import { IGHRepositoryRes } from "./../../types/github-api/repository";
 import {
   GitHubAPIBlobResponse,
-  GitHubAPIRepositoryResponse,
   IBranch,
   ICommit,
   IFileTreeNode
@@ -26,7 +26,7 @@ export const toggleImportProccessModal = (): IToggleImportProccessModalAction =>
 };
 
 export const startImportRepository = (
-  importThis: GitHubAPIRepositoryResponse
+  importThis: IGHRepositoryRes
 ): IStartImportRepositoryAction => {
   return {
     type: "START_IMPORT_REPOSITORY",

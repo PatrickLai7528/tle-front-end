@@ -1,8 +1,8 @@
 import * as stubs from "./../stubs";
 
-export type GitHubAPIRepositoryResponse = typeof stubs.repositories[0];
+// export type GitHubAPIRepositoryResponse = typeof stubs.repositories[0];
 
-export type GitHubAPIRepositoriesResponse = typeof stubs.repositories;
+// export type GitHubAPIRepositoriesResponse = typeof stubs.repositories;
 
 export type GitHubAPITreeResponse = typeof stubs.tree;
 
