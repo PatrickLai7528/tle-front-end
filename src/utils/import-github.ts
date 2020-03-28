@@ -1,9 +1,9 @@
+import { IGHTreeRes } from "./../types/github-api/tree";
+import { IGHCommitRes } from "./../types/github-api/commit";
+import { IGHDetailCommitRes } from "./../types/github-api/detail-commit";
 import { IGHBranchesRes } from "./../types/github-api/branch";
 import moment from "moment";
 import {
-  GitHubAPICommitsResponse,
-  GitHubAPIDetailCommitResponse,
-  GitHubAPITreeResponse,
   IBranch,
   ICommit,
   ICommitChanges,
@@ -11,7 +11,7 @@ import {
 } from "./../types/index";
 
 export const cloneOneCommit = async (url: string, headers: any) => {
-  const res: GitHubAPIDetailCommitResponse = await fetch(url, {
+  const res: IGHDetailCommitRes = await fetch(url, {
     headers
   }).then(res => res.json());
   const fetchRawContentPromises: Promise<ICommitChanges>[] = (
@@ -70,7 +70,7 @@ export const cloneOneCommit = async (url: string, headers: any) => {
 };
 
 export const cloneManyCommit = async (url: string, headers: any) => {
-  let manyCommitResponse: GitHubAPICommitsResponse = await fetch(url, {
+  let manyCommitResponse: IGHCommitRes[] = await fetch(url, {
     headers
   }).then(res => res.json());
   const commitList: ICommit[] = [];
@@ -113,9 +113,7 @@ export const cloneManyTree = async (
   headers: any,
   update?: (nodes: IFileTreeNode[], blobs: Blobs) => void
 ): Promise<[IFileTreeNode[], Blobs]> => {
-  const res: GitHubAPITreeResponse = await fetch(url, { headers }).then(res =>
-    res.json()
-  );
+  const res: IGHTreeRes = await fetch(url, { headers }).then(res => res.json());
   const { tree: trees } = res;
   let rootNode: IFileTreeNode[] = [];
   let blobs: Blobs = [];
