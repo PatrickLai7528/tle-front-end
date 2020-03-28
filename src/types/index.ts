@@ -4,15 +4,15 @@ import * as stubs from "./../stubs";
 
 // export type GitHubAPIRepositoriesResponse = typeof stubs.repositories;
 
-export type GitHubAPITreeResponse = typeof stubs.tree;
+// export type GitHubAPITreeResponse = typeof stubs.tree;
 
-export type GitHubAPIBlobResponse = typeof stubs.blob;
+// export type GitHubAPIBlobResponse = typeof stubs.blob;
 
 // export type GitHubAPIBranchesResponse = typeof stubs.branches;
 
-export type GitHubAPICommitsResponse = typeof stubs.commits;
+// export type GitHubAPICommitsResponse = typeof stubs.commits;
 
-export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
+// export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
 
 export interface IBranch {
   // 分支名稱
