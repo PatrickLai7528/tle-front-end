@@ -1,6 +1,5 @@
 import { Button, Descriptions, PageHeader } from "antd";
 import React, { FunctionComponent, memo } from "react";
-import { FileReader } from "../../components/file-reader";
 import { repositories } from "../../stubs/repository";
 
 export interface IRepositoryDetailProps {}
@@ -37,7 +36,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             Gonghu Road, Xihu District, Hangzhou, Zhejiang, China
           </Descriptions.Item>
         </Descriptions>
-        <FileReader repo={repo} />
       </PageHeader>
     );
   }

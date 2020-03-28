@@ -1,6 +1,6 @@
+import { IGHBranchesRes } from "./../types/github-api/branch";
 import moment from "moment";
 import {
-  GitHubAPIBranchesResponse,
   GitHubAPICommitsResponse,
   GitHubAPIDetailCommitResponse,
   GitHubAPITreeResponse,
@@ -90,7 +90,7 @@ export const cloneManyBranch = async (
   headers: any,
   defaultBranch = "master"
 ): Promise<[IBranch[], string[]]> => {
-  const branchesResponse: GitHubAPIBranchesResponse = await fetch(url, {
+  const branchesResponse: IGHBranchesRes = await fetch(url, {
     headers
   }).then(res => res.json());
   const clonedBranches: IBranch[] = [];

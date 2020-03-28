@@ -8,7 +8,7 @@ export type GitHubAPITreeResponse = typeof stubs.tree;
 
 export type GitHubAPIBlobResponse = typeof stubs.blob;
 
-export type GitHubAPIBranchesResponse = typeof stubs.branches;
+// export type GitHubAPIBranchesResponse = typeof stubs.branches;
 
 export type GitHubAPICommitsResponse = typeof stubs.commits;
 
