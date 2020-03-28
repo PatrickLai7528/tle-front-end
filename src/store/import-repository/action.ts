@@ -1,10 +1,6 @@
+import { IGHBlobRes } from "./../../types/github-api/blob";
 import { IGHRepositoryRes } from "./../../types/github-api/repository";
-import {
-  GitHubAPIBlobResponse,
-  IBranch,
-  ICommit,
-  IFileTreeNode
-} from "../../types";
+import { IBranch, ICommit, IFileTreeNode } from "../../types";
 import {
   cloneManyBranch,
   cloneManyCommit,
@@ -189,7 +185,7 @@ export const cloneFileContent = (): AppThunk<
       };
       let shaFileContentMap: any = {};
       for (const blob of blobs || []) {
-        const res: GitHubAPIBlobResponse = await fetch(blob.url, {
+        const res: IGHBlobRes = await fetch(blob.url, {
           headers
         }).then(res => res.json());
         const { sha, content, encoding } = res;
