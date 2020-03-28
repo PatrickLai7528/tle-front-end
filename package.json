@@ -63,9 +63,17 @@
     "@types/redux": "^3.6.0",
     "husky": "^4.2.3",
     "i18next": "^19.3.3",
-    "prettier": "1.19.1",
+    "import-sort-style-module": "^6.0.0",
+    "prettier": "^2.0.2",
+    "prettier-plugin-import-sort": "^0.0.4",
     "pretty-quick": "^2.0.1",
     "react-i18next": "^11.3.3",
     "redux-devtools": "^3.5.0"
+  },
+  "importSort": {
+    ".js, .jsx, .ts, .tsx": {
+      "style": "module",
+      "parser": "typescript"
+    }
   }
 }
