@@ -3,6 +3,7 @@ interface IGHTreeResInnerTree {
   mode: string;
   type: "blob" | "tree";
   size: number;
+  sha: string;
   url: string;
 }
 
