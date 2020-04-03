@@ -56,8 +56,6 @@ const ImportProccess: FunctionComponent<IImportProccessProps> = memo(
       else return 0;
     }, [importProccess]);
 
-    console.log("currentStep :", currentStep);
-
     useEffect(() => {
       if (importDone) return;
       else if (currentStep === 0) cloneBranches();

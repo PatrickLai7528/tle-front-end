@@ -1,16 +1,24 @@
 import React, { FunctionComponent, memo } from "react";
-import { Divider } from "antd";
-
+import { Comment } from "antd";
+import moment from "moment";
+import "./style.scss";
 export interface ICommitMessageProps {
   message: string;
-  avatarUrl: string;
+  committerId: string;
   committedAt: number;
   sha: string;
 }
 
 const CommitMessage: FunctionComponent<ICommitMessageProps> = memo(
   (props: ICommitMessageProps) => {
-    return <div></div>;
+    const { message, committedAt, committerId, sha } = props;
+    return (
+      <Comment
+        author={committerId}
+        content={message}
+        datetime={<span>{moment(committedAt).format()}</span>}
+      />
+    );
   }
 );
 

@@ -1,4 +1,4 @@
-import { Button, PageHeader, Typography } from "antd";
+import { Button, PageHeader, Typography, Row, Col } from "antd";
 import React, { FC, memo, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { RouteComponentProps } from "react-router-dom";
@@ -8,6 +8,7 @@ import { ImportProccess as ImportProccessType } from "../../store/import-reposit
 import { IBranch, ICommit } from "../../types";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import "./style.scss";
+import { CommitMessage } from "../../components/commit-message";
 
 export interface IStateProps {
   // repository?: IImportedRepository;
@@ -38,8 +39,6 @@ export interface IImportRepositoryProcessProps
 
 const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
   (props: IImportRepositoryProcessProps) => {
-    console.log(props);
-
     const { t } = useTranslation();
     const {
       importProccess,
@@ -134,18 +133,14 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
             <Typography.Title level={3}>提交</Typography.Title>
             {commits &&
               commits.map(commit => {
-                console.log(commit);
-                // const {
-                // 	sha,
-                // 	message,
-                // 	committer: { avatar_url: avatarUrl }
-                // } = commit as any;
-                const sha = commit.sha || "";
-                const message = commit.message || "";
                 return (
-                  <Typography.Paragraph key={commit.sha}>
-                    {commit.sha}
-                  </Typography.Paragraph>
+                  <CommitMessage
+                    key={commit.sha}
+                    sha={commit.sha}
+                    message={commit.message}
+                    committedAt={commit.committedAt}
+                    committerId={commit.committer?.id || ""}
+                  />
                 );
               })}
             <Typography.Title level={3}>文件結構</Typography.Title>

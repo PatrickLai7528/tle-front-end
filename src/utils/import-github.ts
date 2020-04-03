@@ -36,7 +36,7 @@ export const cloneOneCommit = async (url: string, headers: any) => {
   const changedFiles: ICommitChanges[] = await Promise.all<ICommitChanges>(
     fetchRawContentPromises
   );
-
+  console.log(res);
   return {
     sha: res.sha,
     message: res.commit.message,
@@ -45,18 +45,8 @@ export const cloneOneCommit = async (url: string, headers: any) => {
       additions: res.stats.additions,
       deletions: res.stats.deletions
     },
-    author:
-      res.author && (res.author as any).login
-        ? {
-            id: (res.author as any).login
-          }
-        : null,
-    committer:
-      res.committer && (res.committer as any).login
-        ? {
-            id: (res.author as any).login
-          }
-        : null,
+    author: { id: res.commit?.author?.name || "" },
+    committer: { id: res.commit?.committer?.name || "" },
     parents: res.parents.map(parent => {
       return {
         sha: parent.sha
@@ -73,16 +63,11 @@ export const cloneManyCommit = async (url: string, headers: any) => {
   let manyCommitResponse: IGHCommitRes[] = await fetch(url, {
     headers
   }).then(res => res.json());
-  const commitList: ICommit[] = [];
+  const commitPrs: Promise<ICommit>[] = [];
   for (const res of manyCommitResponse) {
-    const oneCommit = await cloneOneCommit(res.url, headers);
-    commitList.push({
-      ...oneCommit,
-      committer: res.committer,
-      author: res.author
-    } as any);
+    commitPrs.push(cloneOneCommit(res.url, headers));
   }
-  return commitList;
+  return await Promise.all(commitPrs);
 };
 
 export const cloneManyBranch = async (

@@ -12,10 +12,16 @@ export const sendGitHubLogIn = (
 ): AppThunk<void, AuthActionTypes> => async dispatch => {
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
-    const { accessToken } = await fetch(
-      `http://localhost:3001/access_token?code=${code}`
+    const res = await fetch(
+      `http://localhost:8080/auth/access_token?code=${code}`
     ).then(res => res.json());
-    dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
+    console.log(res);
+    const { success, meta, payload: accessToken } = res;
+    if (success) {
+      dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
+    } else {
+      dispatch({ type: "SEND_GITHUB_LOG_IN_FAILURE", meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);

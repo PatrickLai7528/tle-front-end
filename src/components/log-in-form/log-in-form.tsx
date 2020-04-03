@@ -37,7 +37,6 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
       form.setFieldsValue({ remember: e.target.checked });
 
     const onFinish = (values: any) => {
-      console.log("Success:", values);
       if (typeof props.onFinish === "function") {
         props.onFinish(
           {
@@ -50,7 +49,6 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
     };
 
     const onFinishFailed = (errorInfo: any) => {
-      console.log("Failed:", errorInfo);
       if (typeof props.onFinishFailed === "function") {
         props.onFinishFailed();
       }

@@ -49,15 +49,12 @@ const ProccessiveLoadingFileTree: FunctionComponent<IProccessiveLoadingFileTreeP
       treeData
     ]);
 
-    console.log(keys);
-
     return (
       <Tree.DirectoryTree
         multiple
         defaultExpandAll
         autoExpandParent
         defaultExpandParent
-        expandedKeys={keys}
         treeData={newTreeData}
       />
     );

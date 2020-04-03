@@ -33,7 +33,6 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
       form.setFieldsValue({ remember: e.target.checked });
 
     const onFinish = (values: any) => {
-      console.log("Success:", values);
       if (typeof props.onFinish === "function") {
         props.onFinish(
           {
@@ -46,7 +45,6 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
     };
 
     const onFinishFailed = (errorInfo: any) => {
-      console.log("Failed:", errorInfo);
       if (typeof props.onFinishFailed === "function") {
         props.onFinishFailed();
       }

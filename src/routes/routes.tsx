@@ -6,6 +6,7 @@ import { SideNavBar, TopNavBar } from "./../components/nav-bar";
 import Content from "./content";
 import { AuthRedirectView } from "../views/auth-redirect";
 import { RequireAuth } from "../components/require-auth";
+import NewHome from "./../views/new-home";
 
 const { Header, Sider } = Layout;
 
@@ -14,7 +15,7 @@ export interface IRoutesProps {}
 const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
   return (
     <Switch>
-      <Route exact path="/user/login" component={AuthView} />
+      <Route exact path="/user/login" component={NewHome} />
       <Route
         exact
         path="/auth/redirect"
@@ -31,7 +32,13 @@ const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
         component={() => {
           return (
             <RequireAuth>
-              <Layout style={{ minHeight: "100vmin", padding: 0, margin: 0 }}>
+              <Layout
+                style={{
+                  minHeight: "100vmin",
+                  padding: 0,
+                  margin: 0
+                }}
+              >
                 <Header className="header">
                   <TopNavBar />
                 </Header>

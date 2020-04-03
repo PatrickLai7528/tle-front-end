@@ -191,7 +191,6 @@ export const cloneFileContent = (): AppThunk<
         const { sha, content, encoding } = res;
         shaFileContentMap[sha] =
           encoding === "base64" ? atob(content) : content;
-        console.log(shaFileContentMap);
       }
       dispatch({
         type: "FINISH_CLONE_FILE_CONTENT",

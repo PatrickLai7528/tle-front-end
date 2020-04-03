@@ -28,7 +28,6 @@ export const searchGitHubRepository = (
           }
         }
       ).then(res => res.json());
-      console.log(res);
       dispatch({ type: SAERCH_GITHUB_REPOSITORY_SUCCESS, payload: res });
     } else {
       dispatch({ type: SEARCH_GITHUB_REPOSITORY_FAILURE });
