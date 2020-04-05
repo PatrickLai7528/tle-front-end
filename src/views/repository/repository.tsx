@@ -2,25 +2,17 @@ import { Button, PageHeader, Tabs } from "antd";
 import React, { FunctionComponent, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectedGitHubRepositoryList } from "../../components/github-repository-list";
-import { ConnectedImportProccessModal } from "../../components/import-proccess-modal";
 import { SearchGitHubRepository } from "../../components/search-github-repository";
 import { ConnectedImportedRepositorTab } from "../imported-repository-tab";
 import "./style.scss";
+
 export interface IStateProps {
   gitHubAccessToken?: string;
   rawRepositories: any[];
-  // loading?: boolean;
-  // loadMoreTimes: number;
-  // importedRepository?: IClonedRepository;
-  // importLoading: boolean;
-  // importProccessModalVisible: boolean;
 }
 
 export interface IDispatchProps {
   fetchAllRepositories: () => void;
-  // loadMoreRepositories: (accessToken: string, loadMoreTimes: number) => void;
-  // importRepository: (accessToken: string, repositoryName: string) => void;
-  // toggleModal: (repository: GitHubAPIRepositoryResponse) => void;
 }
 
 const routes = [
@@ -52,7 +44,6 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
 
     return (
       <div className={"repository-view-container"}>
-        <ConnectedImportProccessModal />
         <PageHeader
           breadcrumb={{ routes }}
           ghost={false}

@@ -4,8 +4,14 @@ import {
   AuthActionTypes,
   ILogInData,
   IRegistryData,
-  SEND_GITHUB_LOG_IN
+  TOGGLE_AUTH_MODAL,
+  SEND_GITHUB_LOG_IN,
+  AuthActions
 } from "./types";
+
+export const toggleAuthModal = (): AuthActions => {
+  return { type: TOGGLE_AUTH_MODAL };
+};
 
 export const sendGitHubLogIn = (
   code: string

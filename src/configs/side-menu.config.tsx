@@ -1,11 +1,17 @@
 import {
   AppstoreOutlined,
   OrderedListOutlined,
-  SwapOutlined
+  SwapOutlined,
+  DashboardOutlined
 } from "@ant-design/icons";
 import React from "react";
 
 export const sideMenuConfigs = [
+  {
+    label: "workplace",
+    route: "/authed/workplace",
+    icon: <DashboardOutlined />
+  },
   {
     label: "repository management",
     route: "/authed/repository",

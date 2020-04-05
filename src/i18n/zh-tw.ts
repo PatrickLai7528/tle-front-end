@@ -20,5 +20,6 @@ export const zhtw = {
   "file structure": "文件結構",
   "file content": "文件內容",
   "requirement management": "需求管理",
+  workplace: "工作台",
   "trace link management": "追踪矩陣管理"
 };

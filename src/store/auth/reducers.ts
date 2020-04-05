@@ -11,11 +11,13 @@ import {
   SEND_LOG_IN_SUCCESS,
   SEND_REGISTRY,
   SEND_REGISTRY_FAILRE,
-  SEND_REGISTRY_SUCCESS
+  SEND_REGISTRY_SUCCESS,
+  TOGGLE_AUTH_MODAL
 } from "./types";
 
 const initalAuthState: IAuthState = {
-  loggedIn: false
+  loggedIn: false,
+  authModalVisible: false
 };
 
 export const authReducer = (
@@ -23,6 +25,11 @@ export const authReducer = (
   action: AuthActions
 ): IAuthState => {
   switch (action.type) {
+    case TOGGLE_AUTH_MODAL:
+      return {
+        ...state,
+        authModalVisible: !state.authModalVisible
+      };
     case SEND_LOG_IN:
       return {
         ...state,

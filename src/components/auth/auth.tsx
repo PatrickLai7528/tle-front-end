@@ -1,24 +1,40 @@
 import { Tabs } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { LogInForm } from "../../components/log-in-form";
-import { RegistryForm } from "../../components/registry-form";
+import { LogInForm } from "../log-in-form";
+import { RegistryForm } from "../registry-form";
 import { ILogInData, IRegistryData } from "../../store/auth/types";
-import "./style.scss";
+import { createUseStyles } from "react-jss";
 
 const { TabPane } = Tabs;
 
-export interface IAuthProps {
+export interface IStateProps {}
+
+export interface IDispatchProps {
   logIn: (data: ILogInData) => void;
   registry: (data: IRegistryData) => void;
 }
 
+export interface IOwnProps {}
+
+export interface IAuthProps extends IStateProps, IDispatchProps, IOwnProps {}
+
+const useStyles = createUseStyles({
+  authViewContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    alignContent: "center"
+  }
+});
+
 const Auth: FunctionComponent<IAuthProps> = memo((props: IAuthProps) => {
   const { logIn, registry } = props;
   const { t } = useTranslation();
-
+  const styles = useStyles();
   return (
-    <div className={"auth-view-container"}>
+    <div className={styles.authViewContainer}>
       <Tabs defaultActiveKey="login">
         <TabPane tab={t("log in")} key="login">
           <LogInForm

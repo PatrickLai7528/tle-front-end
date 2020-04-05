@@ -1,12 +1,12 @@
 import { Layout } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
-import { AuthView } from "../views/auth";
 import { SideNavBar, TopNavBar } from "./../components/nav-bar";
 import Content from "./content";
 import { AuthRedirectView } from "../views/auth-redirect";
 import { RequireAuth } from "../components/require-auth";
-import NewHome from "./../views/new-home";
+import { ConnectedHomeView } from "./../views/home";
+import { RouteConstants } from "./constants";
 
 const { Header, Sider } = Layout;
 
@@ -15,7 +15,7 @@ export interface IRoutesProps {}
 const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
   return (
     <Switch>
-      <Route exact path="/user/login" component={NewHome} />
+      <Route exact path={RouteConstants.HOME} component={ConnectedHomeView} />
       <Route
         exact
         path="/auth/redirect"
@@ -56,7 +56,7 @@ const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
         }}
       />
       <Route exact path={"/"}>
-        <Redirect to={"/user/login"} />
+        <Redirect to={RouteConstants.HOME} />
       </Route>
     </Switch>
   );

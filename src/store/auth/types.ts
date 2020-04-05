@@ -10,6 +10,8 @@ export const SEND_GITHUB_LOG_IN = "SEND_GITHUB_LOG_IN";
 export const SEND_GITHUB_LOG_IN_SUCCESS = "SEND_GITHUB_LOG_IN_SUCCESS";
 export const SEND_GITHUB_LOG_IN_FAILURE = "SEND_GITHUB_LOG_IN_FAILURE";
 
+export const TOGGLE_AUTH_MODAL = "TOGGLE_AUTH_MODAL";
+
 export interface IAuthState {
   loggedIn: boolean;
   email?: string;
@@ -17,6 +19,11 @@ export interface IAuthState {
   gitHubAccessToken?: string;
   loading?: boolean;
   error?: string | boolean;
+  authModalVisible: boolean;
+}
+
+export interface IToggleAuthModalAction {
+  type: typeof TOGGLE_AUTH_MODAL;
 }
 
 export interface ISendGitHubLogInAction {
@@ -82,7 +89,8 @@ export type AuthActions =
   | ISendRegistryFailureAction
   | ISendGitHubLogInAction
   | ISendGitHubLogInSuccessAction
-  | ISendGitHubLogInFailureAction;
+  | ISendGitHubLogInFailureAction
+  | IToggleAuthModalAction;
 
 export type AuthActionTypes =
   | typeof SEND_LOG_IN
@@ -93,4 +101,5 @@ export type AuthActionTypes =
   | typeof SEND_REGISTRY_FAILRE
   | typeof SEND_GITHUB_LOG_IN
   | typeof SEND_GITHUB_LOG_IN_SUCCESS
-  | typeof SEND_GITHUB_LOG_IN_FAILURE;
+  | typeof SEND_GITHUB_LOG_IN_FAILURE
+  | typeof TOGGLE_AUTH_MODAL;

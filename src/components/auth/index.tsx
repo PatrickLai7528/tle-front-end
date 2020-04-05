@@ -3,21 +3,15 @@ import { ThunkDispatch } from "redux-thunk";
 import { sendLogIn, sendRegistry } from "../../store/auth/actions";
 import { AuthActions, ILogInData, IRegistryData } from "../../store/auth/types";
 import { RootState } from "../../store/reducers";
-import Auth from "./auth";
-interface IStateProps {}
+import Auth, { IStateProps, IDispatchProps, IOwnProps } from "./auth";
 
-interface IDispatchProps {
-  logIn: (data: ILogInData) => void;
-  registry: (data: IRegistryData) => void;
-}
-
-const mapStateToProps: MapStateToProps<IStateProps, void, RootState> = (
+const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   return {};
 };
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, void> = (
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<RootState, any, AuthActions>
 ) => {
   return {
@@ -26,4 +20,4 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, void> = (
   };
 };
 
-export const AuthView = connect(mapStateToProps, mapDispatchToProps)(Auth);
+export const ConnectedAuth = connect(mapStateToProps, mapDispatchToProps)(Auth);

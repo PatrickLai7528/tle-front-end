@@ -3,9 +3,9 @@ import React, { FunctionComponent, memo } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { RepositoryView } from "../views/repository";
 import { RepositoryDetail } from "../views/repository-detail";
-import { Home } from "./../views/home";
 import { Other } from "./../views/other-view";
 import { ConnectedImportRepositoryProcess } from "../views/import-repository-process";
+import { WorkplaceView } from "../views/workplace";
 
 const { Content: AntdContent } = Layout;
 
@@ -23,7 +23,7 @@ const Content: FunctionComponent<IContentProps> = memo(
           }}
         >
           <Switch>
-            <Route exact path="/authed/home" component={Home} />
+            <Route exact path="/authed/workplace" component={WorkplaceView} />
             <Route exact path="/authed/other" component={Other} />
             <Route exact path="/authed/repository" component={RepositoryView} />
             <Route
