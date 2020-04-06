@@ -5,11 +5,12 @@ import { Avatar } from "antd";
 export interface IRepositoryAvartarProps {
   repositoryName: string;
   language: ProgramLanguage;
+  size?: number | "large" | "small" | "default";
 }
 
 const RepositoryAvatar: FunctionComponent<IRepositoryAvartarProps> = memo(
   (props: IRepositoryAvartarProps) => {
-    const { repositoryName, language } = props;
+    const { repositoryName, language, size } = props;
 
     const style: CSSProperties = useMemo(() => {
       return {
@@ -18,11 +19,13 @@ const RepositoryAvatar: FunctionComponent<IRepositoryAvartarProps> = memo(
     }, [language]);
 
     return (
-      <Avatar style={style}>
+      <Avatar size={size} style={style}>
         {(repositoryName[0] as string).toUpperCase()}
       </Avatar>
     );
   }
 );
+
+RepositoryAvatar.defaultProps = { size: "default" };
 
 export default RepositoryAvatar;

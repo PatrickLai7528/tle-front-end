@@ -3,7 +3,7 @@ import { PaginationConfig } from "antd/lib/pagination";
 import React, { FunctionComponent, memo, useCallback, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { LanguageBadge } from "../ language-badge";
+import { LanguageBadge } from "../language-badge";
 import { ProgramLanguage } from "../../utils/language-color";
 import { LoadMore } from "../load-more";
 import { RepositoryAvatar } from "../repository-avatar";

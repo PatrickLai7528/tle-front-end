@@ -5,16 +5,17 @@ import {
   DashboardOutlined
 } from "@ant-design/icons";
 import React from "react";
+import { RouteConstants } from "./../routes/constants";
 
 export const sideMenuConfigs = [
   {
     label: "workplace",
-    route: "/authed/workplace",
+    route: RouteConstants.WORKPLACE,
     icon: <DashboardOutlined />
   },
   {
     label: "repository management",
-    route: "/authed/repository",
+    route: RouteConstants.REPOSITORY,
     icon: <AppstoreOutlined />
   },
   {

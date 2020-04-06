@@ -21,5 +21,10 @@ export const zhtw = {
   "file content": "文件內容",
   "requirement management": "需求管理",
   workplace: "工作台",
-  "trace link management": "追踪矩陣管理"
+  "trace link management": "追踪矩陣管理",
+  "home page": "首頁",
+  requirement: "需求",
+  "trace link": "追蹤線索",
+  repository: "倉庫",
+  activity: "動態"
 };

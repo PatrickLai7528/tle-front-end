@@ -1,12 +1,12 @@
-import Component from "./require-auth";
+import RequireAuth, {
+  IDispatchProps,
+  IOwnProps,
+  IStateProps
+} from "./require-auth";
 import { connect, MapStateToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
 
-export interface IStateProps {
-  loggedIn: boolean;
-}
-
-const mapStateToProps: MapStateToProps<IStateProps, any, RootState> = (
+const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   return {
@@ -14,4 +14,4 @@ const mapStateToProps: MapStateToProps<IStateProps, any, RootState> = (
   };
 };
 
-export const RequireAuth = connect(mapStateToProps)(Component);
+export const ConnectedRequireAuth = connect(mapStateToProps)(RequireAuth);
