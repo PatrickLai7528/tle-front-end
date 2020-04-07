@@ -1,32 +1,30 @@
 import { Button, PageHeader, Tabs } from "antd";
-import React, { FunctionComponent, memo, useEffect } from "react";
+import React, { FunctionComponent, memo, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectedGitHubRepositoryList } from "../../components/github-repository-list";
 import { SearchGitHubRepository } from "../../components/search-github-repository";
-import { ConnectedImportedRepositorTab } from "../imported-repository-tab";
-import "./style.scss";
+import { ConnectedImportedRepositorTab } from "../imported-repository";
+import { routes } from "./breadcrumb-routes";
+import { createUseStyles } from "react-jss";
 
 export interface IStateProps {
   gitHubAccessToken?: string;
   rawRepositories: any[];
+  loadMoreTimes: number;
 }
 
 export interface IDispatchProps {
   fetchAllRepositories: () => void;
+  loadMoreRepositories: (loadMoreTimes: number) => void;
 }
 
-const routes = [
-  {
-    path: "/",
-    breadcrumbName: "首頁"
-  },
-  {
-    path: "/repository",
-    breadcrumbName: "倉庫"
-  }
-];
-
 export interface IOwnProps {}
+
+const useStyles = createUseStyles({
+  repositoryViewContainer: {
+    width: "100%"
+  }
+});
 
 export interface IRepositoryProps
   extends IStateProps,
@@ -36,23 +34,29 @@ export interface IRepositoryProps
 const Repository: FunctionComponent<IRepositoryProps> = memo(
   (props: IRepositoryProps) => {
     const { t } = useTranslation();
-    const { fetchAllRepositories } = props;
+    const styles = useStyles();
+    const { fetchAllRepositories, loadMoreRepositories, loadMoreTimes } = props;
 
     useEffect(() => {
       fetchAllRepositories();
     }, [fetchAllRepositories]);
 
+    const onLoadMore = useCallback(() => {
+      loadMoreRepositories(loadMoreTimes);
+    }, [loadMoreTimes, loadMoreRepositories]);
+
     return (
-      <div className={"repository-view-container"}>
+      <div className={styles.repositoryViewContainer}>
         <PageHeader
           breadcrumb={{ routes }}
           ghost={false}
           title={t("repository management")}
           extra={[
-            <Button key="3">Operation</Button>,
-            <Button key="2">Operation</Button>,
-            <Button key="1" type="primary">
-              Primary
+            <Button key="reload" onClick={fetchAllRepositories}>
+              {t("reload")}
+            </Button>,
+            <Button key={"loadMore"} onClick={onLoadMore} type={"primary"}>
+              {t("load more")}
             </Button>
           ]}
         >
@@ -63,9 +67,6 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("imported repository")} key="2">
               <ConnectedImportedRepositorTab />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="Tab 3" key="3">
-              Content of Tab Pane 3
             </Tabs.TabPane>
           </Tabs>
         </PageHeader>

@@ -2,7 +2,7 @@ import { Layout } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { Redirect, Route, Switch } from "react-router";
 import { RepositoryView } from "../views/repository";
-import { RepositoryDetail } from "../views/repository-detail";
+import { ConnectedRepositoryDetailView } from "../views/repository-detail";
 import { ConnectedImportRepositoryProcess } from "../views/import-repository-process";
 import { ConnectedWorkPlaceView } from "../views/workplace";
 import { RouteConstants } from "./constants";
@@ -35,12 +35,12 @@ const Content: FunctionComponent<IContentProps> = memo(
             />
             <Route
               exact
-              path={RouteConstants.REPOSITORY_DETAIL}
-              component={RepositoryDetail}
+              path={RouteConstants.REPOSITORY_DETAIL()}
+              component={ConnectedRepositoryDetailView}
             />
             <Route
               exact
-              path={RouteConstants.IMPORT_PROCESS}
+              path={RouteConstants.IMPORT_PROCESS()}
               component={ConnectedImportRepositoryProcess}
             />
             <Route exact path="/authed">

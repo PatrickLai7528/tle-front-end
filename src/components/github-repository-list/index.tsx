@@ -8,7 +8,6 @@ import { RootState } from "../../store/reducers";
 import { toggleImportProccessModal } from "../../store/import-repository/action";
 import { loadMoreRepository } from "../../store/repository-management/action";
 import { ThunkDispatch } from "redux-thunk";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
 
 const mapStateToProps: MapStateToProps<

@@ -8,20 +8,18 @@ import Repository, {
   IOwnProps,
   IStateProps
 } from "./repository";
-import { fetchAllRepositoryFromGitHub } from "../../store/repository-management/action";
+import {
+  fetchAllRepositoryFromGitHub,
+  loadMoreRepository
+} from "../../store/repository-management/action";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   return {
     gitHubAccessToken: state.authReducer.gitHubAccessToken,
-    rawRepositories: state.repositoryManagementReducer.rawRepositories
-    // loading: state.repositoryManagementReducer.loading,
-    // loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes
-    // importedRepository: state.importRepositoryReducer.importedRepository,
-    // importLoading: !!state.importRepositoryReducer.importLoading,
-    // importProccessModalVisible: !!state.importRepositoryReducer
-    // .importProcessModalVisible
+    rawRepositories: state.repositoryManagementReducer.rawRepositories,
+    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes
   };
 };
 
@@ -33,13 +31,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   >
 ) => {
   return {
-    fetchAllRepositories: () => dispatch(fetchAllRepositoryFromGitHub())
-    // loadMoreRepositories: (accessToken: string, loadMoreTimes: number) =>
-    // dispatch(loadMoreRepository(accessToken, loadMoreTimes)),
-    // importRepository: (accessToken: string, repository: any) =>
-    // dispatch(importRepository(accessToken, repository)),
-    // toggleModal: (repository: GitHubAPIRepositoryResponse) =>
-    // dispatch(toggleImportProccessModal(repository))
+    fetchAllRepositories: () => dispatch(fetchAllRepositoryFromGitHub()),
+    loadMoreRepositories: loadMoreTimes =>
+      dispatch(loadMoreRepository(loadMoreTimes))
   };
 };
 

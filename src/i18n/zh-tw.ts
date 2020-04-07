@@ -26,5 +26,6 @@ export const zhtw = {
   requirement: "需求",
   "trace link": "追蹤線索",
   repository: "倉庫",
-  activity: "動態"
+  activity: "動態",
+  reload: "刷新"
 };

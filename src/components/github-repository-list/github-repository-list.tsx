@@ -1,11 +1,10 @@
 import { Button, Divider, List, Popconfirm } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
-import React, { FunctionComponent, memo, useCallback, useMemo } from "react";
+import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { LanguageBadge } from "../language-badge";
 import { ProgramLanguage } from "../../utils/language-color";
-import { LoadMore } from "../load-more";
 import { RepositoryAvatar } from "../repository-avatar";
 import { RepositoryDescription } from "../repository-description";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
@@ -38,26 +37,10 @@ const paginationConfig: PaginationConfig = {
 const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = memo(
   (props: IGitHubRepositoryListProps) => {
     const { t } = useTranslation();
-    const {
-      loading,
-      loadMoreTimes,
-      loadMoreRepositories,
-      repositoryList,
-      toggleModal
-    } = props;
-
-    const onLoadMore = useCallback(() => {
-      loadMoreRepositories(loadMoreTimes);
-    }, [loadMoreTimes, loadMoreRepositories]);
-
-    const wrappedLoadMore = useMemo(() => {
-      return !loading ? <LoadMore onLoadMore={onLoadMore} /> : null;
-    }, [loading, onLoadMore]);
-
+    const { loading, repositoryList } = props;
     return (
       <List
         loading={loading}
-        loadMore={wrappedLoadMore}
         pagination={paginationConfig}
         dataSource={repositoryList}
         renderItem={(item: IGHRepositoryRes) => {

@@ -3,7 +3,10 @@ import {
   IRepositoryManagementState,
   RepositoryManagementActions,
   IFetchRepositoryFromGitHubSuccessAction,
-  IFetchImportedRepositorySuccessAction
+  IFetchImportedRepositorySuccessAction,
+  FETCH_IMPORTED_REPOSITORY_DETAIL,
+  FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
+  FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE
 } from "./types";
 
 const initialState: IRepositoryManagementState = {
@@ -17,6 +20,25 @@ export const repositoryManagementReducer = (
   action: RepositoryManagementActions
 ): IRepositoryManagementState => {
   switch (action.type) {
+    case FETCH_IMPORTED_REPOSITORY_DETAIL:
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        importedRepositoryDetail: action.payload
+      };
+    case FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case "FETCH_IMPORTED_REPOSITORY_LIST":
       return {
         ...state,

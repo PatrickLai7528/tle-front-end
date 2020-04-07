@@ -1,22 +1,20 @@
-import ImportedRepositoryTab, {
-  IStateProps,
-  IOwnProps,
-  IDispatchProps
-} from "./imported-repository-tab";
-import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../store/reducers";
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import {
-  RepositoryManagementActionTypes,
-  RepositoryManagementActions
-} from "../../store/repository-management/types";
 import { fetchImportedRepositoryList } from "../../store/repository-management/action";
+import { RepositoryManagementActions } from "../../store/repository-management/types";
+import ImportedRepositoryTab, {
+  IDispatchProps,
+  IOwnProps,
+  IStateProps
+} from "./imported-repository";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   return {
-    repositoryList: state.repositoryManagementReducer.importedRepositoryList
+    repositoryList: state.repositoryManagementReducer.importedRepositoryList,
+    loading: !!state.repositoryManagementReducer.loading
   };
 };
 

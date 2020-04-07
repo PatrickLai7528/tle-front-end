@@ -1,3 +1,4 @@
+import { ProgramLanguage } from "./../../utils/language-color";
 import { IImportedRepository } from "./../../types/index";
 import {
   IFinishCloneBranchesAction,
@@ -19,21 +20,10 @@ export const importRepositoryReducer = (
 ): IImportRepositoryState => {
   switch (action.type) {
     case "TOGGLE_IMPORT_PROCESS_MODAL":
-      // const { payload: { repository } } = action as IToggleImportProccessModalAction;
       return {
         ...state,
         importProcessModalVisible: !state.importProcessModalVisible,
         importDone: false
-        // repositoryResponse: repository ? { ...repository } : undefined,
-        // importedRepository: repository ? {
-        //    name: repository.name,
-        //    currentBranch: repository.default_branch,
-        //    ownerId: repository.owner.login,
-        //    commits: [],
-        //    trees: [],
-        //    branches: [],
-        //    shaFileContentMap: {}
-        // } : undefined
       };
     case "START_IMPORT_REPOSITORY":
       const { payload: repository } = action as IStartImportRepositoryAction;
@@ -49,7 +39,9 @@ export const importRepositoryReducer = (
               commits: [],
               trees: [],
               branches: [],
-              shaFileContentMap: {}
+              shaFileContentMap: {},
+              language: repository.language as ProgramLanguage,
+              description: repository.description
             }
           : undefined
       };

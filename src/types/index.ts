@@ -1,3 +1,4 @@
+import { ProgramLanguage } from "./../utils/language-color";
 import * as stubs from "./../stubs";
 
 // export type GitHubAPIRepositoryResponse = typeof stubs.repositories[0];
@@ -61,6 +62,12 @@ export interface IImportedRepository {
   trees: IFileTreeNode[];
 
   commits: ICommit[];
+
+  language: ProgramLanguage;
+
+  description: string;
+
+  lastUpdateAt?: number;
 
   /**
    * @key file's sha

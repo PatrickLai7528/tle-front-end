@@ -31,7 +31,6 @@ const useStyles = createUseStyles({
 
 const Layout: FunctionComponent<ILayoutProps> = memo((props: ILayoutProps) => {
   const { requireAuth, content } = props;
-  console.log(props);
   const styles = useStyles();
   const withAuth = (content: ReactChild) => {
     return (

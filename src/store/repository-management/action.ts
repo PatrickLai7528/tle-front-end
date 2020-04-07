@@ -1,7 +1,30 @@
 import { importedRepository } from "./../../stubs/imported-repositories";
 import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
 import { AppThunk } from "./../store";
-import { RepositoryManagementActionTypes } from "./types";
+import {
+  RepositoryManagementActionTypes,
+  FETCH_IMPORTED_REPOSITORY_DETAIL,
+  FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
+  FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE
+} from "./types";
+
+export const fetchImportedRepositoryDetail = (
+  repoName: string
+): AppThunk<void, RepositoryManagementActionTypes> => async dispatch => {
+  dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    dispatch({
+      type: FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
+      payload: importedRepository[0]
+    });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE });
+  }
+};
 
 export const fetchImportedRepositoryList = (): AppThunk<
   void,
