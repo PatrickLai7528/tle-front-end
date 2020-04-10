@@ -39,6 +39,12 @@ const useStyles = createUseStyles({
   cardDescription: {
     margin: { top: "10px", bottom: "10px" }
   },
+  cardBottomWrapper: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-end"
+  },
   cardBottom: {
     display: "flex",
     flexDirection: "row",
@@ -69,7 +75,10 @@ const SimpleRepoCard: FC<ISimpleRepoCardProps> = memo(
         className={styles.simpleRepoCard}
         bodyStyle={{
           height: "100%",
-          padding: "12px"
+          padding: "12px",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start"
         }}
       >
         <div className={styles.cardHeader}>
@@ -85,11 +94,13 @@ const SimpleRepoCard: FC<ISimpleRepoCardProps> = memo(
         <Typography.Paragraph className={styles.cardDescription}>
           {description}
         </Typography.Paragraph>
-        <div className={styles.cardBottom}>
-          <Typography.Text type="secondary">{lastUpdateBy}</Typography.Text>
-          <Typography.Text type="secondary" className={styles.updateDate}>
-            {moment(lastUpdateAt).fromNow()}
-          </Typography.Text>
+        <div className={styles.cardBottomWrapper}>
+          <div className={styles.cardBottom}>
+            <Typography.Text type="secondary">{lastUpdateBy}</Typography.Text>
+            <Typography.Text type="secondary" className={styles.updateDate}>
+              {moment(lastUpdateAt).fromNow()}
+            </Typography.Text>
+          </div>
         </div>
       </Card>
     );

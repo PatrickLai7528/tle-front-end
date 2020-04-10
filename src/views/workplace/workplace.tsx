@@ -9,6 +9,7 @@ import { recentRepos } from "../../stubs/recent-repo";
 import TracingStatistic from "./tracing-statistic";
 import QuickAction, { IAction } from "./quick-action";
 import Activity from "./activity";
+import { activity } from "../../stubs/activity";
 
 export interface IStateProps {
   userName: string;
@@ -124,15 +125,7 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
                   style={{ marginBottom: "16px" }}
                   repos={recentRepos}
                 />
-                <Activity
-                  activities={[
-                    {
-                      avatarUrl: userAvatarUrl,
-                      title: "PatrickLai在項目中提交了代碼xjlkjzcxv",
-                      description: "asdfasdfasdf日尸木火"
-                    }
-                  ]}
-                />
+                <Activity activities={activity} />
               </Col>
             </Row>
           </Col>
