@@ -40,5 +40,7 @@ export const zhtw = {
   "start using": "開始使用",
   "product and service": "產品及服務",
   "using steps": "使用流程",
-  "other login": "其它登錄方式"
+  "other login": "其它登錄方式",
+  "all repository": "全部倉庫",
+  "recent repository": "常用倉庫"
 };
