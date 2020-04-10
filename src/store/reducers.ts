@@ -1,3 +1,4 @@
+import { traceLinkReducer } from "./trace-link/reducers";
 import { requirementReducer } from "./requirement/reducers";
 import { combineReducers } from "redux";
 import { authReducer } from "./auth/reducers";
@@ -10,7 +11,8 @@ const rootReducer = combineReducers({
   repositoryManagementReducer,
   importRepositoryReducer,
   searchReducer,
-  requirementReducer
+  requirementReducer,
+  traceLinkReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -42,19 +42,22 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
           status={traced ? "success" : "error"}
           text={traced ? t("tracing") : t("not tracing")}
         />
-        <div className={styles.relatedImplements}>
-          {(relatedImplementIds || []).map(id => {
-            return (
-              <Card
-                hoverable
-                bodyStyle={bodyStyle}
-                className={styles.implementCard}
-              >
-                <Card.Meta title={`#${id}`} description="www.instagram.com" />
-              </Card>
-            );
-          })}
-        </div>
+        {traced && (
+          <div className={styles.relatedImplements}>
+            {(relatedImplementIds || []).map(id => {
+              return (
+                <Card
+                  key={id}
+                  hoverable
+                  bodyStyle={bodyStyle}
+                  className={styles.implementCard}
+                >
+                  <Card.Meta title={`#${id}`} description="www.instagram.com" />
+                </Card>
+              );
+            })}
+          </div>
+        )}
       </Typography>
     );
   }

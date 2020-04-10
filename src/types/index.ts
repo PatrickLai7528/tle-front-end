@@ -15,11 +15,30 @@ import * as stubs from "./../stubs";
 
 // export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
 
+export interface IImplement {
+  id: string;
+  type: "METHOD" | "CLASS";
+  fullyQualifiedName: string;
+  traced: boolean;
+}
+
+export interface ITraceLink {
+  id: string;
+  requirementDescription: IRequirementDescription;
+  implements: IImplement[];
+  lastUpdateAt: number;
+  lastUpdateByCommit: ICommit; // commit message
+}
+
+export interface ITraceLinkMatrix {
+  links: ITraceLink[];
+}
+
 export interface IRequirementDescription {
   text: string;
   traced: boolean;
   lastUpdateAt: number;
-  lastUpdateCommit: string; // commit message
+  // lastUpdateCommit: string; // commit message
   relatedImplementIds: string[];
   id: string;
 }

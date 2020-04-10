@@ -4,25 +4,24 @@ import React, {
   memo,
   useEffect,
   useMemo,
-  useState,
-  ReactNode
+  useState
 } from "react";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
+import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
   IImportedRepository,
   IRequirement,
-  IRequirementDescription
+  IRequirementDescription,
+  ITraceLinkMatrix
 } from "../../types";
 import CommitCard from "./commit/commit-card";
 import CommitDetail from "./commit/commit-detail";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import TraceLinkCard from "./trace-link/trace-link-card";
 import RequirementDetail from "./requirement/requirement-detail";
-import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 
 export interface IStateProps {
   repo: IImportedRepository;
@@ -80,7 +79,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     const styles = useStyles();
 
     const [drawerType, setDrawerType] = useState<
-      null | "COMMIT" | "REQUIREMENT"
+      null | "COMMIT" | "REQUIREMENT" | "TRACE_LINK"
     >(null);
 
     const [selectedCommit, setSelectedCommit] = useState<ICommit | null>(null);
@@ -90,7 +89,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       setSelectedRequirementDescription
     ] = useState<IRequirementDescription | null>(null);
 
-    const openDrawer = (type: "COMMIT" | "REQUIREMENT") => setDrawerType(type);
+    const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "TRACE_LINK") =>
+      setDrawerType(type);
     const closeDrawer = () => setDrawerType(null);
 
     useEffect(() => {
@@ -208,9 +208,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </div>
-          <div className={styles.contentCardWrapper}>
-            <TraceLinkCard />
           </div>
         </div>
       </Spin>

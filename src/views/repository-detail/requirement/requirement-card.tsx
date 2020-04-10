@@ -31,7 +31,12 @@ const RequirementCard: FunctionComponent<IRequirementCardProps> = memo(
     return (
       <PropertyCard
         titleProps={{
-          actions: [<PlusOutlined onClick={toggleAddRequirementModal} />],
+          actions: [
+            <PlusOutlined
+              key={"addRequirement"}
+              onClick={toggleAddRequirementModal}
+            />
+          ],
           text: t("requirement"),
           itemNumber: requirement.descriptions.length || 0
         }}
@@ -54,9 +59,7 @@ const RequirementCard: FunctionComponent<IRequirementCardProps> = memo(
             >
               <List.Item.Meta
                 title={desc.text}
-                description={`Update by commit #${
-                  desc.lastUpdateCommit
-                } at ${moment(desc.lastUpdateAt).fromNow()}`}
+                description={`Update at ${moment(desc.lastUpdateAt).fromNow()}`}
               />
             </List.Item>
           )}
