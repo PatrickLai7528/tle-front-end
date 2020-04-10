@@ -5,10 +5,15 @@ import RepositoryDetail, {
 } from "./repository-detail";
 import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { IImportedRepository } from "../../types";
+import { IImportedRepository, IRequirement } from "../../types";
 import { ThunkDispatch } from "redux-thunk";
 import { RepositoryManagementActions } from "../../store/repository-management/types";
 import { fetchImportedRepositoryDetail } from "../../store/repository-management/action";
+import {
+  fetchRepoRequirement,
+  toggleAddRequirementModal
+} from "../../store/requirement/actions";
+import { RequirementActions } from "../../store/requirement/types";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,
@@ -16,6 +21,7 @@ const mapStateToProps: MapStateToProps<
   RootState
 > = state => {
   return {
+    requirement: state.requirementReducer.requirement as IRequirement,
     loading: !!state.repositoryManagementReducer.loading,
     repo: state.repositoryManagementReducer
       .importedRepositoryDetail as IImportedRepository
@@ -23,12 +29,21 @@ const mapStateToProps: MapStateToProps<
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
-  dispatch: ThunkDispatch<RootState, any, RepositoryManagementActions>,
-  ownProps: IOwnProps
+  dispatch: ThunkDispatch<
+    RootState,
+    any,
+    RepositoryManagementActions | RequirementActions
+  >,
+  {
+    match: {
+      params: { name }
+    }
+  }: IOwnProps
 ) => {
   return {
-    fetchRepoDetail: () =>
-      dispatch(fetchImportedRepositoryDetail(ownProps.match.params.name))
+    fetchRepoRequirement: () => dispatch(fetchRepoRequirement(name)),
+    fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(name)),
+    toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal())
   };
 };
 

@@ -15,6 +15,20 @@ import * as stubs from "./../stubs";
 
 // export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
 
+export interface IRequirementDescription {
+  text: string;
+  traced: boolean;
+  lastUpdateAt: number;
+  lastUpdateCommit: string; // commit message
+  relatedImplementIds: string[];
+  id: string;
+}
+
+export interface IRequirement {
+  descriptions: IRequirementDescription[];
+  relatedRepoName: string;
+}
+
 export interface IBranch {
   // 分支名稱
   name: string;

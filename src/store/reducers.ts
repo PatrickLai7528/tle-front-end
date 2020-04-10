@@ -1,3 +1,4 @@
+import { requirementReducer } from "./requirement/reducers";
 import { combineReducers } from "redux";
 import { authReducer } from "./auth/reducers";
 import { importRepositoryReducer } from "./import-repository/reducer";
@@ -8,7 +9,8 @@ const rootReducer = combineReducers({
   authReducer,
   repositoryManagementReducer,
   importRepositoryReducer,
-  searchReducer
+  searchReducer,
+  requirementReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

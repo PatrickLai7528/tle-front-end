@@ -38,7 +38,7 @@ const ImportedRepositoryTab: FunctionComponent<IImportedRepositoryTabProps> = me
 
     return (
       <Spin spinning={loading}>
-        <Row className={styles.importedRepository}>
+        <Row className={styles.importedRepository} gutter={[16, 16]}>
           {repositoryList.map(repo => {
             return (
               <Col key={repo.name} span={8}>

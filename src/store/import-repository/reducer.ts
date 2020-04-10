@@ -53,7 +53,7 @@ export const importRepositoryReducer = (
         files,
         commits
       } = state;
-      return {
+      let newState = {
         ...state,
         importedRepository:
           importedRepository && branches && shaContentMap && files && commits
@@ -66,7 +66,8 @@ export const importRepositoryReducer = (
               }
             : undefined
       };
-
+      console.log(JSON.stringify(newState.importedRepository));
+      return newState;
     case "IMPORT_REPOSITORY_FAILURE":
       return {
         ...state,

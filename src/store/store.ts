@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, Action, compose } from "redux";
 import rootReducer from "./reducers";
-import thunk, { ThunkAction } from "redux-thunk";
+import thunk, { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { RootState } from "./reducers";
 
 //@ts-ignore
@@ -11,6 +11,12 @@ export type AppThunk<ReturnType = void, a = string> = ThunkAction<
   RootState,
   unknown,
   Action<a>
+>;
+
+export type AppDispatch<A extends Action<any>> = ThunkDispatch<
+  RootState,
+  any,
+  A
 >;
 
 const store = createStore(

@@ -22,7 +22,7 @@ const RepoDetailDescription: FunctionComponent<IRepoDetailDescriptionProps> = me
           <LanguageBadge language={repo.language} />
         </Descriptions.Item>
         <Descriptions.Item label={"最近更新"}>
-          {moment(repo.lastUpdateAt).format()}
+          {moment(repo.lastUpdateAt).format("YYYY-MM-DD HH:mm:SS")}
         </Descriptions.Item>
         <Descriptions.Item label="描述">
           <RepositoryDescription description={repo.description} />

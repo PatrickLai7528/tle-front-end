@@ -15,7 +15,7 @@ export const zhtw = {
   "imported repository": "已導入倉庫",
   "load more": "加載更多",
   "unknown program language": "未知語言",
-  commit: "提交",
+  commit: "提交日誌",
   branch: "分支",
   "file structure": "文件結構",
   "file content": "文件內容",
@@ -27,5 +27,12 @@ export const zhtw = {
   "trace link": "追蹤線索",
   repository: "倉庫",
   activity: "動態",
-  reload: "刷新"
+  reload: "刷新",
+  "trace link change log": "追踪線索變更日誌",
+  "basic information": "基本信息",
+  "no change": "沒有變化",
+  tracing: "追踪中",
+  "not tracing": "未追踪",
+  confirm: "確認",
+  cancel: "取消"
 };

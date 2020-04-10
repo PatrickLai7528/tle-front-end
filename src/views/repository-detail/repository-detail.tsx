@@ -1,18 +1,39 @@
-import { Button, Descriptions, PageHeader, Spin, Skeleton } from "antd";
-import React, { FunctionComponent, useMemo, memo, useEffect } from "react";
-import { RouteConstants } from "../../routes/constants";
-import { IImportedRepository } from "../../types";
-import { RouteComponentProps } from "react-router-dom";
+import { Drawer, PageHeader, Skeleton, Spin } from "antd";
+import React, {
+  FunctionComponent,
+  memo,
+  useEffect,
+  useMemo,
+  useState,
+  ReactNode
+} from "react";
 import { createUseStyles } from "react-jss";
+import { RouteComponentProps } from "react-router-dom";
+import { RouteConstants } from "../../routes/constants";
+import {
+  ICommit,
+  IImportedRepository,
+  IRequirement,
+  IRequirementDescription
+} from "../../types";
+import CommitCard from "./commit/commit-card";
+import CommitDetail from "./commit/commit-detail";
 import RepoDetailDescription from "./repo-detail-description";
+import RequirementCard from "./requirement/requirement-card";
+import TraceLinkCard from "./trace-link/trace-link-card";
+import RequirementDetail from "./requirement/requirement-detail";
+import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 
 export interface IStateProps {
   repo: IImportedRepository;
+  requirement: IRequirement;
   loading: boolean;
 }
 
 export interface IDispatchProps {
   fetchRepoDetail: () => void;
+  fetchRepoRequirement: () => void;
+  toggleAddRequirementModal: () => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{ name: string }> {}
@@ -26,18 +47,56 @@ const useStyles = createUseStyles({
   spining: {
     width: "100%",
     minHeight: "60vh"
+  },
+  content: {
+    padding: "16px",
+    overflowX: "scroll",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start",
+    background: "#fff"
+  },
+  contentCardWrapper: {
+    width: "500px",
+    flexGrow: "0",
+    flexShrink: "0",
+    margin: { right: "16px" }
   }
 });
 
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
-    const { repo, fetchRepoDetail, loading } = props;
+    const {
+      repo,
+      fetchRepoDetail,
+      loading,
+      requirement,
+      fetchRepoRequirement,
+      toggleAddRequirementModal,
+      match: {
+        params: { name: repoName }
+      }
+    } = props;
     const styles = useStyles();
+
+    const [drawerType, setDrawerType] = useState<
+      null | "COMMIT" | "REQUIREMENT"
+    >(null);
+
+    const [selectedCommit, setSelectedCommit] = useState<ICommit | null>(null);
+
+    const [
+      selectedRequirementDescription,
+      setSelectedRequirementDescription
+    ] = useState<IRequirementDescription | null>(null);
+
+    const openDrawer = (type: "COMMIT" | "REQUIREMENT") => setDrawerType(type);
+    const closeDrawer = () => setDrawerType(null);
 
     useEffect(() => {
       const doIt = async () => {
         try {
-          fetchRepoDetail();
+          await Promise.all([fetchRepoDetail(), fetchRepoRequirement()]);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
@@ -45,26 +104,24 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         }
       };
       doIt();
-    }, [fetchRepoDetail]);
+    }, [fetchRepoDetail, fetchRepoRequirement]);
 
     const routes = useMemo(() => {
-      return !!repo
-        ? [
-            {
-              path: "/",
-              breadcrumbName: "首頁"
-            },
-            {
-              path: RouteConstants.REPOSITORY,
-              breadcrumbName: "倉庫"
-            },
-            {
-              path: RouteConstants.REPOSITORY_DETAIL(repo.name),
-              breadcrumbName: repo.name
-            }
-          ]
-        : [];
-    }, [repo]);
+      return [
+        {
+          path: "/",
+          breadcrumbName: "首頁"
+        },
+        {
+          path: RouteConstants.REPOSITORY,
+          breadcrumbName: "倉庫"
+        },
+        {
+          path: RouteConstants.REPOSITORY_DETAIL(repoName),
+          breadcrumbName: repoName
+        }
+      ];
+    }, [repoName]);
 
     const pageHeaderConfig = useMemo(() => {
       if (repo) {
@@ -80,24 +137,82 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       }
     }, [repo]);
 
+    const drawerContent = useMemo(() => {
+      if (drawerType === "COMMIT") {
+        return <CommitDetail commit={selectedCommit!} />;
+      } else if (drawerType === "REQUIREMENT") {
+        return (
+          <RequirementDetail description={selectedRequirementDescription!} />
+        );
+      } else return null;
+    }, [selectedCommit, selectedRequirementDescription, drawerType]);
+
+    const drawerTitle = useMemo(() => {
+      if (drawerType === "COMMIT") {
+        return `ID: ${selectedCommit?.sha}`;
+      } else if (drawerType) {
+        return `ID: ${selectedRequirementDescription?.id}`;
+      } else return <Skeleton.Input />;
+    }, [selectedRequirementDescription, selectedCommit, drawerType]);
+
+    // drawType not equals null
+    // one of selectedCommit and selectedRequirementDescription is not null
+    const drawerVisible =
+      !!drawerType && (!!selectedCommit || !!selectedRequirementDescription);
+
     return (
       <Spin spinning={loading} className={styles.spining}>
+        <ConnectedAddRequirementModal />
+        <Drawer
+          destroyOnClose
+          width={"80vw"}
+          visible={drawerVisible}
+          onClose={closeDrawer}
+          title={drawerTitle}
+        >
+          {drawerContent}
+        </Drawer>
         <PageHeader
           breadcrumb={{ routes }}
           ghost={false}
           onBack={() => window.history.back()}
           title={pageHeaderConfig.title}
           subTitle={pageHeaderConfig.subTitle}
-          extra={[
-            <Button key="3">Operation</Button>,
-            <Button key="2">Operation</Button>,
-            <Button key="1" type="primary">
-              Primary
-            </Button>
-          ]}
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
+        <div className={styles.content}>
+          <div className={styles.contentCardWrapper}>
+            {!!repo ? (
+              <CommitCard
+                commits={repo.commits}
+                onDetailClick={commit => {
+                  openDrawer("COMMIT");
+                  setSelectedCommit(commit);
+                }}
+              />
+            ) : (
+              <Skeleton />
+            )}
+          </div>
+          <div className={styles.contentCardWrapper}>
+            {!!requirement ? (
+              <RequirementCard
+                toggleAddRequirementModal={toggleAddRequirementModal}
+                requirement={requirement}
+                onDetailClick={description => {
+                  openDrawer("REQUIREMENT");
+                  setSelectedRequirementDescription(description);
+                }}
+              />
+            ) : (
+              <Skeleton />
+            )}
+          </div>
+          <div className={styles.contentCardWrapper}>
+            <TraceLinkCard />
+          </div>
+        </div>
       </Spin>
     );
   }

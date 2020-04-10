@@ -13,7 +13,7 @@ export const fetchImportedRepositoryDetail = (
 ): AppThunk<void, RepositoryManagementActionTypes> => async dispatch => {
   dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL });
   try {
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     dispatch({
       type: FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
       payload: importedRepository[0]
