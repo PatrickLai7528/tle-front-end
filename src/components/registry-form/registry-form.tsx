@@ -77,7 +77,10 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
           name="password"
           rules={[{ required: true, message: t("password placeholder") }]}
         >
-          <Input.Password onChange={onPasswordChange} />
+          <Input.Password
+            onChange={onPasswordChange}
+            placeholder={t("password placeholder")}
+          />
         </Form.Item>
 
         <Form.Item
