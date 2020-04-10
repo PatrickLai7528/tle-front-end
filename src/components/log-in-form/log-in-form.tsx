@@ -5,26 +5,28 @@ import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { ILogInData } from "../../store/auth/types";
 import { GithubOutlined } from "@ant-design/icons";
 import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
+import { createUseStyles } from "react-jss";
 
 export interface ILogInFormProps {
   onFinish: (data: ILogInData, remember: boolean) => void;
-  onFinishFailed: () => void;
+  onFinishFailed: (error: any) => void;
 }
 
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-};
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
-};
-
 const href = `${gitHubAuthConfigs.authorize_uri}?client_id=${gitHubAuthConfigs.client_id}&redirect_uri=${gitHubAuthConfigs.redirect_uri}`;
+
+const useStyles = createUseStyles({
+  formItem: {
+    margin: { bottom: "10px" }
+  },
+  otherLogInArea: {
+    float: "right"
+  }
+});
 
 const LogInForm: FunctionComponent<ILogInFormProps> = memo(
   (props: ILogInFormProps) => {
     const { t } = useTranslation();
-
+    const styles = useStyles();
     const [form] = Form.useForm();
 
     const onEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -50,14 +52,16 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
 
     const onFinishFailed = (errorInfo: any) => {
       if (typeof props.onFinishFailed === "function") {
-        props.onFinishFailed();
+        props.onFinishFailed(errorInfo);
+      }
+      if (process.env.NODE_ENV !== "production") {
+        console.log(errorInfo);
       }
     };
 
     return (
       <Form
-        {...layout}
-        name="basic"
+        name="logInForm"
         form={form}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -86,21 +90,20 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
         </Form.Item>
 
         <Form.Item
-          {...tailLayout}
           name="remember"
           valuePropName="checked"
-          style={{ marginBottom: 10 }}
+          className={styles.formItem}
         >
           <Checkbox onChange={onRememberChange}>{t("remember me")}</Checkbox>
         </Form.Item>
 
-        <Form.Item {...tailLayout} style={{ marginBottom: 10 }}>
+        <Form.Item className={styles.formItem}>
           <Button type="primary" htmlType="submit" block>
             {t("log in")}
           </Button>
         </Form.Item>
-        <div style={{ float: "right" }}>
-          <span>其它登錄方式：</span>
+        <div className={styles.otherLogInArea}>
+          <span>{`${t("other login")}:`}</span>
           <Button icon={<GithubOutlined />} type={"link"} href={href}></Button>
         </div>
       </Form>

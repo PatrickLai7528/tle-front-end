@@ -21,11 +21,7 @@ export interface IAuthProps extends IStateProps, IDispatchProps, IOwnProps {}
 
 const useStyles = createUseStyles({
   authViewContainer: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    alignContent: "center"
+    width: "100%"
   }
 });
 

@@ -39,5 +39,6 @@ export const zhtw = {
     "基於代碼重構檢測與信息檢索技術的軟件可追踪性維護工具",
   "start using": "開始使用",
   "product and service": "產品及服務",
-  "using steps": "使用流程"
+  "using steps": "使用流程",
+  "other login": "其它登錄方式"
 };

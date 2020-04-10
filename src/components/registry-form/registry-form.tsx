@@ -3,24 +3,23 @@ import { Form, Input, Button, Checkbox } from "antd";
 import { useTranslation } from "react-i18next";
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import { IRegistryData } from "../../store/auth/types";
-
-const layout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 }
-};
-const tailLayout = {
-  wrapperCol: { offset: 8, span: 16 }
-};
+import { createUseStyles } from "react-jss";
 
 export interface IRegistryFormProps {
   onFinish: (data: IRegistryData, remember: boolean) => void;
-  onFinishFailed: () => void;
+  onFinishFailed: (error: any) => void;
 }
+
+const useStyles = createUseStyles({
+  formItem: {
+    margin: { bottom: "10px" }
+  }
+});
 
 const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
   (props: IRegistryFormProps) => {
     const { t } = useTranslation();
-
+    const styles = useStyles();
     const [form] = Form.useForm();
 
     const onEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
@@ -46,14 +45,16 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
 
     const onFinishFailed = (errorInfo: any) => {
       if (typeof props.onFinishFailed === "function") {
-        props.onFinishFailed();
+        props.onFinishFailed(errorInfo);
+      }
+      if (process.env.NODE_ENV !== "production") {
+        console.log(errorInfo);
       }
     };
 
     return (
       <Form
-        {...layout}
-        name="basic"
+        name="registry from"
         form={form}
         initialValues={{ remember: true }}
         onFinish={onFinish}
@@ -71,6 +72,7 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
         </Form.Item>
 
         <Form.Item
+          className={styles.formItem}
           label={t("password")}
           name="password"
           rules={[{ required: true, message: t("password placeholder") }]}
@@ -78,13 +80,17 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
           <Input.Password onChange={onPasswordChange} />
         </Form.Item>
 
-        <Form.Item {...tailLayout} name="remember" valuePropName="checked">
+        <Form.Item
+          name="remember"
+          valuePropName="checked"
+          className={styles.formItem}
+        >
           <Checkbox onChange={onRememberChange}>{t("remember me")}</Checkbox>
         </Form.Item>
 
-        <Form.Item {...tailLayout}>
-          <Button type="primary" htmlType="submit">
-            {t("submit")}
+        <Form.Item>
+          <Button type="primary" htmlType="submit" block>
+            {t("registry")}
           </Button>
         </Form.Item>
       </Form>

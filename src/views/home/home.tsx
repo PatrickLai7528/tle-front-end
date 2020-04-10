@@ -54,6 +54,8 @@ const useStyles = createUseStyles({
   }
 });
 
+const bodyStyle = { padding: "8px" };
+
 const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
   const { toggle, authModalVisible } = props;
   const { t } = useTranslation();
@@ -61,6 +63,7 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
   return (
     <>
       <Modal
+        bodyStyle={bodyStyle}
         visible={authModalVisible}
         closable={false}
         footer={null}
