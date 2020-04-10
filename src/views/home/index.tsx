@@ -1,4 +1,3 @@
-// export { default as HomeView } from "./home";
 import Home, { IStateProps, IDispatchProps, IOwnProps } from "./home";
 import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
 import { RootState } from "../../store/reducers";

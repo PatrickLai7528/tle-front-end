@@ -34,5 +34,10 @@ export const zhtw = {
   tracing: "追踪中",
   "not tracing": "未追踪",
   confirm: "確認",
-  cancel: "取消"
+  cancel: "取消",
+  "software traceability maintenance tool based on code refactoring detection and information retrieval technology":
+    "基於代碼重構檢測與信息檢索技術的軟件可追踪性維護工具",
+  "start using": "開始使用",
+  "product and service": "產品及服務",
+  "using steps": "使用流程"
 };

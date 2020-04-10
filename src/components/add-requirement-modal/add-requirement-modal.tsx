@@ -1,7 +1,6 @@
-import React, { memo, FunctionComponent, useState, ChangeEvent } from "react";
-import { Modal, Input } from "antd";
+import { Input, Modal } from "antd";
+import React, { ChangeEvent, FunctionComponent, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useStore } from "react-redux";
 
 export interface IStateProps {
   visible: boolean;

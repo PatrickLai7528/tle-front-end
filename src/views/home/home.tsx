@@ -3,10 +3,11 @@ import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
 import { ProductAndService } from "../../components/product-and-service";
 import { UsingSteps } from "../../components/using-steps";
-import bannerImg from "./banner2.jpg";
+import bannerImg from "./asset/banner.jpg";
 import SectionLayout from "./section-layout";
 import { Layout } from "antd";
 import { ConnectedAuth } from "../../components/auth";
+import { useTranslation } from "react-i18next";
 
 export interface IStateProps {
   authModalVisible: boolean;
@@ -55,6 +56,7 @@ const useStyles = createUseStyles({
 
 const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
   const { toggle, authModalVisible } = props;
+  const { t } = useTranslation();
   const styles = useStyles();
   return (
     <>
@@ -72,19 +74,24 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
           <div className={styles.header}>
             <div className={styles.title}>Trace Link Evolver</div>
             <div className={styles.subTitle}>
-              基於代碼重構檢測與信息檢索技術的軟件可追踪性維護工具
+              {t(
+                "software traceability maintenance tool based on code refactoring detection and information retrieval technology"
+              )}
             </div>
             <Button
               className={styles.startButton}
               type={"primary"}
               onClick={toggle}
             >
-              開始使用
+              {t("start using")}
             </Button>
           </div>
         </Layout.Content>
-        <SectionLayout title={"產品及服務"} content={<ProductAndService />} />
-        <SectionLayout title={"使用流程"} content={<UsingSteps />} />
+        <SectionLayout
+          title={t("product and service")}
+          content={<ProductAndService />}
+        />
+        <SectionLayout title={t("using steps")} content={<UsingSteps />} />
         <Footer className={styles.footer}>TLE ©2020 Created by NJU</Footer>
       </Layout>
     </>
