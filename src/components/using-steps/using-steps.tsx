@@ -1,19 +1,11 @@
 import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
 import StepImage from "./step.svg";
+import { dataSource } from "../product-and-service/data-source";
 
 export interface IUsingStepsProps {}
 
 const useStyles = createUseStyles({
-  // "@keyframes slideInUp": {
-  // 	from: {
-  // 		transform: "translate3d(0, 100%, 0)",
-  // 		visibility: "visible"
-  // 	},
-  // 	to: {
-  // 		transform: "translate3d(0, 0, 0)"
-  // 	}
-  // },
   usingSteps: {
     width: "100%",
     display: "flex",
@@ -21,8 +13,6 @@ const useStyles = createUseStyles({
     justifyContent: "space-around"
   },
   box: {
-    // animationName: "$slideInUp",
-    // animationDuration: "5s",
     padding: "20px",
     display: "flex",
     flexDirection: "column",
@@ -51,33 +41,17 @@ const UsingSteps: FunctionComponent<IUsingStepsProps> = memo(
     const styles = useStyles();
     return (
       <section className={styles.usingSteps}>
-        <div key="box1" className={styles.box}>
-          <img src={StepImage} alt={"step"} />
-          <h1 className={styles.boxTitle}>需求沟通</h1>
-          <div className={styles.stepDescription}>
-            <span>
-              沟通业务需求，对接人：诚凡、芸彩沟通业务需求，对接人：诚凡、芸彩
-            </span>
-          </div>
-        </div>
-        <div key="box2" className={styles.box}>
-          <img src={StepImage} alt={"step"} />
-          <h1 className={styles.boxTitle}>需求沟通</h1>
-          <div className={styles.stepDescription}>
-            <span>
-              沟通业务需求，对接人：诚凡、芸彩沟通业务需求，对接人：诚凡、芸彩
-            </span>
-          </div>
-        </div>
-        <div key="box3" className={styles.box}>
-          <img src={StepImage} alt={"step"} />
-          <h1 className={styles.boxTitle}>需求沟通</h1>
-          <div className={styles.stepDescription}>
-            <span>
-              沟通业务需求，对接人：诚凡、芸彩沟通业务需求，对接人：诚凡、芸彩
-            </span>
-          </div>
-        </div>
+        {dataSource.map(data => {
+          return (
+            <div key={data.title} className={styles.box}>
+              <img src={StepImage} alt={"step"} />
+              <h1 className={styles.boxTitle}>{data.title}</h1>
+              <div className={styles.stepDescription}>
+                <span>{data.description} </span>
+              </div>
+            </div>
+          );
+        })}
       </section>
     );
   }
