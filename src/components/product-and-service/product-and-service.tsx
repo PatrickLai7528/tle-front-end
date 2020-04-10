@@ -1,6 +1,6 @@
 import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
-import ProductServiceImage1 from "./product-service-1.png";
+import { dataSource } from "./data-source";
 
 export interface IProductAndServiceProps {}
 
@@ -26,36 +26,22 @@ const ProductAndService: FunctionComponent<IProductAndServiceProps> = memo(
     const styles = useStyles();
     return (
       <section className={styles.productServiceContent}>
-        <div className={styles.productServiceContentBox}>
-          <img
-            width={"100px"}
-            height={"100px"}
-            src={ProductServiceImage1}
-            alt={"product service 1"}
-          />
-          <h1 className={styles.productServiceContentBoxTitle}>產品及服務一</h1>
-          <span>產品及服務一描述</span>
-        </div>
-        <div className={styles.productServiceContentBox}>
-          <img
-            width={"100px"}
-            height={"100px"}
-            src={ProductServiceImage1}
-            alt={"product service 1"}
-          />
-          <h1 className={styles.productServiceContentBoxTitle}>產品及服務一</h1>
-          <span>產品及服務一描述</span>
-        </div>
-        <div className={styles.productServiceContentBox}>
-          <img
-            width={"100px"}
-            height={"100px"}
-            src={ProductServiceImage1}
-            alt={"product service 1"}
-          />
-          <h1 className={styles.productServiceContentBoxTitle}>產品及服務一</h1>
-          <span>產品及服務一描述</span>
-        </div>
+        {dataSource.map(data => {
+          return (
+            <div className={styles.productServiceContentBox} key={data.title}>
+              <img
+                width={"100px"}
+                height={"100px"}
+                src={data.image}
+                alt={"product service 1"}
+              />
+              <h1 className={styles.productServiceContentBoxTitle}>
+                {data.title}
+              </h1>
+              <span>{data.description}</span>
+            </div>
+          );
+        })}
       </section>
     );
   }
