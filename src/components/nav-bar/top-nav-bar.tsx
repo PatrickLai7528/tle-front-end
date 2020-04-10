@@ -1,24 +1,41 @@
-import React, { FunctionComponent, memo } from "react";
 import { Menu } from "antd";
+import React, { FunctionComponent, memo } from "react";
+import { createUseStyles } from "react-jss";
+import { sideMenuConfigs } from "./../../configs/side-menu.config";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export interface ITopNavBarProps {}
 
+const useStyles = createUseStyles({
+  topNavBar: {
+    display: "flex",
+    flexDirection: "row-reverse"
+  }
+});
+
 const TopNavBar: FunctionComponent<ITopNavBarProps> = memo(
   (props: ITopNavBarProps) => {
+    const { t } = useTranslation();
+    const styles = useStyles();
     return (
-      <>
-        <div className="logo" />
+      <div className={styles.topNavBar}>
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={["2"]}
           style={{ lineHeight: "64px" }}
         >
-          <Menu.Item key="1">nav 1</Menu.Item>
-          <Menu.Item key="2">nav 2</Menu.Item>
-          <Menu.Item key="3">nav 3</Menu.Item>
+          {sideMenuConfigs.map(config => {
+            return (
+              <Menu.Item key={config.label}>
+                {config.icon}
+                <Link to={config.route}>{t(config.label)}</Link>
+              </Menu.Item>
+            );
+          })}
         </Menu>
-      </>
+      </div>
     );
   }
 );

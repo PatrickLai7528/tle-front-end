@@ -1,27 +1,44 @@
 import React, { FunctionComponent, memo } from "react";
-import { Layout } from "antd";
-import { TopNavBar, SideNavBar } from "./../components/nav-bar";
+import { Redirect, Route, Switch } from "react-router-dom";
+import { AuthRedirectView } from "../views/auth-redirect";
+import { ConnectedHomeView } from "./../views/home";
+import { RouteConstants } from "./constants";
 import Content from "./content";
-
-const { Header, Sider } = Layout;
+import Layout from "./layout";
 
 export interface IRoutesProps {}
 
 const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
   return (
-    <Layout style={{ minHeight: "100vmin" }}>
-      <Header className="header">
-        <TopNavBar />
-      </Header>
-      <Layout>
-        <Sider width={200} className="site-layout-background">
-          <SideNavBar />
-        </Sider>
-        <Layout style={{ padding: "0 24px 24px" }}>
-          <Content />
-        </Layout>
-      </Layout>
-    </Layout>
+    <Switch>
+      <Route exact path={"/"}>
+        <Redirect to={RouteConstants.HOME} />
+      </Route>
+      <Route
+        exact
+        path={RouteConstants.HOME}
+        component={() => {
+          return <Layout requireAuth={false} content={<ConnectedHomeView />} />;
+        }}
+      />
+      <Route
+        exact
+        path="/auth/redirect"
+        component={(props: any) => (
+          <AuthRedirectView
+            {...props}
+            successRedirect={"/authed/"}
+            failureRedirect={"/user/auth"}
+          />
+        )}
+      />
+      <Route
+        path="/authed/*"
+        component={() => {
+          return <Layout requireAuth={true} content={<Content />} />;
+        }}
+      />
+    </Switch>
   );
 });
 
