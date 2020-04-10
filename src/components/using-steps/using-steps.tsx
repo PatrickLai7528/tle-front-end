@@ -44,7 +44,7 @@ const UsingSteps: FunctionComponent<IUsingStepsProps> = memo(
         {dataSource.map(data => {
           return (
             <div key={data.title} className={styles.box}>
-              <img src={StepImage} alt={"step"} />
+              <img src={data.image} alt={"step"} />
               <h1 className={styles.boxTitle}>{data.title}</h1>
               <div className={styles.stepDescription}>
                 <span>{data.description} </span>
