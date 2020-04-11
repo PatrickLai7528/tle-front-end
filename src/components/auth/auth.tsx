@@ -1,5 +1,5 @@
 import { Tabs } from "antd";
-import React, { FunctionComponent, useMemo, memo } from "react";
+import React, { FunctionComponent, useMemo, memo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { LogInForm } from "../log-in-form";
 import { RegistryForm } from "../registry-form";
@@ -17,7 +17,7 @@ export interface IStateProps {
 export interface IDispatchProps {
   logIn: (data: ILogInData) => Promise<boolean>;
   pushNotification: (item: INotificationQueueItem) => void;
-  registry: (data: IRegistryData) => void;
+  registry: (data: IRegistryData) => Promise<boolean>;
 }
 
 export interface IOwnProps {
@@ -43,9 +43,12 @@ const Auth: FunctionComponent<IAuthProps> = memo((props: IAuthProps) => {
     onRegistryDone
   } = props;
   const { t } = useTranslation();
+  const [activeTabKey, setActiveTabKey] = useState<"LOG_IN" | "REGISTRY">(
+    "LOG_IN"
+  );
   const styles = useStyles();
 
-  const successNotification: INotificationQueueItem = useMemo(() => {
+  const successLogInNotification: INotificationQueueItem = useMemo(() => {
     return {
       title: t("log in success"),
       duration: 4.5,
@@ -54,9 +57,27 @@ const Auth: FunctionComponent<IAuthProps> = memo((props: IAuthProps) => {
     };
   }, [t]);
 
-  const failureNotification: INotificationQueueItem = useMemo(() => {
+  const failureLogInNotification: INotificationQueueItem = useMemo(() => {
     return {
       title: t("log in failure"),
+      duration: 4.5,
+      type: "error",
+      messageOrNotification: "message"
+    };
+  }, [t]);
+
+  const successRegistryNotification: INotificationQueueItem = useMemo(() => {
+    return {
+      title: t("registry success"),
+      duration: 4.5,
+      type: "success",
+      messageOrNotification: "message"
+    };
+  }, [t]);
+
+  const failureRegistryNotification: INotificationQueueItem = useMemo(() => {
+    return {
+      title: t("registry failure"),
       duration: 4.5,
       type: "error",
       messageOrNotification: "message"
@@ -66,39 +87,73 @@ const Auth: FunctionComponent<IAuthProps> = memo((props: IAuthProps) => {
   const memorizedOnLogInFinish = useMemo(() => {
     return (data: ILogInData, remember: boolean) => {
       logIn(data).then(success => {
-        pushNotification(success ? successNotification : failureNotification);
+        pushNotification(
+          success ? successLogInNotification : failureLogInNotification
+        );
         onLogInDone(success);
       });
     };
   }, [
     logIn,
-    failureNotification,
-    successNotification,
+    failureLogInNotification,
+    successLogInNotification,
     pushNotification,
     onLogInDone
   ]);
 
+  const memorizedOnLogInFailure = useMemo(() => {
+    return (error: any) => {
+      pushNotification(failureLogInNotification);
+    };
+  }, [pushNotification, failureLogInNotification]);
+
+  const memorizedOnRegistryFinish = useMemo(() => {
+    return (data: IRegistryData, rememebr: boolean) => {
+      registry(data).then(success => {
+        pushNotification(
+          success ? successRegistryNotification : failureRegistryNotification
+        );
+        onRegistryDone(success);
+        setActiveTabKey("LOG_IN");
+      });
+    };
+  }, [
+    registry,
+    successRegistryNotification,
+    failureRegistryNotification,
+    pushNotification,
+    onRegistryDone
+  ]);
+
+  const memorizedOnRegistryFailure = useMemo(() => {
+    return (error: any) => {
+      pushNotification(failureRegistryNotification);
+    };
+  }, [pushNotification, failureRegistryNotification]);
+
+  const memorizedOnTabKeyChange = useMemo(() => {
+    return (key: string) => setActiveTabKey(key as any);
+  }, [setActiveTabKey]);
+
   return (
     <div className={styles.authViewContainer}>
-      <Tabs defaultActiveKey="login">
-        <TabPane tab={t("log in")} key="login">
+      <Tabs
+        activeKey={activeTabKey}
+        onChange={memorizedOnTabKeyChange}
+        destroyInactiveTabPane
+      >
+        <TabPane tab={t("log in")} key={"LOG_IN"}>
           <LogInForm
             loading={loading}
             onFinish={memorizedOnLogInFinish}
-            onFinishFailed={() => {
-              console.log("failed");
-            }}
+            onFinishFailed={memorizedOnLogInFailure}
           />
         </TabPane>
-        <TabPane tab={t("registry")} key="registry">
+        <TabPane tab={t("registry")} key={"REGISTRY"}>
           <RegistryForm
-            onFinish={(data: IRegistryData, rememebr) => {
-              console.log(data);
-              console.log(rememebr);
-            }}
-            onFinishFailed={() => {
-              console.log("failed");
-            }}
+            loading={loading}
+            onFinish={memorizedOnRegistryFinish}
+            onFinishFailed={memorizedOnRegistryFailure}
           />
         </TabPane>
       </Tabs>

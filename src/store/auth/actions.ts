@@ -1,21 +1,49 @@
-import { ThunkDispatch } from "redux-thunk";
-import {
-  PUSH_NOTIFICATION_QUEUE,
-  NotificationActionTypes,
-  INotificationQueueItem
-} from "./../notification/types";
+import _ from "lodash";
+import { getServerUrl } from "./../../configs/get-url";
+import { IGHUserProfile } from "./../../types/github-api/user-profile";
+import { NotificationActionTypes } from "./../notification/types";
 import { AppThunk } from "./../store";
 import {
+  AuthActions,
   AuthActionTypes,
+  FETCH_GH_PROFILE,
+  FETCH_GH_PROFILE_FAILURE,
+  FETCH_GH_PROFILE_SUCCESS,
   ILogInData,
   IRegistryData,
-  TOGGLE_AUTH_MODAL,
   SEND_GITHUB_LOG_IN,
-  AuthActions
+  TOGGLE_AUTH_MODAL
 } from "./types";
 
 export const toggleAuthModal = (): AuthActions => {
   return { type: TOGGLE_AUTH_MODAL };
+};
+
+export const fetchGHProfile = (
+  gitHubAccessToken: string
+): AppThunk<void, AuthActionTypes> => async dispatch => {
+  try {
+    const res = await fetch(`https://api.github.com/user`, {
+      headers: {
+        accept: "application/json",
+        Authorization: `token ${gitHubAccessToken}`
+      }
+    });
+    const data = await res.json();
+    const ghProfile: IGHUserProfile = Object.keys(data).reduce(
+      (sum: any, curr) => {
+        sum[_.camelCase(curr)] = data[curr];
+        return sum;
+      },
+      {}
+    ) as IGHUserProfile;
+    dispatch({ type: FETCH_GH_PROFILE_SUCCESS, payload: ghProfile });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: FETCH_GH_PROFILE_FAILURE });
+  }
 };
 
 export const sendGitHubLogIn = (
@@ -24,11 +52,11 @@ export const sendGitHubLogIn = (
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
     const res = await fetch(
-      `http://localhost:8080/auth/access_token?code=${code}`
+      `${getServerUrl()}/auth/access_token?code=${code}`
     ).then(res => res.json());
-    console.log(res);
     const { success, meta, payload: accessToken } = res;
     if (success) {
+      dispatch(fetchGHProfile(accessToken));
       dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
     } else {
       dispatch({ type: "SEND_GITHUB_LOG_IN_FAILURE", meta });
@@ -67,15 +95,17 @@ export const sendLogIn = (
 
 export const sendRegistry = (
   data: IRegistryData
-): AppThunk<void, AuthActionTypes> => async dispatch => {
+): AppThunk<Promise<boolean>, AuthActionTypes> => async dispatch => {
   dispatch({ type: "SEND_REGISTRY" });
   try {
     await new Promise(resolve => setTimeout(resolve, 1500));
     dispatch({ type: "SEND_REGISTRY_SUCCESS" });
+    return true;
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);
     }
     dispatch({ type: "SEND_REGISTRY_FAILRE" });
+    return false;
   }
 };

@@ -6,6 +6,7 @@ import { IRegistryData } from "../../store/auth/types";
 import { createUseStyles } from "react-jss";
 
 export interface IRegistryFormProps {
+  loading: boolean;
   onFinish: (data: IRegistryData, remember: boolean) => void;
   onFinishFailed: (error: any) => void;
 }
@@ -21,6 +22,7 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
     const { t } = useTranslation();
     const styles = useStyles();
     const [form] = Form.useForm();
+    const { loading } = props;
 
     const onEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
       form.setFieldsValue({ email: e.target.value });
@@ -92,7 +94,7 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit" block>
+          <Button loading={loading} type="primary" htmlType="submit" block>
             {t("registry")}
           </Button>
         </Form.Item>

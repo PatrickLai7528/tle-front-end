@@ -12,7 +12,11 @@ import {
   SEND_REGISTRY,
   SEND_REGISTRY_FAILRE,
   SEND_REGISTRY_SUCCESS,
-  TOGGLE_AUTH_MODAL
+  TOGGLE_AUTH_MODAL,
+  FETCH_GH_PROFILE,
+  FETCH_GH_PROFILE_SUCCESS,
+  FETCH_GH_PROFILE_FAILURE,
+  IFetchGHProfileSuccessAction
 } from "./types";
 
 const initalAuthState: IAuthState = {
@@ -25,6 +29,23 @@ export const authReducer = (
   action: AuthActions
 ): IAuthState => {
   switch (action.type) {
+    case FETCH_GH_PROFILE:
+      return {
+        ...state,
+        loading: true
+      };
+    case FETCH_GH_PROFILE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        ghProfile: (action as IFetchGHProfileSuccessAction).payload
+      };
+    case FETCH_GH_PROFILE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case TOGGLE_AUTH_MODAL:
       return {
         ...state,

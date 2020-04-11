@@ -4,6 +4,8 @@ import { RepositoryAvatar } from "../repository-avatar";
 import { createUseStyles } from "react-jss";
 import { ProgramLanguage } from "../../utils/language-color";
 import moment from "moment";
+import { RouteConstants } from "../../routes/constants";
+import { Link } from "react-router-dom";
 
 export interface IStateProps {}
 
@@ -88,7 +90,9 @@ const SimpleRepoCard: FC<ISimpleRepoCardProps> = memo(
             language={language}
           />
           <Typography.Text className={styles.cardTitle}>
-            {repositoryName}
+            <Link to={RouteConstants.REPOSITORY_DETAIL(repositoryName)}>
+              {repositoryName}
+            </Link>
           </Typography.Text>
         </div>
         <Typography.Paragraph className={styles.cardDescription}>

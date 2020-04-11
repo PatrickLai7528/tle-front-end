@@ -5,7 +5,7 @@ import { combineReducers } from "redux";
 import { authReducer } from "./auth/reducers";
 import { importRepositoryReducer } from "./import-repository/reducer";
 import { repositoryManagementReducer } from "./repository-management/reducer";
-import { searchReducer } from "./search-repository/reducers";
+import { searchReducer } from "./search-github-repository/reducers";
 
 const rootReducer = combineReducers({
   authReducer,

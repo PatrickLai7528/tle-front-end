@@ -27,12 +27,12 @@ export interface IGitHubRepositoryListProps
     IDispatchProps,
     IOwnProps {}
 
-const paginationConfig: PaginationConfig = {
-  simple: true,
-  position: "top",
-  pageSize: 10,
-  style: { margin: 0 }
-};
+// const paginationConfig: PaginationConfig = {
+// 	simple: true,
+// 	position: "top",
+// 	pageSize: 10,
+// 	style: { margin: 0 }
+// };
 
 const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = memo(
   (props: IGitHubRepositoryListProps) => {
@@ -41,26 +41,18 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
     return (
       <List
         loading={loading}
-        pagination={paginationConfig}
+        // pagination={paginationConfig}
         dataSource={repositoryList}
         renderItem={(item: IGHRepositoryRes) => {
-          const { name, language, description, html_url: htmlUrl, id } = item;
+          const { language, html_url: htmlUrl, id } = item;
           return (
             <List.Item
               key={item.name}
               actions={[
-                <Link to={`/authed/import_process/${id}`}>
-                  <Button type={"link"}>{t("import")}</Button>
-                </Link>
+                <Link to={`/authed/import_process/${id}`}>{t("import")}</Link>
               ]}
             >
               <List.Item.Meta
-                avatar={
-                  <RepositoryAvatar
-                    repositoryName={name}
-                    language={language as ProgramLanguage}
-                  />
-                }
                 title={
                   <Popconfirm
                     title={"將前往GitHub"}
@@ -74,13 +66,7 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
                   </Popconfirm>
                 }
                 description={
-                  <>
-                    <LanguageBadge language={language as ProgramLanguage} />
-                    <Divider type="vertical" />
-                    {description && (
-                      <RepositoryDescription description={description} />
-                    )}
-                  </>
+                  <LanguageBadge language={language as ProgramLanguage} />
                 }
               />
             </List.Item>

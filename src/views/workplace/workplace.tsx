@@ -1,21 +1,20 @@
+import { Avatar, Col, PageHeader, Row, Typography, Skeleton } from "antd";
 import React, { FunctionComponent, memo } from "react";
-import { PageHeader, Avatar, Typography, Row, Col, Card } from "antd";
+import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteConstants } from "../../routes/constants";
-import { useTranslation } from "react-i18next";
-import { SimpleRepoCard } from "../../components/simple-repo-card";
-import RecentRepos from "./recent-repos";
-import { recentRepos } from "../../stubs/recent-repo";
-import TracingStatistic from "./tracing-statistic";
-import QuickAction, { IAction } from "./quick-action";
-import Activity from "./activity";
 import { activity } from "../../stubs/activity";
-import RepoTracingChart from "./repo-tracing-chart";
+import { recentRepos } from "../../stubs/recent-repo";
+import Activity from "./activity";
+import QuickAction, { IAction } from "./quick-action";
+import RecentRepos from "./recent-repos";
+import TracingStatistic from "./tracing-statistic";
 
 export interface IStateProps {
-  userName: string;
-  userAvatarUrl: string;
-  userProfile: string;
+  loading: boolean;
+  userName?: string;
+  userAvatarUrl?: string;
+  userProfile?: string;
 }
 
 export interface IDispatchProps {}
@@ -99,16 +98,24 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
           title={t("workplace")}
         >
           <div className={styles.pageHeaderContent}>
-            <Avatar src={userAvatarUrl} size={64} />
-            <Typography className={styles.contentTypography}>
-              <Typography.Title
-                className={styles.contentTitle}
-                level={3}
-              >{`您好，${userName}`}</Typography.Title>
-              <Typography.Paragraph type={"secondary"}>
-                {userProfile}
-              </Typography.Paragraph>
-            </Typography>
+            {userAvatarUrl ? (
+              <Avatar src={userAvatarUrl} size={64} />
+            ) : (
+              <Skeleton.Avatar />
+            )}
+            {userName && userProfile ? (
+              <Typography className={styles.contentTypography}>
+                <Typography.Title
+                  className={styles.contentTitle}
+                  level={3}
+                >{`您好，${userName}`}</Typography.Title>
+                <Typography.Paragraph type={"secondary"}>
+                  {userProfile}
+                </Typography.Paragraph>
+              </Typography>
+            ) : (
+              <Skeleton />
+            )}
             <div className={styles.statisticArea}>
               <TracingStatistic
                 repository={123}
