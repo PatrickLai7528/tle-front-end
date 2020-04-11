@@ -24,7 +24,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
 ) => {
   return {
     logIn: (data: ILogInData): Promise<boolean> => dispatch(sendLogIn(data)),
-    registry: (data: IRegistryData) => dispatch(sendRegistry(data)),
+    registry: (data: IRegistryData): Promise<boolean> =>
+      dispatch(sendRegistry(data)),
     pushNotification: (item: INotificationQueueItem) =>
       dispatch(pushNotification(item))
   };

@@ -67,15 +67,17 @@ export const sendLogIn = (
 
 export const sendRegistry = (
   data: IRegistryData
-): AppThunk<void, AuthActionTypes> => async dispatch => {
+): AppThunk<Promise<boolean>, AuthActionTypes> => async dispatch => {
   dispatch({ type: "SEND_REGISTRY" });
   try {
     await new Promise(resolve => setTimeout(resolve, 1500));
     dispatch({ type: "SEND_REGISTRY_SUCCESS" });
+    return true;
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);
     }
     dispatch({ type: "SEND_REGISTRY_FAILRE" });
+    return false;
   }
 };
