@@ -1,4 +1,9 @@
-import { fakeLogIn, fakeRegistry } from "./../../mock/auth-api";
+import { ThunkDispatch } from "redux-thunk";
+import {
+  PUSH_NOTIFICATION_QUEUE,
+  NotificationActionTypes,
+  INotificationQueueItem
+} from "./../notification/types";
 import { AppThunk } from "./../store";
 import {
   AuthActionTypes,
@@ -38,19 +43,25 @@ export const sendGitHubLogIn = (
 
 export const sendLogIn = (
   data: ILogInData
-): AppThunk<void, AuthActionTypes> => async dispatch => {
+): AppThunk<
+  Promise<boolean>,
+  AuthActionTypes | NotificationActionTypes
+> => async dispatch => {
   dispatch({ type: "SEND_LOG_IN" });
   try {
-    const token = await fakeLogIn(data);
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const token = "hahaha hahahaha fake token";
     dispatch({
       type: "SEND_LOG_IN_SUCCESS",
       payload: { token, email: data.email }
     });
+    return true;
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);
     }
     dispatch({ type: "SEND_LOG_IN_FAILURE" });
+    return false;
   }
 };
 
@@ -59,7 +70,7 @@ export const sendRegistry = (
 ): AppThunk<void, AuthActionTypes> => async dispatch => {
   dispatch({ type: "SEND_REGISTRY" });
   try {
-    await fakeRegistry(data);
+    await new Promise(resolve => setTimeout(resolve, 1500));
     dispatch({ type: "SEND_REGISTRY_SUCCESS" });
   } catch (e) {
     if (process.env.NODE_ENV === "development") {

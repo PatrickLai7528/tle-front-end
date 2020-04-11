@@ -7,9 +7,11 @@ import "./index.scss";
 import { Routes } from "./routes";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./store";
+import { ConnectedNotificatioQueue } from "./components/notification-queue";
 ReactDOM.render(
   <ReactReduxProvider store={store}>
     <Router>
+      <ConnectedNotificatioQueue />
       <Routes />
     </Router>
   </ReactReduxProvider>,
