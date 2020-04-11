@@ -1,11 +1,21 @@
 import React, { FunctionComponent, memo } from "react";
 import { Input, Dropdown, Menu } from "antd";
+import { createUseStyles } from "react-jss";
 
 export interface IStateProps {}
 
 export interface IDispatchProps {}
 
 export interface IOwnProps {}
+
+const useStyles = createUseStyles({
+  searchGitHub: {
+    width: "100%"
+  },
+  searchInput: {
+    width: "100%"
+  }
+});
 
 export interface ISearchGitHubRepositoryProps
   extends IStateProps,
@@ -42,12 +52,13 @@ const menu = (
 
 const SearchGitHubRepository: FunctionComponent<ISearchGitHubRepositoryProps> = memo(
   (props: ISearchGitHubRepositoryProps) => {
+    const styles = useStyles();
     return (
-      <Dropdown overlay={menu}>
+      <Dropdown className={styles.searchGitHub} overlay={menu}>
         <Input.Search
           placeholder="input search text"
           onSearch={value => console.log(value)}
-          style={{ width: 200 }}
+          className={styles.searchInput}
         />
       </Dropdown>
     );

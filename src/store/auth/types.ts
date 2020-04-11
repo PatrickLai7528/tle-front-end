@@ -1,3 +1,4 @@
+import { IGHUserProfile } from "./../../types/github-api/user-profile";
 export const SEND_LOG_IN = "SEND_LOG_IN";
 export const SEND_LOG_IN_SUCCESS = "SEND_LOG_IN_SUCCESS";
 export const SEND_LOG_IN_FAILURE = "SEND_LOG_IN_FAILURE";
@@ -10,6 +11,10 @@ export const SEND_GITHUB_LOG_IN = "SEND_GITHUB_LOG_IN";
 export const SEND_GITHUB_LOG_IN_SUCCESS = "SEND_GITHUB_LOG_IN_SUCCESS";
 export const SEND_GITHUB_LOG_IN_FAILURE = "SEND_GITHUB_LOG_IN_FAILURE";
 
+export const FETCH_GH_PROFILE = "FETCH_GH_PROFILE";
+export const FETCH_GH_PROFILE_SUCCESS = "FETCH_GH_PROFILE_SUCCESS";
+export const FETCH_GH_PROFILE_FAILURE = "FETCH_GH_PROFILE_SUCCESS";
+
 export const TOGGLE_AUTH_MODAL = "TOGGLE_AUTH_MODAL";
 
 export interface IAuthState {
@@ -20,6 +25,20 @@ export interface IAuthState {
   loading?: boolean;
   error?: string | boolean;
   authModalVisible: boolean;
+  ghProfile?: IGHUserProfile;
+}
+
+export interface IFetchGhProfileAction {
+  type: typeof FETCH_GH_PROFILE;
+}
+
+export interface IFetchGHProfileSuccessAction {
+  type: typeof FETCH_GH_PROFILE_SUCCESS;
+  payload: IGHUserProfile;
+}
+
+export interface IFetchGHProfileFailureAction {
+  type: typeof FETCH_GH_PROFILE_FAILURE;
 }
 
 export interface IToggleAuthModalAction {
@@ -90,7 +109,10 @@ export type AuthActions =
   | ISendGitHubLogInAction
   | ISendGitHubLogInSuccessAction
   | ISendGitHubLogInFailureAction
-  | IToggleAuthModalAction;
+  | IToggleAuthModalAction
+  | IFetchGhProfileAction
+  | IFetchGHProfileSuccessAction
+  | IFetchGHProfileFailureAction;
 
 export type AuthActionTypes =
   | typeof SEND_LOG_IN
@@ -102,4 +124,7 @@ export type AuthActionTypes =
   | typeof SEND_GITHUB_LOG_IN
   | typeof SEND_GITHUB_LOG_IN_SUCCESS
   | typeof SEND_GITHUB_LOG_IN_FAILURE
-  | typeof TOGGLE_AUTH_MODAL;
+  | typeof TOGGLE_AUTH_MODAL
+  | typeof FETCH_GH_PROFILE
+  | typeof FETCH_GH_PROFILE_SUCCESS
+  | typeof FETCH_GH_PROFILE_FAILURE;

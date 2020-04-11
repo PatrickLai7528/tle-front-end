@@ -4,5 +4,6 @@ export const gitHubAuthConfigs = {
   authorize_uri: "https://github.com/login/oauth/authorize",
   redirect_uri: "http://localhost:3000/auth/redirect",
   access_token_uri: "https://github.com/login/oauth/access_token",
-  fetch_repository: "https://api.github.com/user/repos"
+  fetch_repository: "https://api.github.com/user/repos",
+  search: "https://api.github.com/search/repositories"
 };

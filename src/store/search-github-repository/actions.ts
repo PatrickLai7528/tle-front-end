@@ -1,11 +1,11 @@
-import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
+import { gitHubAuthConfigs } from "../../configs/github-auth.config";
 import {
   SearchRepositoryActionTypes,
   SEARCH_GITHUB_REPOSITORY,
   SEARCH_GITHUB_REPOSITORY_FAILURE,
   SAERCH_GITHUB_REPOSITORY_SUCCESS
 } from "./types";
-import { AppThunk } from "./../store";
+import { AppThunk } from "../store";
 
 export const searchGitHubRepository = (
   searchFor: string
@@ -19,6 +19,7 @@ export const searchGitHubRepository = (
       authReducer: { gitHubAccessToken }
     } = getState();
     if (gitHubAccessToken) {
+      const queryString = `?q=`;
       const res = await fetch(
         `${gitHubAuthConfigs.fetch_repository}/${searchFor}`,
         {

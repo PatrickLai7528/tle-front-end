@@ -1,4 +1,5 @@
-import { IGHRepositoryRes } from "./../../types/github-api/repository";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
+
 export const SEARCH_GITHUB_REPOSITORY = "SEARCH_GITHUB_REPOSITORY";
 export const SAERCH_GITHUB_REPOSITORY_SUCCESS =
   "SEARCH_GITHUB_REPOSITORY_SUCCESS";

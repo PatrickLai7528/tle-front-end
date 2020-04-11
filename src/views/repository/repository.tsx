@@ -1,4 +1,4 @@
-import { Button, PageHeader, Tabs } from "antd";
+import { Button, PageHeader, Tabs, Row, Col } from "antd";
 import React, { FunctionComponent, memo, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import { ConnectedGitHubRepositoryList } from "../../components/github-repository-list";
@@ -6,6 +6,7 @@ import { SearchGitHubRepository } from "../../components/search-github-repositor
 import { ConnectedImportedRepositorTab } from "../imported-repository";
 import { routes } from "./breadcrumb-routes";
 import { createUseStyles } from "react-jss";
+import GitHubRepository from "./github-repository";
 
 export interface IStateProps {
   gitHubAccessToken?: string;
@@ -60,15 +61,22 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
             </Button>
           ]}
         >
-          <Tabs defaultActiveKey="1">
-            <Tabs.TabPane tab={t("github repository")} key="1">
-              <SearchGitHubRepository />
-              <ConnectedGitHubRepositoryList />
-            </Tabs.TabPane>
-            <Tabs.TabPane tab={t("imported repository")} key="2">
+          <Row gutter={[16, 16]}>
+            <Col md={{ span: 6 }} sm={{ span: 24 }}>
+              <GitHubRepository />
+            </Col>
+            <Col md={{ span: 18 }} sm={{ span: 24 }}>
               <ConnectedImportedRepositorTab />
-            </Tabs.TabPane>
-          </Tabs>
+            </Col>
+          </Row>
+          {/* <Tabs defaultActiveKey="1">
+						<Tabs.TabPane tab={t("github repository")} key="1">
+							<SearchGitHubRepository />
+						</Tabs.TabPane>
+						<Tabs.TabPane
+							tab={t("imported repository")}
+							key="2"></Tabs.TabPane>
+					</Tabs> */}
         </PageHeader>
       </div>
     );
