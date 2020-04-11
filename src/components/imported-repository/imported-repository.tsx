@@ -1,7 +1,7 @@
 import React, { useEffect, FunctionComponent, memo } from "react";
 import { IImportedRepository } from "../../types";
 import { createUseStyles } from "react-jss";
-import { RepositoryCard } from "../../components/repository-card";
+import { RepositoryCard } from "../repository-card";
 import { Row, Col, Spin } from "antd";
 import { RouteConstants } from "../../routes/constants";
 
