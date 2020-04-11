@@ -10,6 +10,7 @@ import TracingStatistic from "./tracing-statistic";
 import QuickAction, { IAction } from "./quick-action";
 import Activity from "./activity";
 import { activity } from "../../stubs/activity";
+import RepoTracingChart from "./repo-tracing-chart";
 
 export interface IStateProps {
   userName: string;
@@ -130,8 +131,11 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
             </Row>
           </Col>
           <Col lg={{ span: 6 }} md={{ span: 24 }}>
-            <Row>
-              <QuickAction actions={actionShortCuts} />
+            <Row style={{ width: "100%" }}>
+              <Col span={24}>
+                <QuickAction actions={actionShortCuts} />
+                {/* <RepoTracingChart /> */}
+              </Col>
             </Row>
           </Col>
         </Row>

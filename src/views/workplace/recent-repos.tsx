@@ -3,8 +3,11 @@ import { Card, Row, Col } from "antd";
 import { SimpleRepoCard } from "../../components/simple-repo-card";
 import { createUseStyles } from "react-jss";
 import { ProgramLanguage } from "../../utils/language-color";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 export interface IRecentRepo {
+  id: string;
   name: string;
   language: ProgramLanguage;
   lastUpdateBy: string;
@@ -23,44 +26,26 @@ const useStyles = createUseStyles({
   }
 });
 
+const bodyStyle = { padding: 0 };
+
 const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
   (props: IRecentReposProps) => {
     const styles = useStyles();
+    const { t } = useTranslation();
     const { repos } = props;
-
-    const [firstRow, secondRow] = useMemo(() => {
-      const firstRow = repos.slice(0, 3);
-      const secondRow = repos.slice(3, 6);
-      return [firstRow, secondRow];
-    }, [repos]);
 
     return (
       <Card
         style={props.style}
-        extra={<a>全部項目</a>}
-        title={"常用項目"}
-        bodyStyle={{ padding: 0 }}
+        extra={<Link to={`/authed/repository`}>{t("all repository")}</Link>}
+        title={t("recent repository")}
+        bodyStyle={bodyStyle}
         className={styles.recentRepository}
       >
         <Row>
-          {firstRow.map((repo, index) => {
+          {repos.map(repo => {
             return (
-              <Col span={8} key={index}>
-                <SimpleRepoCard
-                  description={repo.description}
-                  repositoryName={repo.name}
-                  language={repo.language}
-                  lastUpdateAt={repo.lastUpdateAt}
-                  lastUpdateBy={repo.lastUpdateBy}
-                />
-              </Col>
-            );
-          })}
-        </Row>
-        <Row>
-          {secondRow.map((repo, index) => {
-            return (
-              <Col span={8} key={index}>
+              <Col span={8} key={repo.id}>
                 <SimpleRepoCard
                   description={repo.description}
                   repositoryName={repo.name}
