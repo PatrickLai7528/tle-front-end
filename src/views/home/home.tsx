@@ -1,5 +1,5 @@
 import { Button, Modal } from "antd";
-import React, { FunctionComponent, memo } from "react";
+import React, { FunctionComponent, memo, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { ProductAndService } from "../../components/product-and-service";
 import { UsingSteps } from "../../components/using-steps";
@@ -8,6 +8,8 @@ import SectionLayout from "./section-layout";
 import { Layout } from "antd";
 import { ConnectedAuth } from "../../components/auth";
 import { useTranslation } from "react-i18next";
+import { RouteComponentProps } from "react-router-dom";
+import { RouteConstants } from "../../routes/constants";
 
 export interface IStateProps {
   authModalVisible: boolean;
@@ -17,7 +19,7 @@ export interface IDispatchProps {
   toggle: () => void;
 }
 
-export interface IOwnProps {}
+export interface IOwnProps extends RouteComponentProps {}
 
 export interface INewHomeProps extends IStateProps, IDispatchProps, IOwnProps {}
 
@@ -55,9 +57,29 @@ const useStyles = createUseStyles({
 });
 
 const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
-  const { toggle, authModalVisible } = props;
+  const {
+    toggle,
+    authModalVisible,
+    history: { push }
+  } = props;
   const { t } = useTranslation();
   const styles = useStyles();
+
+  const memorizedOnLogInDone = useMemo(() => {
+    return (success: boolean) => {
+      if (success) {
+        toggle();
+        push(RouteConstants.WORKPLACE);
+      }
+    };
+  }, [toggle, push]);
+
+  const memorizedOnRegistryDone = useMemo(() => {
+    return (success: boolean) => {
+      console.log(success);
+    };
+  }, []);
+
   return (
     <>
       <Modal
@@ -67,7 +89,10 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
         destroyOnClose
         onCancel={toggle}
       >
-        <ConnectedAuth />
+        <ConnectedAuth
+          onLogInDone={memorizedOnLogInDone}
+          onRegistryDone={memorizedOnRegistryDone}
+        />
       </Modal>
       <Layout>
         <Layout.Content className={styles.banner}>

@@ -1,0 +1,39 @@
+export const PUSH_NOTIFICATION_QUEUE = "PUSH_NOTIFICATION_QUEUE";
+
+export const POP_NOTIFICATION_QUEUE = "POP_NOTIFICATION_QUEUE";
+
+//notification.success(config)
+// notification.error(config)
+// notification.info(config)
+// notification.warning(config)
+// notification.warn(config)
+
+export interface INotificationQueueItem {
+  title: string;
+  description?: string;
+  duration: number;
+  messageOrNotification: "message" | "notification";
+  type: "success" | "error" | "warning" | "warn";
+}
+
+export interface INotificationState {
+  queue: INotificationQueueItem[];
+  consumingItem?: INotificationQueueItem;
+}
+
+export interface IPushNotificationQueueAction {
+  type: typeof PUSH_NOTIFICATION_QUEUE;
+  payload: INotificationQueueItem;
+}
+
+export interface IPopNotificationQueueAction {
+  type: typeof POP_NOTIFICATION_QUEUE;
+}
+
+export type NotificationActions =
+  | IPushNotificationQueueAction
+  | IPopNotificationQueueAction;
+
+export type NotificationActionTypes =
+  | typeof PUSH_NOTIFICATION_QUEUE
+  | typeof POP_NOTIFICATION_QUEUE;
