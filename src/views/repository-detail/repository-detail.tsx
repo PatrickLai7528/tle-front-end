@@ -14,8 +14,7 @@ import {
   ICommit,
   IImportedRepository,
   IRequirement,
-  IRequirementDescription,
-  ITraceLinkMatrix
+  IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
 import CommitDetail from "./commit/commit-detail";

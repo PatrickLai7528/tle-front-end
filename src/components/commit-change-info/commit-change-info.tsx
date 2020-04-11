@@ -1,13 +1,14 @@
-import React, { FunctionComponent, memo } from "react";
-import { ICommitChanges } from "../../types";
-import { createUseStyles } from "react-jss";
 import { Anchor } from "antd";
-import { AnchorContainer, AnchorProps } from "antd/lib/anchor/Anchor";
+import { AnchorContainer } from "antd/lib/anchor/Anchor";
+import React, { FunctionComponent, memo, CSSProperties } from "react";
+import { createUseStyles } from "react-jss";
+import { ICommitChanges } from "../../types";
 import StatsBoxes from "./stats-box";
 
 export interface ICommitChangeInfoProps {
   changes: ICommitChanges[];
   getContainer?: () => AnchorContainer;
+  style?: CSSProperties;
 }
 
 const useStyles = createUseStyles({
@@ -36,11 +37,11 @@ const useStyles = createUseStyles({
 
 const CommitChangeInfo: FunctionComponent<ICommitChangeInfoProps> = memo(
   (props: ICommitChangeInfoProps) => {
-    const { changes, getContainer } = props;
+    const { changes, getContainer, style } = props;
     const styles = useStyles();
 
     return (
-      <div className={styles.changes}>
+      <div className={styles.changes} style={style}>
         {(changes || []).map(change => {
           return (
             <Anchor affix={false} getContainer={getContainer}>
@@ -76,5 +77,9 @@ const CommitChangeInfo: FunctionComponent<ICommitChangeInfoProps> = memo(
     );
   }
 );
+
+CommitChangeInfo.defaultProps = {
+  style: {}
+};
 
 export default CommitChangeInfo;
