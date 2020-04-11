@@ -1,10 +1,15 @@
 import React, { FunctionComponent, memo } from "react";
 import { Input, Dropdown, Menu } from "antd";
 import { createUseStyles } from "react-jss";
+import { useTranslation } from "react-i18next";
 
-export interface IStateProps {}
+export interface IStateProps {
+  loading: boolean;
+}
 
-export interface IDispatchProps {}
+export interface IDispatchProps {
+  doSearch: (searchFor: string) => void;
+}
 
 export interface IOwnProps {}
 
@@ -22,45 +27,17 @@ export interface ISearchGitHubRepositoryProps
     IDispatchProps,
     IOwnProps {}
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="http://www.alipay.com/"
-      >
-        1st menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="http://www.taobao.com/"
-      >
-        2nd menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        3rd menu item
-      </a>
-    </Menu.Item>
-  </Menu>
-);
-
 const SearchGitHubRepository: FunctionComponent<ISearchGitHubRepositoryProps> = memo(
   (props: ISearchGitHubRepositoryProps) => {
     const styles = useStyles();
+    const { t } = useTranslation();
+    const { doSearch } = props;
     return (
-      <Dropdown className={styles.searchGitHub} overlay={menu}>
-        <Input.Search
-          placeholder="input search text"
-          onSearch={value => console.log(value)}
-          className={styles.searchInput}
-        />
-      </Dropdown>
+      <Input.Search
+        placeholder={t("search repository placeholder")}
+        className={styles.searchInput}
+        onSearch={doSearch}
+      />
     );
   }
 );

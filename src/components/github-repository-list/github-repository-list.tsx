@@ -1,23 +1,19 @@
-import { Button, Divider, List, Popconfirm } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
+import { List, Popconfirm } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { LanguageBadge } from "../language-badge";
-import { ProgramLanguage } from "../../utils/language-color";
-import { RepositoryAvatar } from "../repository-avatar";
-import { RepositoryDescription } from "../repository-description";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
+import { ProgramLanguage } from "../../utils/language-color";
+import { LanguageBadge } from "../language-badge";
 
 export interface IStateProps {
   loading: boolean;
-  loadMoreTimes: number;
+  // loadMoreTimes: number;
   repositoryList: IGHRepositoryRes[];
 }
 
 export interface IDispatchProps {
-  loadMoreRepositories: (loadMoreTimes: number) => void;
-  toggleModal: (repo: IGHRepositoryRes) => void;
+  // loadMoreRepositories: (loadMoreTimes: number) => void;
 }
 
 export interface IOwnProps {}

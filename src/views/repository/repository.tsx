@@ -1,11 +1,9 @@
-import { Button, PageHeader, Tabs, Row, Col } from "antd";
-import React, { FunctionComponent, memo, useEffect, useCallback } from "react";
+import { Button, Col, PageHeader, Row } from "antd";
+import React, { FunctionComponent, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { ConnectedGitHubRepositoryList } from "../../components/github-repository-list";
-import { SearchGitHubRepository } from "../../components/search-github-repository";
+import { createUseStyles } from "react-jss";
 import { ConnectedImportedRepositorTab } from "../imported-repository";
 import { routes } from "./breadcrumb-routes";
-import { createUseStyles } from "react-jss";
 import GitHubRepository from "./github-repository";
 
 export interface IStateProps {

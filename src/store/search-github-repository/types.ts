@@ -6,11 +6,16 @@ export const SAERCH_GITHUB_REPOSITORY_SUCCESS =
 export const SEARCH_GITHUB_REPOSITORY_FAILURE =
   "SEARCH_GITHUB_REPOSITORY_FAILURE";
 
+interface ISearchHistory {
+  query: string;
+  res: IGHRepositoryRes[];
+}
+
 export interface ISearchRepositoryState {
   error?: boolean | string;
   loading?: boolean;
-  searchResult?: IGHRepositoryRes;
-  searchHistory: string[];
+  searchResult: IGHRepositoryRes[];
+  searchHistory: ISearchHistory[];
 }
 
 export interface ISearchGitHubRepositoryAction {
@@ -19,7 +24,7 @@ export interface ISearchGitHubRepositoryAction {
 
 export interface ISearchGitHubRepositorySuccessAction {
   type: typeof SAERCH_GITHUB_REPOSITORY_SUCCESS;
-  payload: IGHRepositoryRes;
+  payload: { searchStr: string; res: IGHRepositoryRes[] };
 }
 
 export interface ISearchGitHubRepositoryFailureAction {

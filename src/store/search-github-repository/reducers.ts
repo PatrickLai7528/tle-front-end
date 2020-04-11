@@ -9,7 +9,8 @@ import {
 
 const initialState: ISearchRepositoryState = {
   loading: false,
-  searchHistory: []
+  searchHistory: [],
+  searchResult: []
 };
 
 export const searchReducer = (
@@ -23,10 +24,19 @@ export const searchReducer = (
         loading: true
       };
     case SAERCH_GITHUB_REPOSITORY_SUCCESS:
+      const {
+        res,
+        searchStr
+      } = (action as ISearchGitHubRepositorySuccessAction).payload;
+      const oldRes = state.searchResult;
+      const history = state.searchHistory;
+      history.pop();
+      history.push({ query: searchStr, res: oldRes });
       return {
         ...state,
         loading: false,
-        searchResult: (action as ISearchGitHubRepositorySuccessAction).payload
+        searchResult: res,
+        searchHistory: history
       };
     case SEARCH_GITHUB_REPOSITORY_FAILURE:
       return {
