@@ -14,10 +14,17 @@ const mapStateToProps: MapStateToProps<
   IOwnProps,
   RootState
 > = state => {
+  const {
+    searchReducer: { searchResult, loading: searchLoading }
+  } = state;
+  const {
+    repositoryManagementReducer: { rawRepositories, loading: repoListLoading }
+  } = state;
   return {
-    loading: !!state.searchReducer.loading,
+    loading: !!searchLoading || !!repoListLoading,
     // loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
-    repositoryList: state.searchReducer.searchResult
+    repositoryList:
+      searchResult && searchResult.length !== 0 ? searchResult : rawRepositories
   };
 };
 

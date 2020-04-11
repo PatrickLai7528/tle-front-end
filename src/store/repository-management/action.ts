@@ -57,7 +57,7 @@ export const fetchAllRepositoryFromGitHub = (): AppThunk<
     const res = await fetch(
       `${
         gitHubAuthConfigs.fetch_repository
-      }?page=${1}&per_page=50&sort=updated`,
+      }?page=${1}&per_page=10&sort=updated`,
       {
         headers: {
           accept: "application/json",
