@@ -17,8 +17,13 @@ const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
       <Route
         exact
         path={RouteConstants.HOME}
-        component={() => {
-          return <Layout requireAuth={false} content={<ConnectedHomeView />} />;
+        component={(props: any) => {
+          return (
+            <Layout
+              requireAuth={false}
+              content={<ConnectedHomeView {...props} />}
+            />
+          );
         }}
       />
       <Route
