@@ -8,6 +8,7 @@ import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
 import { createUseStyles } from "react-jss";
 
 export interface ILogInFormProps {
+  loading: boolean;
   onFinish: (data: ILogInData, remember: boolean) => void;
   onFinishFailed: (error: any) => void;
 }
@@ -28,7 +29,7 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
     const { t } = useTranslation();
     const styles = useStyles();
     const [form] = Form.useForm();
-
+    const { loading } = props;
     const onEmailChange = (e: ChangeEvent<HTMLInputElement>) =>
       form.setFieldsValue({ email: e.target.value });
 
@@ -98,7 +99,7 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
         </Form.Item>
 
         <Form.Item className={styles.formItem}>
-          <Button type="primary" htmlType="submit" block>
+          <Button type="primary" htmlType="submit" block loading={loading}>
             {t("log in")}
           </Button>
         </Form.Item>

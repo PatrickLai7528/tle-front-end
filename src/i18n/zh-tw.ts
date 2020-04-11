@@ -42,5 +42,6 @@ export const zhtw = {
   "using steps": "使用流程",
   "other login": "其它登錄方式",
   "all repository": "全部倉庫",
-  "recent repository": "常用倉庫"
+  "recent repository": "常用倉庫",
+  notification: "通知"
 };

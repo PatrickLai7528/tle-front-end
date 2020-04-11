@@ -1,3 +1,4 @@
+import { notificationReducer } from "./notification/reducers";
 import { traceLinkReducer } from "./trace-link/reducers";
 import { requirementReducer } from "./requirement/reducers";
 import { combineReducers } from "redux";
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
   importRepositoryReducer,
   searchReducer,
   requirementReducer,
-  traceLinkReducer
+  traceLinkReducer,
+  notificationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
