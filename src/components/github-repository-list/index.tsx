@@ -5,7 +5,6 @@ import RepositoryList, {
 } from "./github-repository-list";
 import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { toggleImportProccessModal } from "../../store/import-repository/action";
 import { loadMoreRepository } from "../../store/repository-management/action";
 import { ThunkDispatch } from "redux-thunk";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
@@ -16,9 +15,9 @@ const mapStateToProps: MapStateToProps<
   RootState
 > = state => {
   return {
-    loading: !!state.repositoryManagementReducer.loading,
-    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
-    repositoryList: state.repositoryManagementReducer.rawRepositories
+    loading: !!state.searchReducer.loading,
+    // loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
+    repositoryList: state.searchReducer.searchResult
   };
 };
 
@@ -26,9 +25,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<RootState, any, ImportRepositoryAcitons>
 ) => {
   return {
-    toggleModal: () => dispatch(toggleImportProccessModal()),
-    loadMoreRepositories: loadMoreTimes =>
-      dispatch(loadMoreRepository(loadMoreTimes))
+    // loadMoreRepositories: loadMoreTimes =>
+    // 	dispatch(loadMoreRepository(loadMoreTimes))
   };
 };
 

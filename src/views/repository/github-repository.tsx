@@ -1,7 +1,7 @@
 import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
-import { SearchGitHubRepository } from "../../components/search-github-repository";
 import { ConnectedGitHubRepositoryList } from "../../components/github-repository-list";
+import { ConnectedSearchGitHubRepository } from "../../components/search-github-repository";
 
 export interface IGitHubRepositoryProps {}
 
@@ -19,7 +19,7 @@ const GitHubRepository: FunctionComponent<IGitHubRepositoryProps> = memo(
     const styles = useStyles();
     return (
       <div className={styles.githubRepository}>
-        <SearchGitHubRepository />
+        <ConnectedSearchGitHubRepository />
         <ConnectedGitHubRepositoryList />
       </div>
     );

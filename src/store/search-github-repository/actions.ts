@@ -16,20 +16,20 @@ export const searchGitHubRepository = (
   dispatch({ type: SEARCH_GITHUB_REPOSITORY });
   try {
     const {
-      authReducer: { gitHubAccessToken }
+      authReducer: { gitHubAccessToken, ghProfile }
     } = getState();
-    if (gitHubAccessToken) {
-      const queryString = `?q=`;
-      const res = await fetch(
-        `${gitHubAuthConfigs.fetch_repository}/${searchFor}`,
-        {
-          headers: {
-            accept: "application/json",
-            Authorization: `token ${gitHubAccessToken}`
-          }
+    if (gitHubAccessToken && ghProfile?.login) {
+      const queryString = `?q=${searchFor}+user:${ghProfile.login}`;
+      const res = await fetch(`${gitHubAuthConfigs.search}${queryString}`, {
+        headers: {
+          accept: "application/json",
+          Authorization: `token ${gitHubAccessToken}`
         }
-      ).then(res => res.json());
-      dispatch({ type: SAERCH_GITHUB_REPOSITORY_SUCCESS, payload: res });
+      }).then(res => res.json());
+      dispatch({
+        type: SAERCH_GITHUB_REPOSITORY_SUCCESS,
+        payload: { res: res.items, searchStr: searchFor }
+      });
     } else {
       dispatch({ type: SEARCH_GITHUB_REPOSITORY_FAILURE });
     }
