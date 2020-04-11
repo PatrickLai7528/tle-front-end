@@ -32,7 +32,6 @@ export const fetchGHProfile = (
     const data = await res.json();
     const ghProfile: IGHUserProfile = Object.keys(data).reduce(
       (sum: any, curr) => {
-        // Object.defineProperty(sum, _.camelCase(curr), { value: data[curr] })
         sum[_.camelCase(curr)] = data[curr];
         return sum;
       },

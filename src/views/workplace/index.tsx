@@ -5,10 +5,14 @@ import { RootState } from "../../store/reducers";
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
+  const {
+    authReducer: { ghProfile, loading }
+  } = state;
   return {
-    userAvatarUrl: "https://avatars3.githubusercontent.com/u/28004715?v=4",
-    userName: "PatrickLai",
-    userProfile: "123123123123"
+    loading: !!loading,
+    userAvatarUrl: ghProfile?.avatarUrl,
+    userName: ghProfile?.login,
+    userProfile: ghProfile?.bio
   };
 };
 
