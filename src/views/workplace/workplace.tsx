@@ -1,13 +1,11 @@
-import { Avatar, Col, PageHeader, Row, Typography, Skeleton } from "antd";
+import { Avatar, Col, PageHeader, Row, Skeleton, Typography } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { ConnectedRecentRepoList } from "../../components/recent-repo-list";
+import { ConnectedUserActivity } from "../../components/user-activity";
 import { RouteConstants } from "../../routes/constants";
-import { activity } from "../../stubs/activity";
-import { recentRepos } from "../../stubs/recent-repo";
-import Activity from "./activity";
 import QuickAction, { IAction } from "./quick-action";
-import RecentRepos from "./recent-repos";
 import TracingStatistic from "./tracing-statistic";
 
 export interface IStateProps {
@@ -129,11 +127,8 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
           <Col lg={18} md={24}>
             <Row style={{ width: "100%" }}>
               <Col span={24}>
-                <RecentRepos
-                  style={{ marginBottom: "16px" }}
-                  repos={recentRepos}
-                />
-                <Activity activities={activity} />
+                <ConnectedRecentRepoList style={{ marginBottom: "16px" }} />
+                <ConnectedUserActivity />
               </Col>
             </Row>
           </Col>

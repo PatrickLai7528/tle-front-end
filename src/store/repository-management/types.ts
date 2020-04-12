@@ -1,5 +1,5 @@
 import { IGHRepositoryRes } from "./../../types/github-api/repository";
-import { IImportedRepository } from "./../../types/index";
+import { IImportedRepository, IRecentRepo } from "./../../types/index";
 export const FETCH_REPOSITORY_FROM_GITHUB = "FETCH_REPOSITORY_FROM_GITHUB";
 export const FETCH_REPOSITORY_FROM_GITHUB_SUCCESS =
   "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS";
@@ -23,6 +23,12 @@ export const FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS =
 export const FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE =
   "FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE";
 
+export const FETCH_RECENT_REPOSITORY = "FETCH_RECENT_REPOSITORY";
+export const FETCH_RECENT_REPOSITORY_SUCCESS =
+  "FETCH_RECENT_REPOSITORY_SUCCESS";
+export const FETCH_RECENT_REPOSITORY_FAILURE =
+  "FETCH_RECENT_REPOSITORY_FAILURE";
+
 export interface IRepositoryManagementState {
   loading?: boolean;
   error?: boolean | string;
@@ -30,6 +36,20 @@ export interface IRepositoryManagementState {
   loadMoreTimes: number;
   importedRepositoryList: IImportedRepository[];
   importedRepositoryDetail?: IImportedRepository;
+  recentRepos: IRecentRepo[];
+}
+
+export interface IFetchRecentRepositoryAction {
+  type: typeof FETCH_RECENT_REPOSITORY;
+}
+
+export interface IFetchRecentRepositorySuccessAction {
+  type: typeof FETCH_RECENT_REPOSITORY_SUCCESS;
+  payload: IRecentRepo[];
+}
+
+export interface IFetchRecentRepositoryFailureAction {
+  type: typeof FETCH_RECENT_REPOSITORY_FAILURE;
 }
 
 export interface IFetchImportedRepositoryDetailAction {
@@ -98,7 +118,10 @@ export type RepositoryManagementActions =
   | IFetchImportedRepositoryFailureAction
   | IFetchImportedRepositoryDetailAction
   | IFetchImportedRepositoryDetailSuccessAction
-  | IFetchImportedRepositoryDetailFailureAction;
+  | IFetchImportedRepositoryDetailFailureAction
+  | IFetchRecentRepositoryAction
+  | IFetchRecentRepositorySuccessAction
+  | IFetchRecentRepositoryFailureAction;
 
 export type RepositoryManagementActionTypes =
   | typeof FETCH_REPOSITORY_FROM_GITHUB
@@ -112,4 +135,7 @@ export type RepositoryManagementActionTypes =
   | typeof FETCH_IMPORTED_REPOSITORY_LIST_SUCCESS
   | typeof FETCH_IMPORTED_REPOSITORY_DETAIL
   | typeof FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS
-  | typeof FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE;
+  | typeof FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE
+  | typeof FETCH_RECENT_REPOSITORY
+  | typeof FETCH_RECENT_REPOSITORY_SUCCESS
+  | typeof FETCH_RECENT_REPOSITORY_FAILURE;

@@ -15,6 +15,12 @@ import * as stubs from "./../stubs";
 
 // export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
 
+export interface IUserActivity {
+  avatarUrl: string;
+  title: string;
+  description: string;
+}
+
 export interface IImplement {
   id: string;
   type: "METHOD" | "CLASS";
@@ -67,6 +73,15 @@ export interface ICommitChanges {
   patch: string;
   // 修改的文件內容
   rawContent: string;
+}
+
+export interface IRecentRepo {
+  id: string;
+  name: string;
+  language: ProgramLanguage;
+  lastUpdateBy: string;
+  lastUpdateAt: number;
+  description: string;
 }
 
 export interface ICommit {
