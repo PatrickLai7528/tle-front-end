@@ -7,3 +7,11 @@ export const gitHubAuthConfigs = {
   fetch_repository: "https://api.github.com/user/repos",
   search: "https://api.github.com/search/repositories"
 };
+
+export const toGitHubCommitPage = (
+  ownerId: string,
+  repoName: string,
+  commitSha: string
+): string => {
+  return `https:/github.com/${ownerId}/${repoName}/commits/${commitSha}`;
+};

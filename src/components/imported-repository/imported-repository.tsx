@@ -25,6 +25,12 @@ const useStyles = createUseStyles({
   importedRepository: {
     width: "100%",
     minHeight: "100vh"
+  },
+  repoCardList: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "flex-start"
   }
 });
 
@@ -38,18 +44,13 @@ const ImportedRepositoryTab: FunctionComponent<IImportedRepositoryTabProps> = me
 
     return (
       <Spin spinning={loading}>
-        <Row className={styles.importedRepository} gutter={[16, 16]}>
-          {repositoryList.map(repo => {
-            return (
-              <Col key={repo.name} span={8}>
-                <RepositoryCard
-                  repo={repo}
-                  detailLink={RouteConstants.REPOSITORY_DETAIL(repo.name)}
-                />
-              </Col>
-            );
-          })}
-        </Row>
+        <div className={styles.importedRepository}>
+          <div className={styles.repoCardList}>
+            {repositoryList.map(repo => {
+              return <RepositoryCard repo={repo} key={repo.name} />;
+            })}
+          </div>
+        </div>
       </Spin>
     );
   }
