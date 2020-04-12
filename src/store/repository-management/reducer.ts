@@ -6,13 +6,18 @@ import {
   IFetchImportedRepositorySuccessAction,
   FETCH_IMPORTED_REPOSITORY_DETAIL,
   FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
-  FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE
+  FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE,
+  FETCH_RECENT_REPOSITORY,
+  IFetchRecentRepositorySuccessAction,
+  FETCH_RECENT_REPOSITORY_SUCCESS,
+  FETCH_RECENT_REPOSITORY_FAILURE
 } from "./types";
 
 const initialState: IRepositoryManagementState = {
   rawRepositories: [],
   loadMoreTimes: 0,
-  importedRepositoryList: []
+  importedRepositoryList: [],
+  recentRepos: []
 };
 
 export const repositoryManagementReducer = (
@@ -20,6 +25,24 @@ export const repositoryManagementReducer = (
   action: RepositoryManagementActions
 ): IRepositoryManagementState => {
   switch (action.type) {
+    case FETCH_RECENT_REPOSITORY:
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case FETCH_RECENT_REPOSITORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        recentRepos: (action as IFetchRecentRepositorySuccessAction).payload
+      };
+    case FETCH_RECENT_REPOSITORY_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case FETCH_IMPORTED_REPOSITORY_DETAIL:
       return {
         ...state,
@@ -79,7 +102,8 @@ export const repositoryManagementReducer = (
     case "LOAD_MORE_REPOSITORY":
       return {
         ...state,
-        loading: true
+        loading: true,
+        error: false
       };
     case "LOAD_MORE_REPOSITORY_SUCCESS":
       return {

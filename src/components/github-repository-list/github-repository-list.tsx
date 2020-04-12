@@ -1,4 +1,4 @@
-import { List, Popconfirm } from "antd";
+import { List, Popconfirm, Tooltip } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -50,16 +50,9 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
             >
               <List.Item.Meta
                 title={
-                  <Popconfirm
-                    title={"將前往GitHub"}
-                    okText={"前往"}
-                    cancelText={"取消"}
-                    onConfirm={() => window.open(htmlUrl)}
-                  >
-                    <a href={htmlUrl} onClick={e => e.preventDefault()}>
-                      {item.name}
-                    </a>
-                  </Popconfirm>
+                  <Tooltip title={"View in Github"}>
+                    <a href={htmlUrl}>{item.name}</a>
+                  </Tooltip>
                 }
                 description={
                   <LanguageBadge language={language as ProgramLanguage} />

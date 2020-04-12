@@ -1,4 +1,5 @@
-import { IRecentRepo } from "./../views/workplace/recent-repos";
+import { IRecentRepo } from "../types";
+
 export const recentRepos: IRecentRepo[] = [
   {
     name: "egestas metus aenean",

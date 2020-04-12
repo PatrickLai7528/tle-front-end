@@ -2,7 +2,7 @@ import { Button, Col, PageHeader, Row } from "antd";
 import React, { FunctionComponent, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { ConnectedImportedRepositorTab } from "../imported-repository";
+import { ConnectedImportedRepositorTab } from "../../components/imported-repository";
 import { routes } from "./breadcrumb-routes";
 import GitHubRepository from "./github-repository";
 
@@ -67,14 +67,6 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
               <ConnectedImportedRepositorTab />
             </Col>
           </Row>
-          {/* <Tabs defaultActiveKey="1">
-						<Tabs.TabPane tab={t("github repository")} key="1">
-							<SearchGitHubRepository />
-						</Tabs.TabPane>
-						<Tabs.TabPane
-							tab={t("imported repository")}
-							key="2"></Tabs.TabPane>
-					</Tabs> */}
         </PageHeader>
       </div>
     );

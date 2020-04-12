@@ -1,3 +1,4 @@
+import { userActivityReducer } from "./user-activity/reducers";
 import { notificationReducer } from "./notification/reducers";
 import { traceLinkReducer } from "./trace-link/reducers";
 import { requirementReducer } from "./requirement/reducers";
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   searchReducer,
   requirementReducer,
   traceLinkReducer,
-  notificationReducer
+  notificationReducer,
+  userActivityReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
