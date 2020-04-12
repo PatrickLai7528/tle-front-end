@@ -1,8 +1,8 @@
-import { Button, Col, PageHeader, Row } from "antd";
+import { Button, Col, PageHeader, Row, Typography } from "antd";
 import React, { FunctionComponent, memo, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { ConnectedImportedRepositorTab } from "../../components/imported-repository";
+import { ConnectedImportedRepository } from "../../components/imported-repository";
 import { routes } from "./breadcrumb-routes";
 import GitHubRepository from "./github-repository";
 
@@ -22,6 +22,10 @@ export interface IOwnProps {}
 const useStyles = createUseStyles({
   repositoryViewContainer: {
     width: "100%"
+  },
+  importedRepositoryListWrapper: {
+    width: "100%",
+    padding: "16px"
   }
 });
 
@@ -64,7 +68,12 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
               <GitHubRepository />
             </Col>
             <Col md={{ span: 18 }} sm={{ span: 24 }}>
-              <ConnectedImportedRepositorTab />
+              <div className={styles.importedRepositoryListWrapper}>
+                <Typography.Title level={4}>
+                  {t("imported repository")}
+                </Typography.Title>
+                <ConnectedImportedRepository />
+              </div>
             </Col>
           </Row>
         </PageHeader>

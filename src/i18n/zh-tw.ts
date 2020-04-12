@@ -46,5 +46,6 @@ export const zhtw = {
   "all repository": "全部倉庫",
   "recent repository": "常用倉庫",
   notification: "通知",
-  "search repository placeholder": "Search for repository"
+  "search repository placeholder": "Search for repository",
+  search: "搜索"
 };

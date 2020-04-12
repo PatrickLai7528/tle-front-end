@@ -3,7 +3,7 @@ import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../store/reducers";
 import { fetchImportedRepositoryList } from "../../store/repository-management/action";
 import { RepositoryManagementActions } from "../../store/repository-management/types";
-import ImportedRepositoryTab, {
+import ImportedRepository, {
   IDispatchProps,
   IOwnProps,
   IStateProps
@@ -26,7 +26,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   };
 };
 
-export const ConnectedImportedRepositorTab = connect(
+export const ConnectedImportedRepository = connect(
   mapStateToProps,
   mapDispatchToProps
-)(ImportedRepositoryTab);
+)(ImportedRepository);
