@@ -53,7 +53,7 @@ const Content: FunctionComponent<IContentProps> = memo(
 
 const CommitMessage: FunctionComponent<ICommitMessageProps> = memo(
   (props: ICommitMessageProps) => {
-    const { action, message, committedAt, committerId, sha, style } = props;
+    const { action, message, committedAt, committerId, style } = props;
     return (
       <Comment
         style={style}
