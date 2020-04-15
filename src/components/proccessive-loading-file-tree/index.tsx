@@ -9,10 +9,11 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   const {
-    importRepositoryReducer: { files }
+    // importRepositoryReducer: { files }
   } = state;
   return {
-    treeData: files ? files || [] : []
+    // treeData: files ? files || [] : []
+    treeData: []
   };
 };
 

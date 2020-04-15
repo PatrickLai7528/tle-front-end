@@ -97,6 +97,8 @@ export interface ICommit {
   stats: { total: number; additions: number; deletions: number };
 }
 
+export type ShaFileContentMap = { [key: string]: string };
+
 export interface IImportedRepository {
   // 倉庫名稱
   name: string;
@@ -121,7 +123,7 @@ export interface IImportedRepository {
    * @key file's sha
    * @value file's content
    */
-  shaFileContentMap: { [key: string]: string };
+  shaFileContentMap: ShaFileContentMap;
 }
 
 export interface IFileTreeNode {

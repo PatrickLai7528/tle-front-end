@@ -36,7 +36,6 @@ export const cloneOneCommit = async (url: string, headers: any) => {
   const changedFiles: ICommitChanges[] = await Promise.all<ICommitChanges>(
     fetchRawContentPromises
   );
-  console.log(res);
   return {
     sha: res.sha,
     message: res.commit.message,
@@ -92,7 +91,7 @@ export const cloneManyBranch = async (
   return [clonedBranches, commitUrlsFromOtherBranchs];
 };
 
-type Blobs = { sha: string; url: string }[];
+export type Blobs = { sha: string; url: string }[];
 export const cloneManyTree = async (
   url: string,
   headers: any,

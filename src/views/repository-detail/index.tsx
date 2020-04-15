@@ -5,13 +5,18 @@ import RepositoryDetail, {
 } from "./repository-detail";
 import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { IImportedRepository, IRequirement } from "../../types";
+import {
+  IImportedRepository,
+  IRequirement,
+  IRequirementDescription
+} from "../../types";
 import { ThunkDispatch } from "redux-thunk";
 import { RepositoryManagementActions } from "../../store/repository-management/types";
 import { fetchImportedRepositoryDetail } from "../../store/repository-management/action";
 import {
   fetchRepoRequirement,
-  toggleAddRequirementModal
+  toggleAddRequirementModal,
+  deleteRequirement
 } from "../../store/requirement/actions";
 import { RequirementActions } from "../../store/requirement/types";
 
@@ -24,7 +29,8 @@ const mapStateToProps: MapStateToProps<
     requirement: state.requirementReducer.requirement as IRequirement,
     loading: !!state.repositoryManagementReducer.loading,
     repo: state.repositoryManagementReducer
-      .importedRepositoryDetail as IImportedRepository
+      .importedRepositoryDetail as IImportedRepository,
+    deleteRequirementLoading: state.requirementReducer.deleteRequirementLoading
   };
 };
 
@@ -43,7 +49,11 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   return {
     fetchRepoRequirement: () => dispatch(fetchRepoRequirement(name)),
     fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(name)),
-    toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal())
+    toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal()),
+    deleteRequirementDescription: (
+      requirement: IRequirement,
+      description: IRequirementDescription
+    ) => dispatch(deleteRequirement(requirement, description))
   };
 };
 

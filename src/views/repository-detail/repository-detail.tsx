@@ -26,12 +26,17 @@ export interface IStateProps {
   repo: IImportedRepository;
   requirement: IRequirement;
   loading: boolean;
+  deleteRequirementLoading: boolean;
 }
 
 export interface IDispatchProps {
   fetchRepoDetail: () => void;
   fetchRepoRequirement: () => void;
   toggleAddRequirementModal: () => void;
+  deleteRequirementDescription: (
+    requirement: IRequirement,
+    description: IRequirementDescription
+  ) => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{ name: string }> {}
@@ -70,7 +75,9 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       loading,
       requirement,
       fetchRepoRequirement,
+      deleteRequirementLoading,
       toggleAddRequirementModal,
+      deleteRequirementDescription,
       match: {
         params: { name: repoName }
       }
@@ -197,7 +204,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           <div className={styles.contentCardWrapper}>
             {!!requirement ? (
               <RequirementCard
+                loading={deleteRequirementLoading}
                 toggleAddRequirementModal={toggleAddRequirementModal}
+                onDeleteClick={description =>
+                  deleteRequirementDescription(requirement, description)
+                }
                 requirement={requirement}
                 onDetailClick={description => {
                   openDrawer("REQUIREMENT");

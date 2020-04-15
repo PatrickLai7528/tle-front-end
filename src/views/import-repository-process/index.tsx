@@ -1,18 +1,12 @@
-import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
-import { RootState } from "../../store/reducers";
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
+import { startImportRepository } from "../../store/import-repository/action";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
-import {
-  cloneBranches,
-  cloneCommits,
-  cloneFileStructure,
-  cloneFileContent,
-  startImportRepository
-} from "../../store/import-repository/action";
+import { RootState } from "../../store/reducers";
 import ImportRepositoryProcess, {
-  IStateProps,
   IDispatchProps,
-  IOwnProps
+  IOwnProps,
+  IStateProps
 } from "./import-repository-process";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
@@ -20,14 +14,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   ownProps: IOwnProps
 ) => {
   const {
-    importRepositoryReducer: {
-      importProccess,
-      branches,
-      files,
-      commits,
-      shaContentMap,
-      importDone
-    },
+    importRepositoryReducer: { importProccess, importDone, importedRepository },
     repositoryManagementReducer: { rawRepositories }
   } = state;
 
@@ -40,10 +27,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   return {
     repositoryRes: rawRepositories.filter(repo => repo.id.toString() === id)[0],
     importProccess,
-    branches,
-    files,
-    commits,
-    shaContentMap,
+    importedRepostiroy: importedRepository || {},
     importDone: !!importDone
   };
 };
@@ -52,12 +36,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<RootState, any, ImportRepositoryAcitons>
 ) => {
   return {
-    startImport: repoRes => dispatch(startImportRepository(repoRes)),
-    cloneBranches: () => dispatch(cloneBranches()),
-    cloneCommits: () => dispatch(cloneCommits()),
-    cloneFileStructure: () => dispatch(cloneFileStructure()),
-    cloneFileContent: () => dispatch(cloneFileContent()),
-    finishImport: () => dispatch({ type: "IMPORT_REPOSITORY_SUCCESS" })
+    startImport: repoRes => dispatch(startImportRepository(repoRes))
+    // cloneBranches: () => dispatch(cloneBranches()),
+    // cloneCommits: () => dispatch(cloneCommits()),
+    // cloneFileStructure: () => dispatch(cloneFileStructure()),
+    // cloneFileContent: () => dispatch(cloneFileContent()),
+    // finishImport: () => dispatch({ type: "IMPORT_REPOSITORY_SUCCESS" })
   };
 };
 

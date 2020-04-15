@@ -12,6 +12,8 @@ import {
   fetchAllRepositoryFromGitHub,
   loadMoreRepository
 } from "../../store/repository-management/action";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
+import { startImportRepository } from "../../store/import-repository/action";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
@@ -19,7 +21,10 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   return {
     gitHubAccessToken: state.authReducer.gitHubAccessToken,
     rawRepositories: state.repositoryManagementReducer.rawRepositories,
-    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes
+    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
+    importDone: state.importRepositoryReducer.importDone,
+    importStarted: state.importRepositoryReducer.importStarted,
+    importProcess: state.importRepositoryReducer.importProccess
   };
 };
 
@@ -33,7 +38,9 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   return {
     fetchAllRepositories: () => dispatch(fetchAllRepositoryFromGitHub()),
     loadMoreRepositories: loadMoreTimes =>
-      dispatch(loadMoreRepository(loadMoreTimes))
+      dispatch(loadMoreRepository(loadMoreTimes)),
+    startImportRepository: (ghRepoRes: IGHRepositoryRes) =>
+      dispatch(startImportRepository(ghRepoRes))
   };
 };
 

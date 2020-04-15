@@ -63,7 +63,7 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
         let contents: ReactNode[] = [];
         for (let i = 0; i < 6; i++) {
           contents.push(
-            <Col span={8}>
+            <Col span={8} key={i}>
               <div style={{ padding: "16px" }}>
                 <Skeleton />
               </div>

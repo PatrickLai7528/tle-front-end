@@ -1,5 +1,9 @@
-import { IGHRepositoryRes } from "./../../types/github-api/repository";
-import { IBranch, ICommit, IFileTreeNode } from "./../../types/index";
+import {
+  IBranch,
+  ICommit,
+  IFileTreeNode,
+  ShaFileContentMap
+} from "./../../types/index";
 import { IImportedRepository } from "../../types";
 
 export const START_IMPORT_REPOSITORY = "START_IMPORT_REPOSITORY";
@@ -8,19 +12,13 @@ export const IMPORT_REPOSITORY_FAILURE = "IMPORT_REPOSITORY_FAILURE";
 
 export const UPDATE_IMPORTING_REPOSITORY = "UPDATE_IMPORTING_REPOSITORY";
 
-export const START_CLONE_BRANCHES = "START_CLONE_BRANCHES";
 export const FINISH_CLONE_BRANCES = "FINISH_CLONE_BRANCHES";
 
-export const START_CLONE_COMMITS = "START_CLONE_COMMITS";
 export const FINISH_CLONE_COMMITS = "FINISH_CLONE_COMMITS";
 
-export const START_CLONE_FILE_STRUCTURE = "START_CLONE_FILE_STRUCTURE";
 export const FINISH_CLONE_FILE_STRUCTURE = "FINISH_CLONE_FILE_STRUCTURE";
 
-export const START_CLONE_FILE_CONTENT = "START_CLONE_FILE_CONTENT";
 export const FINISH_CLONE_FILE_CONTENT = "FINISH_CLONE_FILE_CONTENT";
-
-export const TOGGLE_IMPORT_PROCESS_MODAL = "TOGGLE_IMPORT_PROCESS_MODAL";
 
 export type ImportProccess =
   | "BRANCHES"
@@ -30,30 +28,20 @@ export type ImportProccess =
 
 export interface IImportRepositoryState {
   importProccess?: ImportProccess;
-
   importedRepository?: IImportedRepository;
-  repositoryResponse?: IGHRepositoryRes;
-
-  importProcessModalVisible?: boolean;
-
-  importDone?: boolean;
+  importStarted: boolean;
+  importDone: boolean;
 
   error?: boolean | string;
-  branches?: IBranch[];
-  commits?: ICommit[];
-  files?: IFileTreeNode[];
-  shaContentMap?: { [key: string]: string };
-  otherCommitUrls?: string[];
-  blobs?: { sha: string; url: string }[];
 }
 
 export interface IStartImportRepositoryAction {
   type: typeof START_IMPORT_REPOSITORY;
-  payload: IGHRepositoryRes;
 }
 
 export interface IImportRepositorySuccessAction {
   type: typeof IMPORT_REPOSITORY_SUCCESS;
+  payload: IImportedRepository;
 }
 
 export interface IImportRepositoryFailureAction {
@@ -62,15 +50,7 @@ export interface IImportRepositoryFailureAction {
 
 export interface IUpdateImportingRepositoryAction {
   type: typeof UPDATE_IMPORTING_REPOSITORY;
-  payload: { files: IFileTreeNode[] };
-}
-
-export interface IToggleImportProccessModalAction {
-  type: typeof TOGGLE_IMPORT_PROCESS_MODAL;
-}
-
-export interface IStartCloneBranchesAction {
-  type: typeof START_CLONE_BRANCHES;
+  payload: Partial<IImportedRepository>;
 }
 
 export interface IFinishCloneBranchesAction {
@@ -78,17 +58,9 @@ export interface IFinishCloneBranchesAction {
   payload: { branches: IBranch[]; otherCommitUrls: string[] };
 }
 
-export interface IStartCloneCommitsAction {
-  type: typeof START_CLONE_COMMITS;
-}
-
 export interface IFinishCloneCommitsAction {
   type: typeof FINISH_CLONE_COMMITS;
   payload: { commits: ICommit[] };
-}
-
-export interface IStartCloneFileStructureAction {
-  type: typeof START_CLONE_FILE_STRUCTURE;
 }
 
 export interface IFinishCloneFileStructureAction {
@@ -96,13 +68,9 @@ export interface IFinishCloneFileStructureAction {
   payload: { files: IFileTreeNode[]; shaNodes: { sha: string; url: string }[] };
 }
 
-export interface IStartCloneFileContentAction {
-  type: typeof START_CLONE_FILE_CONTENT;
-}
-
 export interface IFinishCloneFileContentAction {
   type: typeof FINISH_CLONE_FILE_CONTENT;
-  payload: { shaContentMap: { [key: string]: string } };
+  payload: ShaFileContentMap;
 }
 
 export type ImportRepositoryAcitons =
@@ -110,14 +78,9 @@ export type ImportRepositoryAcitons =
   | IImportRepositorySuccessAction
   | IImportRepositoryFailureAction
   | IUpdateImportingRepositoryAction
-  | IToggleImportProccessModalAction
-  | IStartCloneBranchesAction
   | IFinishCloneBranchesAction
-  | IStartCloneCommitsAction
   | IFinishCloneCommitsAction
-  | IStartCloneFileContentAction
   | IFinishCloneFileContentAction
-  | IStartCloneFileStructureAction
   | IFinishCloneFileStructureAction;
 
 export type ImportRepositoryActionTypes =
@@ -125,12 +88,7 @@ export type ImportRepositoryActionTypes =
   | typeof IMPORT_REPOSITORY_SUCCESS
   | typeof IMPORT_REPOSITORY_FAILURE
   | typeof UPDATE_IMPORTING_REPOSITORY
-  | typeof TOGGLE_IMPORT_PROCESS_MODAL
-  | typeof START_CLONE_BRANCHES
   | typeof FINISH_CLONE_BRANCES
-  | typeof START_CLONE_COMMITS
   | typeof FINISH_CLONE_COMMITS
-  | typeof START_CLONE_FILE_CONTENT
   | typeof FINISH_CLONE_FILE_CONTENT
-  | typeof START_CLONE_FILE_STRUCTURE
   | typeof FINISH_CLONE_FILE_STRUCTURE;
