@@ -65,6 +65,7 @@ export interface IRequirementState {
   loading: boolean;
   addRequirementLoading: boolean;
   deleteRequirementLoading: boolean;
+  updateRequirementLoading: boolean;
   error?: boolean | any;
 }
 

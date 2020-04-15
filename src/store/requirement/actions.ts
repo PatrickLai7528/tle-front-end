@@ -60,14 +60,9 @@ export const updateRequirement = (
   dispatch({ type: UPDATE_REQUIREMENT });
   try {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const [removed, ...others] = requirement.descriptions;
-    const newRewquirement: IRequirement = {
-      ...requirement,
-      descriptions: [...others]
-    };
     const action: IUpdateRequirementSuccessAction = {
       type: UPDATE_REQUIREMENT_SUCCESS,
-      payload: newRewquirement
+      payload: requirement
     };
     dispatch(action);
   } catch (e) {

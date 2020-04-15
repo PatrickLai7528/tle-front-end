@@ -16,7 +16,8 @@ import { fetchImportedRepositoryDetail } from "../../store/repository-management
 import {
   fetchRepoRequirement,
   toggleAddRequirementModal,
-  deleteRequirement
+  deleteRequirement,
+  updateRequirement
 } from "../../store/requirement/actions";
 import { RequirementActions } from "../../store/requirement/types";
 
@@ -47,6 +48,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   }: IOwnProps
 ) => {
   return {
+    updateRequirement: requirement => dispatch(updateRequirement(requirement)),
     fetchRepoRequirement: () => dispatch(fetchRepoRequirement(name)),
     fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(name)),
     toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal()),

@@ -33,6 +33,7 @@ export interface IDispatchProps {
   fetchRepoDetail: () => void;
   fetchRepoRequirement: () => void;
   toggleAddRequirementModal: () => void;
+  updateRequirement: (requirement: IRequirement) => void;
   deleteRequirementDescription: (
     requirement: IRequirement,
     description: IRequirementDescription
@@ -78,6 +79,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementLoading,
       toggleAddRequirementModal,
       deleteRequirementDescription,
+      updateRequirement,
       match: {
         params: { name: repoName }
       }
@@ -148,10 +150,38 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         return <CommitDetail commit={selectedCommit!} />;
       } else if (drawerType === "REQUIREMENT") {
         return (
-          <RequirementDetail description={selectedRequirementDescription!} />
+          <RequirementDetail
+            onDescriptionUpdate={(descId: string, descriptionText: string) => {
+              const oldDescriptions: IRequirementDescription[] =
+                requirement.descriptions;
+              const newDescriptions: IRequirementDescription[] = [];
+              for (const oldDesc of oldDescriptions) {
+                if (oldDesc.id === descId) {
+                  newDescriptions.push({
+                    ...oldDesc,
+                    text: descriptionText
+                  });
+                } else {
+                  newDescriptions.push({ ...oldDesc });
+                }
+              }
+              const newRequirement: IRequirement = {
+                ...requirement,
+                descriptions: newDescriptions
+              };
+              updateRequirement(newRequirement);
+            }}
+            description={selectedRequirementDescription!}
+          />
         );
       } else return null;
-    }, [selectedCommit, selectedRequirementDescription, drawerType]);
+    }, [
+      updateRequirement,
+      selectedCommit,
+      selectedRequirementDescription,
+      drawerType,
+      requirement
+    ]);
 
     const drawerTitle = useMemo(() => {
       if (drawerType === "COMMIT") {
