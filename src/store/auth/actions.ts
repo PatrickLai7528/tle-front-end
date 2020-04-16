@@ -53,7 +53,7 @@ export const sendGitHubLogIn = (
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
     const res = await fetch(
-      `${getServerUrl()}/auth/access_token?code=${code}`
+      `${getServerUrl()}/api/auth/access_token?code=${code}`
     ).then(res => res.json());
     const { success, meta, payload: accessToken } = res;
     if (success) {
