@@ -90,8 +90,6 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
       }
     }, [repos, loading]);
 
-    console.log(contents);
-
     return (
       <Card
         style={style}

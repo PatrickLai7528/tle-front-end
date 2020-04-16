@@ -20,6 +20,24 @@ export const FINISH_CLONE_FILE_STRUCTURE = "FINISH_CLONE_FILE_STRUCTURE";
 
 export const FINISH_CLONE_FILE_CONTENT = "FINISH_CLONE_FILE_CONTENT";
 
+export const SEND_IMPORTED_REPOSITORY = "SEND_IMPORTED_REPOSITORY";
+export const SEND_IMPORTED_REPOSITORY_SUCCESS =
+  "SEND_IMPORTED_REPOSITORY_SUCCESS";
+export const SEND_IMPORTED_REPOSITORY_FAILURE =
+  "SEND_IMPORTED_REPOSITORY_FAILURE";
+
+export interface ISendImportedRepositoryAction {
+  type: typeof SEND_IMPORTED_REPOSITORY;
+}
+
+export interface ISendImportedRepositorSuccessAction {
+  type: typeof SEND_IMPORTED_REPOSITORY_SUCCESS;
+}
+
+export interface ISendImportedRepositoryFailureAction {
+  type: typeof SEND_IMPORTED_REPOSITORY_FAILURE;
+}
+
 export type ImportProccess =
   | "BRANCHES"
   | "COMMITS"
@@ -33,6 +51,7 @@ export interface IImportRepositoryState {
   importDone: boolean;
 
   error?: boolean | string;
+  loading: boolean;
 }
 
 export interface IStartImportRepositoryAction {
@@ -81,7 +100,10 @@ export type ImportRepositoryAcitons =
   | IFinishCloneBranchesAction
   | IFinishCloneCommitsAction
   | IFinishCloneFileContentAction
-  | IFinishCloneFileStructureAction;
+  | IFinishCloneFileStructureAction
+  | ISendImportedRepositoryAction
+  | ISendImportedRepositorSuccessAction
+  | ISendImportedRepositoryFailureAction;
 
 export type ImportRepositoryActionTypes =
   | typeof START_IMPORT_REPOSITORY
@@ -91,4 +113,7 @@ export type ImportRepositoryActionTypes =
   | typeof FINISH_CLONE_BRANCES
   | typeof FINISH_CLONE_COMMITS
   | typeof FINISH_CLONE_FILE_CONTENT
-  | typeof FINISH_CLONE_FILE_STRUCTURE;
+  | typeof FINISH_CLONE_FILE_STRUCTURE
+  | typeof SEND_IMPORTED_REPOSITORY
+  | typeof SEND_IMPORTED_REPOSITORY_SUCCESS
+  | typeof SEND_IMPORTED_REPOSITORY_FAILURE;

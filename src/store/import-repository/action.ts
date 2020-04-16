@@ -18,9 +18,27 @@ import {
   ImportRepositoryActionTypes,
   IMPORT_REPOSITORY_FAILURE,
   IUpdateImportingRepositoryAction,
+  SEND_IMPORTED_REPOSITORY,
+  SEND_IMPORTED_REPOSITORY_FAILURE,
+  SEND_IMPORTED_REPOSITORY_SUCCESS,
   START_IMPORT_REPOSITORY,
   UPDATE_IMPORTING_REPOSITORY
 } from "./types";
+
+export const sendImportedRepository = (
+  importedRepo: IImportedRepository
+): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+  dispatch({ type: SEND_IMPORTED_REPOSITORY });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    dispatch({ type: SEND_IMPORTED_REPOSITORY_SUCCESS });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: SEND_IMPORTED_REPOSITORY_FAILURE });
+  }
+};
 
 export const updateImportingRepository = (
   repo: Partial<IImportedRepository>
