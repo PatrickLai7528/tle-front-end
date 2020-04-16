@@ -47,6 +47,7 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
         </Typography.Title>
         {editable ? (
           <Input.TextArea
+            autoFocus
             className={styles.editableArea}
             autoSize
             onBlur={() => {
