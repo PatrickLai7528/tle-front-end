@@ -1,4 +1,5 @@
-import { Col, Drawer, PageHeader, Row, Skeleton, Spin } from "antd";
+import { Drawer, PageHeader, Skeleton, Spin, Tabs } from "antd";
+import GGEditor, { Flow } from "gg-editor";
 import React, {
   FunctionComponent,
   memo,
@@ -6,10 +7,12 @@ import React, {
   useMemo,
   useState
 } from "react";
+import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
 import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 import { ConnectedCommitDetail } from "../../components/commit-detail";
+import { ConnectedRepositoryFiles } from "../../components/repository-files";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -22,6 +25,29 @@ import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import RequirementDetail from "./requirement/requirement-detail";
 
+const data = {
+  nodes: [
+    {
+      id: "0",
+      label: "Node",
+      x: 55,
+      y: 55
+    },
+    {
+      id: "1",
+      label: "Node",
+      x: 55,
+      y: 255
+    }
+  ],
+  edges: [
+    {
+      label: "Label",
+      source: "0",
+      target: "1"
+    }
+  ]
+};
 export interface IStateProps {
   repo: IImportedRepository;
   requirement: IRequirement;
@@ -54,22 +80,14 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: "16px",
-    // overflowX: "scroll",
-    // display: "flex",
-    // flexDirection: "row",
-    // justifyContent: "flex-start",
     background: "#fff"
   },
-  contentCardWrapper: {
-    // width: "500px",
-    // flexGrow: "0",
-    // flexShrink: "0",
-    // margin: { right: "16px" }
-  }
+  contentCardWrapper: {}
 });
 
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
+    const { t } = useTranslation();
     const {
       repo,
       fetchRepoDetail,
@@ -217,8 +235,19 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <Row className={styles.content} gutter={[16, 16]}>
-          <Col lg={{ span: 12 }} style={{ width: "100%" }}>
+        <Tabs defaultActiveKey={"file"} type="card" className={styles.content}>
+          <Tabs.TabPane tab={"文件"} key={"file"}>
+            {repo ? (
+              <ConnectedRepositoryFiles
+                shaFileContentMap={repo.shaFileContentMap}
+                treeData={repo.trees}
+                repoName={repoName}
+              />
+            ) : (
+              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
+            )}
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={t("commit")} key="1">
             {!!repo ? (
               <CommitCard
                 commits={repo.commits}
@@ -230,8 +259,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </Col>
-          <Col lg={{ span: 12 }}>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={t("requirement")} key="2">
             {!!requirement ? (
               <RequirementCard
                 loading={deleteRequirementLoading}
@@ -248,8 +277,13 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </Col>
-        </Row>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="圖" key="3">
+            <GGEditor>
+              <Flow style={{ width: 500, height: 500 }} data={data} />
+            </GGEditor>
+          </Tabs.TabPane>
+        </Tabs>
       </Spin>
     );
   }

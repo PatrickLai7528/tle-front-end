@@ -2,10 +2,14 @@ import React, { FunctionComponent, memo } from "react";
 import { IFileTreeNode, ShaFileContentMap } from "../../types";
 import { Tree } from "antd";
 import { CheckCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import { createUseStyles } from "react-jss";
 
 export interface IFileTreeProps {
   treeData: IFileTreeNode[];
   shaFileContentMap: ShaFileContentMap;
+  defaultExpandAll?: boolean;
+  showLoading?: boolean;
+  onClick?: (treeNode: IFileTreeNode) => void;
 }
 
 const normalize = (
@@ -14,15 +18,17 @@ const normalize = (
 ) => {
   if (root) {
     let res: any = [];
-    let keys: any = [];
+    let mapping: any = {};
     for (const node of root) {
       let children;
-      let subKeys: any[] = [];
       let icon;
       if (node.type === "FOLDER") {
         let res: any[] = normalize(node.subTrees || [], shaFileContentMap);
         children = res[0];
-        subKeys = [...res[1], node.sha];
+        mapping = {
+          ...mapping,
+          ...res[1]
+        };
       } else if (node.type === "FILE") {
         children = [];
         icon = !!shaFileContentMap[node.sha] ? (
@@ -30,6 +36,7 @@ const normalize = (
         ) : (
           <LoadingOutlined />
         );
+        mapping[node.sha] = { ...node };
       }
       res.push({
         key: node.sha,
@@ -37,27 +44,45 @@ const normalize = (
         children,
         icon
       });
-      keys = [...keys, ...subKeys];
     }
-    return [res, [...keys]];
+    return [res, mapping];
   }
-  return [[], []];
+  return [[], {}];
 };
+
+const useStyles = createUseStyles({
+  fileTrees: {}
+});
 
 const FileTree: FunctionComponent<IFileTreeProps> = memo(
   (props: IFileTreeProps) => {
-    const { treeData, shaFileContentMap } = props;
+    const {
+      treeData,
+      shaFileContentMap,
+      defaultExpandAll,
+      showLoading,
+      onClick
+    } = props;
+    const styles = useStyles();
 
-    const [newTreeData, keys] = React.useMemo(
+    const [newTreeData, shaMapping] = React.useMemo(
       () => normalize(treeData, shaFileContentMap),
       [treeData, shaFileContentMap]
     );
 
     return (
       <Tree
-        showIcon
+        onClick={(e, treeNode) => {
+          if (onClick) {
+            onClick(shaMapping[treeNode.key.toString()]);
+          }
+        }}
+        selectable={false}
+        checkable={false}
+        className={styles.fileTrees}
+        showIcon={showLoading}
         multiple
-        defaultExpandAll
+        defaultExpandAll={defaultExpandAll}
         autoExpandParent
         defaultExpandParent
         treeData={newTreeData}
@@ -65,5 +90,7 @@ const FileTree: FunctionComponent<IFileTreeProps> = memo(
     );
   }
 );
+
+FileTree.defaultProps = { defaultExpandAll: true, showLoading: true };
 
 export default FileTree;

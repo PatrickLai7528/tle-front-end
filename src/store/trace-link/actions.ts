@@ -25,11 +25,33 @@ import {
   SEND_INIT_TRACE_LINK_FAILURE,
   FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE,
   FETCH_COMMIT_RELATED_TRACE_LINK,
-  FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS
+  FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS,
+  FETCH_FILE_RELATED_TRACE_LINK,
+  FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
+  FETCH_FILE_RELATED_TRACE_LINK_FAILURE
 } from "./types";
 import { AppThunk, AppDispatch } from "./../store";
 import { traceLinks } from "../../stubs/trace-link";
 import { implementStubs } from "../../stubs/implement";
+
+export const fetchFileRelatedTraceLinks = (
+  repoName: string,
+  fullyQauilfiedName: string
+): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+  dispatch({ type: FETCH_FILE_RELATED_TRACE_LINK });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    dispatch({
+      type: FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
+      payload: traceLinks.splice(0, 5)
+    });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: FETCH_FILE_RELATED_TRACE_LINK_FAILURE });
+  }
+};
 
 export const fetchRelatedTraceLinks = (
   commit: ICommit

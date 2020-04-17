@@ -27,6 +27,25 @@ export const FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS =
 export const FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE =
   "FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE";
 
+export const FETCH_FILE_RELATED_TRACE_LINK = "FETCH_FILE_RELATED_TRACE_LINK";
+export const FETCH_FILE_RELATED_TRACE_LINK_SUCCESS =
+  "FETCH_FILE_RELATED_TRACE_LINK_SUCCESS";
+export const FETCH_FILE_RELATED_TRACE_LINK_FAILURE =
+  "FETCH_FILE_RELATED_TRACE_LINK_FAILURE";
+
+export interface IFetchFileRelatedTraceLinkAction {
+  type: typeof FETCH_FILE_RELATED_TRACE_LINK;
+}
+
+export interface IFetchFileRelatedTraceLinkSuccessAction {
+  type: typeof FETCH_FILE_RELATED_TRACE_LINK_SUCCESS;
+  payload: ITraceLink[];
+}
+
+export interface IFetchFileRelatedTraceLinkFailureAction {
+  type: typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE;
+}
+
 export interface IFetchCommitRelatedTraceLinkAction {
   type: typeof FETCH_COMMIT_RELATED_TRACE_LINK;
 }
@@ -89,6 +108,7 @@ export interface ITraceLinkState {
   initTraceLinkConfirmed: boolean;
 
   commitRelatedTraceLinks: (ITraceLink & { status: "ADDED" | "REMOVED" })[];
+  fileRelatedTraceLinks: ITraceLink[];
 }
 
 export interface IFetchRepoTraceLinkAction {
@@ -119,7 +139,10 @@ export type TraceLinkActions =
   | ISendInitTraceLinkFailureAction
   | IFetchCommitRelatedTraceLinkAction
   | IFetchCommitRelatedTraceLinkFailureAction
-  | IFetchCommitRelatedTraceLinkSuccessAction;
+  | IFetchCommitRelatedTraceLinkSuccessAction
+  | IFetchFileRelatedTraceLinkAction
+  | IFetchFileRelatedTraceLinkSuccessAction
+  | IFetchFileRelatedTraceLinkFailureAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -136,4 +159,7 @@ export type TraceLinkActionTypes =
   | typeof SEND_INIT_TRACE_LINK_FAILURE
   | typeof FETCH_COMMIT_RELATED_TRACE_LINK
   | typeof FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE
-  | typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS;
+  | typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS
+  | typeof FETCH_FILE_RELATED_TRACE_LINK
+  | typeof FETCH_FILE_RELATED_TRACE_LINK_SUCCESS
+  | typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE;

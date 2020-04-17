@@ -3,7 +3,7 @@ import { Badge } from "antd";
 import { createUseStyles } from "react-jss";
 
 export interface ICardTitleProps {
-  itemNumber: number;
+  itemNumber?: number;
   text: string;
   actions?: ReactNode[];
 }

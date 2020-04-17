@@ -130,6 +130,8 @@ export interface IFileTreeNode {
   sha: string;
   // 文件名稱不含路徑
   path: string;
+
+  fullyQuilaifiedName: string;
   // 類型
   type: "FOLDER" | "FILE";
   // 子樹
