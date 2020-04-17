@@ -1,4 +1,3 @@
-import { repositories } from "./repository";
 import { IImplement } from "./../types/index";
 
 export const implementStubs: IImplement[] = [

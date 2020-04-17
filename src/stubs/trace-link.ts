@@ -1,7 +1,6 @@
-import { importedRepository } from "./imported-repositories";
-import { requirementDescription } from "./requirement-description";
-import { ITraceLink, ICommit } from "./../types/index";
+import { ITraceLink } from "./../types/index";
 import { implementStubs } from "./implement";
+import { requirementDescription } from "./requirement-description";
 
 const randomIndex = () => {
   return Math.round(Math.random() * implementStubs.length);

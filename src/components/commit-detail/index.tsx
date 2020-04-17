@@ -1,17 +1,14 @@
-import CommitDetail, {
-  IStateProps,
-  IDispatchProps,
-  IOwnProps
-} from "./commit-detail";
-import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { ICommit } from "../../types";
 import { AppDispatch } from "../../store/store";
-import {
-  TraceLinkActionTypes,
-  TraceLinkActions
-} from "../../store/trace-link/types";
 import { fetchCommitRelatedTraceLinks } from "../../store/trace-link/actions";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { ICommit } from "../../types";
+import CommitDetail, {
+  IDispatchProps,
+  IOwnProps,
+  IStateProps
+} from "./commit-detail";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,

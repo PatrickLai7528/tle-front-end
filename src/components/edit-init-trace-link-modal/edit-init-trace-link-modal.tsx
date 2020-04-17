@@ -1,14 +1,14 @@
+import { Empty, Modal } from "antd";
 import React, {
   FunctionComponent,
   memo,
-  useState,
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from "react";
-import { ITraceLinkMatrix, IImplement, ITraceLink } from "../../types";
-import { Modal, Empty } from "antd";
-import { TraceLinkCard } from "../trace-link-card";
+import { ITraceLink, ITraceLinkMatrix } from "../../types";
 import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
+import { TraceLinkCard } from "../trace-link-card";
 export interface IStateProps {
   visible: boolean;
 }

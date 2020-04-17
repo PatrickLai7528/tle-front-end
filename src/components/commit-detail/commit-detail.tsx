@@ -87,7 +87,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       };
 
       doFetch();
-    }, [fetchCommitRelatedTraceLinks, commit]);
+    }, [fetchCommitRelatedTraceLinks, commit, repoName]);
 
     return (
       <div className={styles.commitDetail} ref={ref}>

@@ -1,10 +1,10 @@
-import React, { FunctionComponent, memo } from "react";
 import { Descriptions, Skeleton, Typography } from "antd";
+import React, { FunctionComponent, memo } from "react";
+import { useTranslation } from "react-i18next";
+import { FileTree } from "../../components/file-tree";
 import { LanguageBadge } from "../../components/language-badge";
 import { RepositoryDescription } from "../../components/repository-description";
-import { FileTree } from "../../components/file-tree";
 import { IImportedRepository } from "../../types";
-import { useTranslation } from "react-i18next";
 
 export interface IBasicInfoDescriptionsProps {
   repo: IImportedRepository;
@@ -17,7 +17,6 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
     const {
       name,
       language,
-      lastUpdateAt,
       currentBranch,
       description,
       shaFileContentMap,
@@ -25,8 +24,6 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
       commits,
       branches
     } = repo;
-
-    console.log(description);
 
     return (
       <Descriptions bordered>

@@ -1,7 +1,7 @@
+import { Input } from "antd";
 import React, { FunctionComponent, memo } from "react";
-import { Input, Dropdown, Menu } from "antd";
-import { createUseStyles } from "react-jss";
 import { useTranslation } from "react-i18next";
+import { createUseStyles } from "react-jss";
 
 export interface IStateProps {
   loading: boolean;

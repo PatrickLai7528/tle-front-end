@@ -1,4 +1,4 @@
-import React, { FunctionComponent, memo, useMemo, ReactNode } from "react";
+import React, { FunctionComponent, memo, ReactNode } from "react";
 import { createUseStyles } from "react-jss";
 
 export interface IStatsBoxProps {

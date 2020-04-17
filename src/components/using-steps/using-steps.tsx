@@ -1,6 +1,5 @@
 import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
-import StepImage from "./step.svg";
 import { dataSource } from "../product-and-service/data-source";
 
 export interface IUsingStepsProps {}

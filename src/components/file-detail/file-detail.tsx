@@ -1,12 +1,5 @@
-import { Col, Collapse, Empty, Row, Typography, Divider, Skeleton } from "antd";
-import React, {
-  FunctionComponent,
-  memo,
-  useEffect,
-  useState,
-  useMemo
-} from "react";
-import { createUseStyles } from "react-jss";
+import { Col, Divider, Empty, Row, Skeleton, Typography } from "antd";
+import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { IFileTreeNode, ITraceLink } from "../../types";
 import { HighlightCode } from "../highlight-code";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
@@ -34,8 +27,6 @@ export interface IFileDetailProps
     IDispatchProps,
     IOwnProps {}
 
-const useStyles = createUseStyles({});
-
 const FileDetail: FunctionComponent<IFileDetailProps> = memo(
   (props: IFileDetailProps) => {
     const {
@@ -46,8 +37,6 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
       fileContent,
       fileNode
     } = props;
-
-    const styles = useStyles();
 
     useEffect(() => {
       if (fileNode) {

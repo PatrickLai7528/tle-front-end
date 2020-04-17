@@ -1,8 +1,8 @@
 import { Anchor } from "antd";
 import { AnchorContainer } from "antd/lib/anchor/Anchor";
-import React, { FunctionComponent, memo, CSSProperties } from "react";
+import React, { CSSProperties, FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
-import { ICommitChanges, ITraceLink } from "../../types";
+import { ICommitChanges } from "../../types";
 import StatsBoxes from "./stats-box";
 
 export interface ICommitChangeInfoProps {

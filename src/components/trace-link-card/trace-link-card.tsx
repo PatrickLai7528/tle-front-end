@@ -1,9 +1,9 @@
-import React, { FunctionComponent, memo, ReactNode, useState } from "react";
-import { ITraceLink, IImplement, IRequirementDescription } from "../../types";
-import { createUseStyles } from "react-jss";
-import { Card, List, Typography, Button, Input } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { Button, Card, Input, List, Typography } from "antd";
+import React, { FunctionComponent, memo, useState } from "react";
+import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
+import { IRequirementDescription, ITraceLink } from "../../types";
 
 export interface ITraceLinkCardProps {
   requirement: IRequirementDescription;

@@ -1,4 +1,4 @@
-import React, { FunctionComponent, memo, useEffect, useState } from "react";
+import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
 import { IFileTreeNode, ShaFileContentMap } from "../../types";
 import { FileTree } from "../file-tree";

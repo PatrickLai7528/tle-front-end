@@ -1,4 +1,3 @@
-import { importedRepository } from "./../../stubs/imported-repositories";
 import { IImportedRepository } from "./../../types/index";
 import {
   IImportRepositoryState,

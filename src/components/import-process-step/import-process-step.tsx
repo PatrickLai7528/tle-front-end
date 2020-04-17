@@ -2,14 +2,11 @@ import React, { FC, memo } from "react";
 import { Steps } from "antd";
 import { LoadingOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import { createUseStyles } from "react-jss";
 
 export interface IImportProcessStepProps {
   currentStep: number;
   done: boolean;
 }
-
-const useStyles = createUseStyles({});
 
 const ImportProcessStep: FC<IImportProcessStepProps> = memo(
   (props: IImportProcessStepProps) => {

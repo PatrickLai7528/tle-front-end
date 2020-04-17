@@ -1,7 +1,6 @@
-import { notification, message } from "antd";
+import { message, notification } from "antd";
 import { FunctionComponent, memo } from "react";
 import { INotificationQueueItem } from "../../store/notification/types";
-import { duration } from "moment";
 
 export interface IStateProps {
   queue: INotificationQueueItem[];

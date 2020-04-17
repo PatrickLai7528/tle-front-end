@@ -1,13 +1,12 @@
+import { message } from "antd";
 import React, {
   FunctionComponent,
   isValidElement,
-  memo,
-  useEffect,
-  ReactChild
+  ReactChild,
+  useEffect
 } from "react";
-import { Redirect } from "react-router-dom";
-import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import { Redirect } from "react-router-dom";
 
 export interface IStateProps {
   loggedIn: boolean;

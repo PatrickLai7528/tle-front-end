@@ -1,13 +1,12 @@
 import { EditOutlined } from "@ant-design/icons";
-import { Badge, Card, Input, Typography, Skeleton } from "antd";
+import { Input, Skeleton, Typography } from "antd";
 import React, {
   FunctionComponent,
   memo,
-  useState,
   useEffect,
-  useMemo
+  useMemo,
+  useState
 } from "react";
-import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import ReactMarkdown from "react-markdown";
 import { IRequirementDescription, ITraceLink } from "../../types";
@@ -66,9 +65,8 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
     } = props;
     const styles = useStyles();
     const [editable, setEditable] = useState<boolean>(false);
-    const { text, traced, id } = description;
+    const { text, id } = description;
     const [textAreaValue, setTextAreaValue] = useState<string>(text);
-    const { t } = useTranslation();
 
     useEffect(() => {
       const doFetch = async () => {

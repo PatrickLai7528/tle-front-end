@@ -1,10 +1,10 @@
-import { List, Tooltip, Button } from "antd";
+import { List, Tooltip } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { ProgramLanguage } from "../../utils/language-color";
 import { LanguageBadge } from "../language-badge";
-import { Link } from "react-router-dom";
 
 export interface IStateProps {
   loading: boolean;

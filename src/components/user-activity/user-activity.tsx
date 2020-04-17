@@ -1,7 +1,6 @@
-import React, { memo, FC, useEffect } from "react";
-import { List, Avatar, Card } from "antd";
+import { Avatar, Card, List } from "antd";
+import React, { FC, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { createUseStyles } from "react-jss";
 import { IUserActivity } from "../../types";
 
 export interface IStateProps {
@@ -20,11 +19,8 @@ export interface IActivityProps
     IDispatchProps,
     IOwnProps {}
 
-const useStyles = createUseStyles({});
-
 const UserActivity: FC<IActivityProps> = memo((props: IActivityProps) => {
   const { t } = useTranslation();
-  const styles = useStyles();
   const { fetchUserActivities, activities, loading } = props;
 
   useEffect(() => {
