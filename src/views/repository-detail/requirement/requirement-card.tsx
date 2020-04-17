@@ -5,7 +5,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { IRequirement, IRequirementDescription } from "../../../types";
 import { createUseStyles } from "react-jss";
 import { useTranslation } from "react-i18next";
-import PropertyCard from "../shared/property-card";
+import PropertyCard from "../../../components/property-card/property-card";
 import moment from "moment";
 
 export interface IRequirementCardProps {

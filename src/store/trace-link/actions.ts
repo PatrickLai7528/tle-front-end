@@ -1,38 +1,33 @@
-import {
-  IRequirement,
-  ITraceLinkMatrix,
-  ICommit,
-  ITraceLink
-} from "./../../types/index";
+import { traceLinks } from "../../stubs/trace-link";
 import { traceLinkMatrix } from "./../../stubs/trace-link-matrix";
+import { ICommit, IRequirement, ITraceLinkMatrix } from "./../../types/index";
+import { AppDispatch, AppThunk } from "./../store";
 import {
-  TraceLinkActionTypes,
-  TraceLinkActions,
+  CONFIRM_INIT_TRACE_LINK,
+  FETCH_COMMIT_RELATED_TRACE_LINK,
+  FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE,
+  FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS,
+  FETCH_FILE_RELATED_TRACE_LINK,
+  FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
+  FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   FETCH_REPO_TRACE_LINK,
-  FETCH_REPO_TRACE_LINK_SUCCESS,
   FETCH_REPO_TRACE_LINK_FAILURE,
+  FETCH_REPO_TRACE_LINK_SUCCESS,
   GENERATE_INIT_TRACE_LINK,
   GENERATE_INIT_TRACE_LINK_SUCCESS,
   GENERATE_INTI_TRACE_LINK_FAILURE,
-  TOGGLE_INIT_TRACE_LINK_EDIT_MODAL,
-  IToggleInitTraceLinkEditModalAction,
-  UPDATE_INIT_TRACE_LINK,
-  IUpdateInitTraceLinkAction,
+  ICommitRelatedTraceLinks,
   IConfirmInitTraceLinkAction,
-  CONFIRM_INIT_TRACE_LINK,
+  IToggleInitTraceLinkEditModalAction,
+  IUpdateInitTraceLinkAction,
   SEND_INIT_TRACE_LINK,
-  SEND_INIT_TRACE_LINK_SUCCESS,
   SEND_INIT_TRACE_LINK_FAILURE,
-  FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE,
-  FETCH_COMMIT_RELATED_TRACE_LINK,
-  FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS,
-  FETCH_FILE_RELATED_TRACE_LINK,
-  FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
-  FETCH_FILE_RELATED_TRACE_LINK_FAILURE
+  SEND_INIT_TRACE_LINK_SUCCESS,
+  TOGGLE_INIT_TRACE_LINK_EDIT_MODAL,
+  TraceLinkActions,
+  TraceLinkActionTypes,
+  UPDATE_INIT_TRACE_LINK
 } from "./types";
-import { AppThunk, AppDispatch } from "./../store";
-import { traceLinks } from "../../stubs/trace-link";
-import { implementStubs } from "../../stubs/implement";
 
 export const fetchFileRelatedTraceLinks = (
   repoName: string,
@@ -53,24 +48,24 @@ export const fetchFileRelatedTraceLinks = (
   }
 };
 
-export const fetchRelatedTraceLinks = (
+export const fetchCommitRelatedTraceLinks = (
+  repoName: string,
   commit: ICommit
 ): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
   dispatch({ type: FETCH_COMMIT_RELATED_TRACE_LINK });
   try {
     await new Promise(resolve => setTimeout(resolve, 1200));
-    const { changedFiles } = commit;
-    const fetched: (ITraceLink & {
-      status: "ADDED" | "REMOVED";
-    })[] = traceLinks.slice(1, 10).map((link, index) => ({
-      ...link,
-      implements:
-        implementStubs[Math.round(Math.random() * implementStubs.length)],
-      status: index % 2 === 0 ? "ADDED" : "REMOVED"
-    }));
+    const commitRelatedTraceLinks: ICommitRelatedTraceLinks = {
+      added: {
+        traceLinks: traceLinks.slice(1, 3)
+      },
+      removed: {
+        traceLinks: traceLinks.slice(2, 4)
+      }
+    };
     dispatch({
       type: FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS,
-      payload: fetched
+      payload: commitRelatedTraceLinks
     });
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {

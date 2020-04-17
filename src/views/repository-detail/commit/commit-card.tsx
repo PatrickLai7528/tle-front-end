@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { CommitMessage } from "../../../components/commit-message";
 import { ICommit } from "../../../types";
-import PropertyCard from "../shared/property-card";
+import PropertyCard from "../../../components/property-card/property-card";
 
 export interface ICommitCardProps {
   commits: ICommit[];

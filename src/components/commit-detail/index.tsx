@@ -6,12 +6,12 @@ import CommitDetail, {
 import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { ICommit } from "../../types";
-import { fetchRelatedTraceLinks } from "../../store/trace-link/actions";
 import { AppDispatch } from "../../store/store";
 import {
   TraceLinkActionTypes,
   TraceLinkActions
 } from "../../store/trace-link/types";
+import { fetchCommitRelatedTraceLinks } from "../../store/trace-link/actions";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,
@@ -32,8 +32,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: AppDispatch<TraceLinkActions>
 ) => {
   return {
-    fetchRelatedTraceLinks: (commit: ICommit) =>
-      dispatch(fetchRelatedTraceLinks(commit))
+    fetchCommitRelatedTraceLinks: (repoName: string, commit: ICommit) =>
+      dispatch(fetchCommitRelatedTraceLinks(repoName, commit))
   };
 };
 

@@ -33,7 +33,10 @@ const initialState: ITraceLinkState = {
   initTraceLinkLoading: false,
   initTraceLinkEditModalVisible: false,
   initTraceLinkConfirmed: false,
-  commitRelatedTraceLinks: [],
+  commitRelatedTraceLinks: {
+    added: { traceLinks: [] },
+    removed: { traceLinks: [] }
+  },
   fileRelatedTraceLinks: []
 };
 
@@ -72,9 +75,9 @@ export const traceLinkReducer = (
       return {
         ...state,
         loading: false,
-        commitRelatedTraceLinks: [
+        commitRelatedTraceLinks: {
           ...(action as IFetchCommitRelatedTraceLinkSuccessAction).payload
-        ]
+        }
       };
     case FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE:
       return {

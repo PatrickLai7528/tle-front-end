@@ -3,37 +3,39 @@ import {
   Col,
   Collapse,
   Divider,
-  Row,
-  Statistic,
-  Typography,
   Empty,
-  Skeleton
+  Row,
+  Skeleton,
+  Statistic,
+  Typography
 } from "antd";
 import React, {
   FunctionComponent,
   memo,
+  useEffect,
   useMemo,
-  useRef,
-  useEffect
+  useRef
 } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { ICommit, ITraceLink } from "../../types";
+import { ICommitRelatedTraceLinks } from "../../store/trace-link/types";
+import { ICommit } from "../../types";
 import { CommitChangeInfo } from "../commit-change-info";
 import { HighlightCode } from "../highlight-code";
-import { TraceLinkCard } from "../trace-link-card";
+import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IStateProps {
-  traceLinks: ITraceLink[];
+  traceLinks: ICommitRelatedTraceLinks;
   fetchTraceLinkLoading: boolean;
 }
 
 export interface IDispatchProps {
-  fetchRelatedTraceLinks: (commit: ICommit) => void;
+  fetchCommitRelatedTraceLinks: (repoName: string, commit: ICommit) => void;
 }
 
 export interface IOwnProps {
   commit: ICommit;
+  repoName: string;
 }
 
 export interface ICommitDetailProps
@@ -61,8 +63,9 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
     const {
       commit,
       traceLinks,
-      fetchRelatedTraceLinks,
-      fetchTraceLinkLoading
+      fetchCommitRelatedTraceLinks,
+      fetchTraceLinkLoading,
+      repoName
     } = props;
     const { changedFiles, stats } = commit;
     const { t } = useTranslation();
@@ -75,7 +78,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
     useEffect(() => {
       const doFetch = async () => {
         try {
-          await fetchRelatedTraceLinks(commit);
+          await fetchCommitRelatedTraceLinks(repoName, commit);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
@@ -84,7 +87,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       };
 
       doFetch();
-    }, [fetchRelatedTraceLinks, commit]);
+    }, [fetchCommitRelatedTraceLinks, commit]);
 
     return (
       <div className={styles.commitDetail} ref={ref}>
@@ -109,22 +112,27 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
         </Row>
         <Divider />
         <Typography.Title level={3}>關聯的需求</Typography.Title>
-        {/* <div>
-					{fetchTraceLinkLoading ? (
-						<Skeleton
-							title={false}
-							avatar={false}
-							active
-							paragraph={{ rows: 5 }}
-						/>
-					) : traceLinks ? (
-						(traceLinks || []).map((link) => (
-							<TraceLinkCard traceLink={link} editable={false} />
-						))
-					) : (
-						<Empty />
-					)}
-				</div> */}
+        <div>
+          {fetchTraceLinkLoading ? (
+            <Skeleton
+              title={false}
+              avatar={false}
+              active
+              paragraph={{ rows: 5 }}
+            />
+          ) : traceLinks ? (
+            <>
+              {traceLinks.added.traceLinks.map(link => (
+                <SimpleTraceLinkCard traceLink={link} />
+              ))}
+              {traceLinks.removed.traceLinks.map(link => (
+                <SimpleTraceLinkCard traceLink={link} />
+              ))}
+            </>
+          ) : (
+            <Empty />
+          )}
+        </div>
         <Divider />
         <Typography.Title level={3}>變更的文件</Typography.Title>
         <CommitChangeInfo

@@ -52,7 +52,7 @@ export interface IFetchCommitRelatedTraceLinkAction {
 
 export interface IFetchCommitRelatedTraceLinkSuccessAction {
   type: typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS;
-  payload: (ITraceLink & { status: "ADDED" | "REMOVED" })[];
+  payload: ICommitRelatedTraceLinks;
 }
 
 export interface IFetchCommitRelatedTraceLinkFailureAction {
@@ -98,6 +98,11 @@ export interface IGenerateInitTraceLinkFailureAction {
   type: typeof GENERATE_INTI_TRACE_LINK_FAILURE;
 }
 
+export interface ICommitRelatedTraceLinks {
+  added: { traceLinks: ITraceLink[] };
+  removed: { traceLinks: ITraceLink[] };
+}
+
 export interface ITraceLinkState {
   loading: boolean;
   error?: boolean | any;
@@ -107,7 +112,7 @@ export interface ITraceLinkState {
   initTraceLinkEditModalVisible: boolean;
   initTraceLinkConfirmed: boolean;
 
-  commitRelatedTraceLinks: (ITraceLink & { status: "ADDED" | "REMOVED" })[];
+  commitRelatedTraceLinks: ICommitRelatedTraceLinks;
   fileRelatedTraceLinks: ITraceLink[];
 }
 
