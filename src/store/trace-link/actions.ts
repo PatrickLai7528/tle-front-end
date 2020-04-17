@@ -26,8 +26,30 @@ import {
   TOGGLE_INIT_TRACE_LINK_EDIT_MODAL,
   TraceLinkActions,
   TraceLinkActionTypes,
-  UPDATE_INIT_TRACE_LINK
+  UPDATE_INIT_TRACE_LINK,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK
 } from "./types";
+
+export const fetchRequirementRelatedTraceLinks = (
+  repoName: string,
+  requirementId: string
+): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+  dispatch({ type: FETCH_REQUIREMENT_RELATED_TRACE_LINK });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    dispatch({
+      type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
+      payload: traceLinks.splice(3, 6)
+    });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE });
+  }
+};
 
 export const fetchFileRelatedTraceLinks = (
   repoName: string,

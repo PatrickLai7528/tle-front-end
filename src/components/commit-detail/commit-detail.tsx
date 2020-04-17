@@ -91,6 +91,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
 
     return (
       <div className={styles.commitDetail} ref={ref}>
+        <Typography.Title level={3}>代碼統計</Typography.Title>
         <Row gutter={[16, 16]}>
           <Col span={8}>
             <Statistic title={"總修改量"} value={stats.total.toString()} />
@@ -107,6 +108,33 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
               title={"刪除"}
               valueStyle={{ color: "#cf1322" }}
               value={stats.deletions.toString()}
+            />
+          </Col>
+        </Row>
+        <Divider />
+        <Typography.Title level={3}>追踪線索統計</Typography.Title>
+        <Row gutter={[16, 16]}>
+          <Col span={8}>
+            <Statistic
+              title={"總修改量"}
+              value={
+                traceLinks.added.traceLinks.length +
+                traceLinks.removed.traceLinks.length
+              }
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic
+              title={"增加"}
+              valueStyle={{ color: "#3f8600" }}
+              value={traceLinks.added.traceLinks.length}
+            />
+          </Col>
+          <Col span={8}>
+            <Statistic
+              title={"刪除"}
+              valueStyle={{ color: "#cf1322" }}
+              value={traceLinks.removed.traceLinks.length}
             />
           </Col>
         </Row>

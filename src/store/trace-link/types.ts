@@ -33,6 +33,26 @@ export const FETCH_FILE_RELATED_TRACE_LINK_SUCCESS =
 export const FETCH_FILE_RELATED_TRACE_LINK_FAILURE =
   "FETCH_FILE_RELATED_TRACE_LINK_FAILURE";
 
+export const FETCH_REQUIREMENT_RELATED_TRACE_LINK =
+  "FETCH_REQUIREMENT_RELATED_TRACE_LINK";
+export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS =
+  "FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS";
+export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE =
+  "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE";
+
+export interface IFetchRequirementRelatedTraceLinkAction {
+  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK;
+}
+
+export interface IFetchRequirementRelatedTraceLinkSuccessAction {
+  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS;
+  payload: ITraceLink[];
+}
+
+export interface IFetchRequirementRelatedTraceLinkFailureAction {
+  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE;
+}
+
 export interface IFetchFileRelatedTraceLinkAction {
   type: typeof FETCH_FILE_RELATED_TRACE_LINK;
 }
@@ -114,6 +134,7 @@ export interface ITraceLinkState {
 
   commitRelatedTraceLinks: ICommitRelatedTraceLinks;
   fileRelatedTraceLinks: ITraceLink[];
+  requirementRelatedTraceLinks: ITraceLink[];
 }
 
 export interface IFetchRepoTraceLinkAction {
@@ -147,7 +168,10 @@ export type TraceLinkActions =
   | IFetchCommitRelatedTraceLinkSuccessAction
   | IFetchFileRelatedTraceLinkAction
   | IFetchFileRelatedTraceLinkSuccessAction
-  | IFetchFileRelatedTraceLinkFailureAction;
+  | IFetchFileRelatedTraceLinkFailureAction
+  | IFetchRequirementRelatedTraceLinkAction
+  | IFetchRequirementRelatedTraceLinkSuccessAction
+  | IFetchRequirementRelatedTraceLinkFailureAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -167,4 +191,7 @@ export type TraceLinkActionTypes =
   | typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS
   | typeof FETCH_FILE_RELATED_TRACE_LINK
   | typeof FETCH_FILE_RELATED_TRACE_LINK_SUCCESS
-  | typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE;
+  | typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE
+  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK
+  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS
+  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE;

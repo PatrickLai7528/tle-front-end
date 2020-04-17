@@ -273,23 +273,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <Tabs defaultActiveKey={"file"} type="card" className={styles.content}>
-          <Tabs.TabPane tab={"文件"} key={"file"}>
-            {repo ? (
-              <RepositoryFiles
-                onFileNodeClick={node => {
-                  if (node && node.type === "FILE") {
-                    setSelectedFile(node);
-                    openDrawer("FILE");
-                  }
-                }}
-                shaFileContentMap={repo.shaFileContentMap}
-                treeData={repo.trees}
-              />
-            ) : (
-              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
-            )}
-          </Tabs.TabPane>
+        <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
           <Tabs.TabPane tab={t("commit")} key="1">
             {!!repo ? (
               <CommitCard
@@ -319,6 +303,22 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               />
             ) : (
               <Skeleton />
+            )}
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={"文件"} key={"file"}>
+            {repo ? (
+              <RepositoryFiles
+                onFileNodeClick={node => {
+                  if (node && node.type === "FILE") {
+                    setSelectedFile(node);
+                    openDrawer("FILE");
+                  }
+                }}
+                shaFileContentMap={repo.shaFileContentMap}
+                treeData={repo.trees}
+              />
+            ) : (
+              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
             )}
           </Tabs.TabPane>
           <Tabs.TabPane tab="圖" key="3">

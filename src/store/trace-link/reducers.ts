@@ -23,7 +23,8 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK,
   FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   IFetchFileRelatedTraceLinkSuccessAction,
-  FETCH_FILE_RELATED_TRACE_LINK_FAILURE
+  FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
+  IFetchRequirementRelatedTraceLinkSuccessAction
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -37,7 +38,8 @@ const initialState: ITraceLinkState = {
     added: { traceLinks: [] },
     removed: { traceLinks: [] }
   },
-  fileRelatedTraceLinks: []
+  fileRelatedTraceLinks: [],
+  requirementRelatedTraceLinks: []
 };
 
 export const traceLinkReducer = (
@@ -45,6 +47,26 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK":
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        requirementRelatedTraceLinks: [
+          ...(action as IFetchRequirementRelatedTraceLinkSuccessAction).payload
+        ]
+      };
+    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case FETCH_FILE_RELATED_TRACE_LINK:
       return {
         ...state,
