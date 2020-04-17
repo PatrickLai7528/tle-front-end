@@ -73,9 +73,9 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
                   </Typography.Paragraph>
                 </Typography>
               )}
+              {showImplement && showRequirement && <Divider />}
               {showImplement && (
                 <>
-                  <Divider />
                   <Typography>
                     <Typography.Text>實現類或函數</Typography.Text>
                     <Typography.Paragraph strong>

@@ -1,4 +1,4 @@
-import { Drawer, PageHeader, Skeleton, Spin, Tabs, Empty } from "antd";
+import { Drawer, Empty, PageHeader, Skeleton, Spin, Tabs } from "antd";
 import GGEditor, { Flow } from "gg-editor";
 import React, {
   FunctionComponent,
@@ -12,20 +12,20 @@ import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
 import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 import { ConnectedCommitDetail } from "../../components/commit-detail";
+import { ConnectedFileDetail } from "../../components/file-detail";
+import { RepositoryFiles } from "../../components/repository-files";
+import { ConnectedRequirementDetail } from "../../components/requirement-detail";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
+  IFileTreeNode,
   IImportedRepository,
   IRequirement,
-  IRequirementDescription,
-  IFileTreeNode
+  IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import RequirementDetail from "./requirement/requirement-detail";
-import { ConnectedFileDetail } from "../../components/file-detail";
-import { RepositoryFiles } from "../../components/repository-files";
 
 const data = {
   nodes: [
@@ -181,7 +181,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         );
       } else if (drawerType === "REQUIREMENT") {
         return (
-          <RequirementDetail
+          <ConnectedRequirementDetail
+            repoName={repoName}
             onDescriptionUpdate={(descId: string, descriptionText: string) => {
               const oldDescriptions: IRequirementDescription[] =
                 requirement.descriptions;
