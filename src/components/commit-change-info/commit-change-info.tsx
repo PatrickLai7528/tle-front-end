@@ -46,7 +46,7 @@ const CommitChangeInfo: FunctionComponent<ICommitChangeInfoProps> = memo(
       <div className={styles.changes} style={style}>
         {(changes || []).map(change => {
           return (
-            <Anchor affix={false} getContainer={getContainer}>
+            <Anchor key={change.sha} affix={false} getContainer={getContainer}>
               <Anchor.Link
                 href={`#${change.sha}`}
                 title={

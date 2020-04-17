@@ -76,7 +76,11 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
         );
       } else if (!loading && fileNode && traceLinks) {
         return traceLinks.map(link => (
-          <SimpleTraceLinkCard key={link.id} traceLink={link} />
+          <SimpleTraceLinkCard
+            key={link.id}
+            traceLink={link}
+            showImplement={false}
+          />
         ));
       } else {
         return <Empty />;
