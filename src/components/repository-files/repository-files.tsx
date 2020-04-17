@@ -86,8 +86,6 @@ const RepositoryFiles: FunctionComponent<IRepositoryFilesProps> = memo(
       }
     }, [repoName, fetchFileRelatedTraceLinks, selectedNode]);
 
-    console.log(traceLinks);
-
     return (
       <Spin spinning={loading}>
         <Row>
@@ -101,6 +99,7 @@ const RepositoryFiles: FunctionComponent<IRepositoryFilesProps> = memo(
                     // select file, not folder
                     setActiveCollapseKeys([
                       "file content",
+                      "trace link",
                       ...activeCollapseKeys
                     ]);
                   }
