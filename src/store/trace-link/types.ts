@@ -1,4 +1,4 @@
-import { ITraceLinkMatrix } from "./../../types/index";
+import { ITraceLinkMatrix, ITraceLink } from "./../../types/index";
 export const FETCH_REPO_TRACE_LINK = "FETCH_REPO_TRACE_LINK";
 export const FETCH_REPO_TRACE_LINK_SUCCESS = "FETCH_REPO_TRACE_LINK_SUCCESS";
 export const FETCH_REPO_TRACE_LINK_FAILURE = "FETCH_REPO_TRACE_LINK_FAILURE";
@@ -19,6 +19,26 @@ export const CONFIRM_INIT_TRACE_LINK = "CONFIRM_INIT_TRACE_LINK";
 export const SEND_INIT_TRACE_LINK = "SEND_INIT_TRACE_LINK";
 export const SEND_INIT_TRACE_LINK_SUCCESS = "SEND_INIT_TRACE_LINK_SUCCESS";
 export const SEND_INIT_TRACE_LINK_FAILURE = "SEND_INIT_TRACE_LINK_FAILURE";
+
+export const FETCH_COMMIT_RELATED_TRACE_LINK =
+  "FETCH_COMMIT_RELATED_TRACE_LINK";
+export const FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS =
+  "FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS";
+export const FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE =
+  "FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE";
+
+export interface IFetchCommitRelatedTraceLinkAction {
+  type: typeof FETCH_COMMIT_RELATED_TRACE_LINK;
+}
+
+export interface IFetchCommitRelatedTraceLinkSuccessAction {
+  type: typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS;
+  payload: (ITraceLink & { status: "ADDED" | "REMOVED" })[];
+}
+
+export interface IFetchCommitRelatedTraceLinkFailureAction {
+  type: typeof FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE;
+}
 
 export interface ISendInitTraceLinkAction {
   type: typeof SEND_INIT_TRACE_LINK;
@@ -67,6 +87,8 @@ export interface ITraceLinkState {
   initTraceLinkMartix?: ITraceLinkMatrix;
   initTraceLinkEditModalVisible: boolean;
   initTraceLinkConfirmed: boolean;
+
+  commitRelatedTraceLinks: (ITraceLink & { status: "ADDED" | "REMOVED" })[];
 }
 
 export interface IFetchRepoTraceLinkAction {
@@ -94,7 +116,10 @@ export type TraceLinkActions =
   | IConfirmInitTraceLinkAction
   | ISendInitTraceLinkAction
   | ISendInitTraceLinkSuccessAction
-  | ISendInitTraceLinkFailureAction;
+  | ISendInitTraceLinkFailureAction
+  | IFetchCommitRelatedTraceLinkAction
+  | IFetchCommitRelatedTraceLinkFailureAction
+  | IFetchCommitRelatedTraceLinkSuccessAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -108,4 +133,7 @@ export type TraceLinkActionTypes =
   | typeof CONFIRM_INIT_TRACE_LINK
   | typeof SEND_INIT_TRACE_LINK
   | typeof SEND_INIT_TRACE_LINK_SUCCESS
-  | typeof SEND_INIT_TRACE_LINK_FAILURE;
+  | typeof SEND_INIT_TRACE_LINK_FAILURE
+  | typeof FETCH_COMMIT_RELATED_TRACE_LINK
+  | typeof FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE
+  | typeof FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS;

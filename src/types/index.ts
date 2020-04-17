@@ -31,9 +31,8 @@ export interface IImplement {
 export interface ITraceLink {
   id: string;
   requirementDescription: IRequirementDescription;
-  implements: IImplement[];
-  lastUpdateAt: number;
-  lastUpdateByCommit: ICommit; // commit message
+  implement: IImplement;
+  lastUpdateAt?: number;
 }
 
 export interface ITraceLinkMatrix {
@@ -45,7 +44,7 @@ export interface IRequirementDescription {
   traced: boolean;
   lastUpdateAt: number;
   // lastUpdateCommit: string; // commit message
-  relatedImplementIds: string[];
+  // relatedImplementIds: string[];
   id: string;
 }
 

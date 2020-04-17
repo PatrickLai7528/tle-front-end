@@ -1,15 +1,45 @@
 import { CaretRightOutlined } from "@ant-design/icons";
-import { Col, Collapse, Divider, Row, Statistic, Typography } from "antd";
-import React, { FunctionComponent, memo, useRef, useMemo } from "react";
+import {
+  Col,
+  Collapse,
+  Divider,
+  Row,
+  Statistic,
+  Typography,
+  Empty,
+  Skeleton
+} from "antd";
+import React, {
+  FunctionComponent,
+  memo,
+  useMemo,
+  useRef,
+  useEffect
+} from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import CommitChangeInfo from "../../../components/commit-change-info/commit-change-info";
-import { HighlightCode } from "../../../components/highlight-code";
-import { ICommit } from "../../../types";
+import { ICommit, ITraceLink } from "../../types";
+import { CommitChangeInfo } from "../commit-change-info";
+import { HighlightCode } from "../highlight-code";
+import { TraceLinkCard } from "../trace-link-card";
 
-export interface ICommitDetailProps {
+export interface IStateProps {
+  traceLinks: ITraceLink[];
+  fetchTraceLinkLoading: boolean;
+}
+
+export interface IDispatchProps {
+  fetchRelatedTraceLinks: (commit: ICommit) => void;
+}
+
+export interface IOwnProps {
   commit: ICommit;
 }
+
+export interface ICommitDetailProps
+  extends IStateProps,
+    IDispatchProps,
+    IOwnProps {}
 
 const useStyles = createUseStyles({
   commitDetail: {
@@ -29,14 +59,32 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
     const styles = useStyles();
     const ref = useRef<HTMLDivElement>(null);
     const {
-      commit: { changedFiles, stats }
+      commit,
+      traceLinks,
+      fetchRelatedTraceLinks,
+      fetchTraceLinkLoading
     } = props;
+    const { changedFiles, stats } = commit;
     const { t } = useTranslation();
 
     const defaultActiveKeys = useMemo(
       () => (changedFiles || []).map(changes => changes.sha),
       [changedFiles]
     );
+
+    useEffect(() => {
+      const doFetch = async () => {
+        try {
+          await fetchRelatedTraceLinks(commit);
+        } catch (e) {
+          if (process.env.NODE_ENV !== "production") {
+            console.log(e);
+          }
+        }
+      };
+
+      doFetch();
+    }, [fetchRelatedTraceLinks, commit]);
 
     return (
       <div className={styles.commitDetail} ref={ref}>
@@ -61,7 +109,22 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
         </Row>
         <Divider />
         <Typography.Title level={3}>關聯的需求</Typography.Title>
-
+        {/* <div>
+					{fetchTraceLinkLoading ? (
+						<Skeleton
+							title={false}
+							avatar={false}
+							active
+							paragraph={{ rows: 5 }}
+						/>
+					) : traceLinks ? (
+						(traceLinks || []).map((link) => (
+							<TraceLinkCard traceLink={link} editable={false} />
+						))
+					) : (
+						<Empty />
+					)}
+				</div> */}
         <Divider />
         <Typography.Title level={3}>變更的文件</Typography.Title>
         <CommitChangeInfo

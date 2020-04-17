@@ -2,7 +2,7 @@ import { Anchor } from "antd";
 import { AnchorContainer } from "antd/lib/anchor/Anchor";
 import React, { FunctionComponent, memo, CSSProperties } from "react";
 import { createUseStyles } from "react-jss";
-import { ICommitChanges } from "../../types";
+import { ICommitChanges, ITraceLink } from "../../types";
 import StatsBoxes from "./stats-box";
 
 export interface ICommitChangeInfoProps {
@@ -32,6 +32,9 @@ const useStyles = createUseStyles({
   removed: {
     color: "#cb2431!important",
     margin: { left: "16px" }
+  },
+  traceLinkArea: {
+    margin: { left: "24px" }
   }
 });
 
@@ -39,7 +42,6 @@ const CommitChangeInfo: FunctionComponent<ICommitChangeInfoProps> = memo(
   (props: ICommitChangeInfoProps) => {
     const { changes, getContainer, style } = props;
     const styles = useStyles();
-
     return (
       <div className={styles.changes} style={style}>
         {(changes || []).map(change => {

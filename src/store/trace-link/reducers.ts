@@ -15,7 +15,11 @@ import {
   IConfirmInitTraceLinkAction,
   SEND_INIT_TRACE_LINK,
   SEND_INIT_TRACE_LINK_SUCCESS,
-  SEND_INIT_TRACE_LINK_FAILURE
+  SEND_INIT_TRACE_LINK_FAILURE,
+  FETCH_COMMIT_RELATED_TRACE_LINK,
+  FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS,
+  IFetchCommitRelatedTraceLinkSuccessAction,
+  FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -24,7 +28,8 @@ const initialState: ITraceLinkState = {
   error: false,
   initTraceLinkLoading: false,
   initTraceLinkEditModalVisible: false,
-  initTraceLinkConfirmed: false
+  initTraceLinkConfirmed: false,
+  commitRelatedTraceLinks: []
 };
 
 export const traceLinkReducer = (
@@ -32,6 +37,26 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case FETCH_COMMIT_RELATED_TRACE_LINK:
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case FETCH_COMMIT_RELATED_TRACE_LINK_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        commitRelatedTraceLinks: [
+          ...(action as IFetchCommitRelatedTraceLinkSuccessAction).payload
+        ]
+      };
+    case FETCH_COMMIT_RELATED_TRACE_LINK_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case SEND_INIT_TRACE_LINK:
       return {
         ...state,

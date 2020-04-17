@@ -36,7 +36,7 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
     const { description, onDescriptionUpdate } = props;
     const styles = useStyles();
     const [editable, setEditable] = useState<boolean>(false);
-    const { text, traced, relatedImplementIds, id } = description;
+    const { text, traced, id } = description;
     const [textAreaValue, setTextAreaValue] = useState<string>(text);
     const { t } = useTranslation();
 
@@ -67,7 +67,7 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
         />
         {traced && (
           <div className={styles.relatedImplements}>
-            {(relatedImplementIds || []).map(id => {
+            {/* {(relatedImplementIds || []).map(id => {
               return (
                 <Card
                   key={id}
@@ -75,10 +75,10 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
                   bodyStyle={bodyStyle}
                   className={styles.implementCard}
                 >
-                  <Card.Meta title={`#${id}`} description="www.instagram.com" />
+                  <Card.Meta title={`#${id}`} description={} />
                 </Card>
               );
-            })}
+            })} */}
           </div>
         )}
       </Typography>

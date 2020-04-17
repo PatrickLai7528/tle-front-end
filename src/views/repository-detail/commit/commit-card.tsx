@@ -23,8 +23,6 @@ const CommitCard: FunctionComponent<ICommitCardProps> = memo(
     const { commits, onDetailClick } = props;
     const styles = useStyles();
 
-    console.log(commits);
-
     return (
       <PropertyCard
         titleProps={{ itemNumber: commits.length, text: t("commit") }}

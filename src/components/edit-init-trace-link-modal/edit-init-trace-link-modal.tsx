@@ -1,8 +1,14 @@
-import React, { FunctionComponent, memo, useState, useEffect } from "react";
+import React, {
+  FunctionComponent,
+  memo,
+  useState,
+  useEffect,
+  useMemo
+} from "react";
 import { ITraceLinkMatrix, IImplement, ITraceLink } from "../../types";
 import { Modal, Empty } from "antd";
 import { TraceLinkCard } from "../trace-link-card";
-import { v4 as uuidv4 } from "uuid";
+import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
 export interface IStateProps {
   visible: boolean;
 }
@@ -31,41 +37,34 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
 
     useEffect(() => setTraceLinkMatrix(props.traceLinkMatrix), [props]);
 
-    const handleDeleteImplement = (link: ITraceLink, impl: IImplement) => {
-      if (traceLinkMatrix) {
-        const linkIndex = traceLinkMatrix.links.indexOf(link);
-        const implIndex = link.implements.indexOf(impl);
-        const oldImpls = link.implements;
-        oldImpls.splice(implIndex, 1);
-        const newLink = {
-          ...link,
-          implements: [...oldImpls]
-        };
-        traceLinkMatrix.links[linkIndex] = { ...newLink };
-        setTraceLinkMatrix({ ...traceLinkMatrix });
-      }
-    };
+    const requirementLinkMap = useMemo(
+      () => classifyTraceLinksByRequirement(traceLinkMatrix?.links || []),
+      [traceLinkMatrix]
+    );
 
-    const handleAddImplement = (link: ITraceLink, implFilename: string) => {
+    const handleDeleteLink = (link: ITraceLink) => {
+      console.log(link);
       if (traceLinkMatrix) {
-        const impl: IImplement = {
-          fullyQualifiedName: implFilename,
-          id: uuidv4(),
-          type: "CLASS",
-          traced: true
-        };
-        const newLinks: ITraceLink[] = traceLinkMatrix.links.map(oldLink => {
-          return oldLink.id === link.id
-            ? {
-                ...link,
-                implements: [impl, ...link.implements]
-              }
-            : oldLink;
-        });
-
+        const oldLinks = traceLinkMatrix.links;
+        const newLinks = [];
+        for (const oldLink of oldLinks) {
+          if (oldLink.id !== link.id) {
+            newLinks.push({ ...oldLink });
+          }
+        }
+        console.log(newLinks);
         setTraceLinkMatrix({
           ...traceLinkMatrix,
           links: [...newLinks]
+        });
+      }
+    };
+
+    const handleAddLink = (link: ITraceLink) => {
+      if (traceLinkMatrix) {
+        setTraceLinkMatrix({
+          ...traceLinkMatrix,
+          links: [link, ...traceLinkMatrix.links]
         });
       }
     };
@@ -84,16 +83,23 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
         }}
         closable={false}
       >
-        {!!traceLinkMatrix && traceLinkMatrix.links.length !== 0 ? (
-          traceLinkMatrix.links.map(traceLink => (
-            <TraceLinkCard
-              editable={true}
-              key={traceLink.id}
-              traceLink={traceLink}
-              onDeleteImplement={handleDeleteImplement}
-              onAddImplement={handleAddImplement}
-            />
-          ))
+        {!!traceLinkMatrix && requirementLinkMap ? (
+          Object.keys(requirementLinkMap || {})
+            .sort()
+            .map(requirementId => {
+              const traceLinks: ITraceLink[] =
+                requirementLinkMap[requirementId];
+              return (
+                <TraceLinkCard
+                  key={requirementId}
+                  editable={true}
+                  onAddLink={handleAddLink}
+                  onDeleteLink={handleDeleteLink}
+                  tracelinks={traceLinks}
+                  requirement={traceLinks[0].requirementDescription}
+                />
+              );
+            })
         ) : (
           <Empty />
         )}

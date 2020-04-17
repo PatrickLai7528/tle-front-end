@@ -21,12 +21,14 @@ import {
   IImportedRepository,
   IRequirement,
   IRequirementDescription,
-  ITraceLinkMatrix
+  ITraceLinkMatrix,
+  ITraceLink
 } from "../../types";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { TraceLinkCard } from "./../../components/trace-link-card";
 import BasicInfoDescriptions from "./basic-info-descriptions";
 import { ConnectedEditInitTraceLinkModal } from "../../components/edit-init-trace-link-modal";
+import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
 
 export interface IStateProps {
   repositoryRes: IGHRepositoryRes;
@@ -139,6 +141,11 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
 
     const confirmImportButtonDisable = !initTraceLinkConfirmed || !importDone;
 
+    const requirementLinkMap = useMemo(
+      () => classifyTraceLinksByRequirement(initTraceLinkMatrix?.links || []),
+      [initTraceLinkMatrix]
+    );
+
     const confirmImportButton = (
       <Button
         block
@@ -183,7 +190,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                   />
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
-                  {!initTraceLinkConfirmed ? (
+                  {!initTraceLinkConfirmed || !requirementLinkMap ? (
                     <>
                       <Alert
                         className={styles.initRequirementAlert}
@@ -224,13 +231,20 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                       />
                     </>
                   ) : (
-                    (initTraceLinkMatrix?.links || []).map(link => (
-                      <TraceLinkCard
-                        key={link.id}
-                        traceLink={link}
-                        editable={false}
-                      />
-                    ))
+                    Object.keys(requirementLinkMap || {})
+                      .sort()
+                      .map(requirementId => {
+                        const traceLinks: ITraceLink[] =
+                          requirementLinkMap[requirementId];
+                        return (
+                          <TraceLinkCard
+                            key={requirementId}
+                            editable={false}
+                            tracelinks={traceLinks}
+                            requirement={traceLinks[0].requirementDescription}
+                          />
+                        );
+                      })
                   )}
                 </Tabs.TabPane>
               </Tabs>

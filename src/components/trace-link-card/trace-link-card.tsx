@@ -1,16 +1,15 @@
 import React, { FunctionComponent, memo, ReactNode, useState } from "react";
-import { ITraceLink, IImplement } from "../../types";
+import { ITraceLink, IImplement, IRequirementDescription } from "../../types";
 import { createUseStyles } from "react-jss";
 import { Card, List, Typography, Button, Input } from "antd";
 import { PlusCircleOutlined } from "@ant-design/icons";
+import { v4 as uuidv4 } from "uuid";
 
 export interface ITraceLinkCardProps {
-  traceLink: ITraceLink;
-  onDeleteImplement?: (
-    traceLink: ITraceLink,
-    implementation: IImplement
-  ) => void;
-  onAddImplement?: (traceLink: ITraceLink, implFilename: string) => void;
+  requirement: IRequirementDescription;
+  tracelinks: ITraceLink[];
+  onDeleteLink?: (traceLink: ITraceLink) => void;
+  onAddLink?: (traceLink: ITraceLink) => void;
   editable: boolean;
 }
 
@@ -33,27 +32,23 @@ const bodyStyle = { padding: "12px" };
 const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
   (props: ITraceLinkCardProps) => {
     const styles = useStyles();
-    const { traceLink, onDeleteImplement, onAddImplement, editable } = props;
+    const {
+      requirement,
+      tracelinks,
+      onAddLink,
+      onDeleteLink,
+      editable
+    } = props;
     const [showInput, setShowInput] = useState<boolean>(false);
     const [newImplValue, setNewImplValue] = useState<string>("");
 
-    const {
-      lastUpdateAt,
-      lastUpdateByCommit,
-      implements: implementations,
-      requirementDescription,
-      id
-    } = traceLink;
-
     return (
-      <Card key={id} bodyStyle={bodyStyle} className={styles.traceLinkCard}>
+      <Card bodyStyle={bodyStyle} className={styles.traceLinkCard}>
         <Card.Meta
           description={
             <Typography>
               <Typography.Title level={4}>需求描述</Typography.Title>
-              <Typography.Paragraph>
-                {requirementDescription.text}
-              </Typography.Paragraph>
+              <Typography.Paragraph>{requirement.text}</Typography.Paragraph>
             </Typography>
           }
         />
@@ -79,8 +74,18 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
                   setShowInput(false);
                 }}
                 onClick={() => {
-                  if (newImplValue && newImplValue !== "" && onAddImplement) {
-                    onAddImplement(traceLink, newImplValue);
+                  if (newImplValue && newImplValue !== "" && onAddLink) {
+                    onAddLink({
+                      id: uuidv4(),
+                      requirementDescription: requirement,
+                      implement: {
+                        traced: true,
+                        id: uuidv4(),
+                        type: "CLASS",
+                        fullyQualifiedName: newImplValue
+                      }
+                    });
+                    // onAddImplement(traceLink, newImplValue);
                     setNewImplValue("");
                   }
                 }}
@@ -93,16 +98,16 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
         <List
           className={styles.implementList}
           itemLayout="horizontal"
-          dataSource={implementations}
-          renderItem={item => (
+          dataSource={tracelinks}
+          renderItem={link => (
             <List.Item
               actions={
                 editable
                   ? [
                       <Button
                         onClick={() => {
-                          if (onDeleteImplement) {
-                            onDeleteImplement(traceLink, item);
+                          if (onDeleteLink) {
+                            onDeleteLink(link);
                           }
                         }}
                         type={"danger"}
@@ -115,8 +120,8 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
               }
             >
               <List.Item.Meta
-                description={`#${item.id}`}
-                title={item.fullyQualifiedName}
+                description={`#${link.implement.id}`}
+                title={link.implement.fullyQualifiedName}
               />
             </List.Item>
           )}

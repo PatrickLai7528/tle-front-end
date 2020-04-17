@@ -1,4 +1,4 @@
-import { Drawer, PageHeader, Skeleton, Spin } from "antd";
+import { Col, Drawer, PageHeader, Row, Skeleton, Spin } from "antd";
 import React, {
   FunctionComponent,
   memo,
@@ -9,6 +9,7 @@ import React, {
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
 import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
+import { ConnectedCommitDetail } from "../../components/commit-detail";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -17,7 +18,6 @@ import {
   IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
-import CommitDetail from "./commit/commit-detail";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import RequirementDetail from "./requirement/requirement-detail";
@@ -54,17 +54,17 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: "16px",
-    overflowX: "scroll",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
+    // overflowX: "scroll",
+    // display: "flex",
+    // flexDirection: "row",
+    // justifyContent: "flex-start",
     background: "#fff"
   },
   contentCardWrapper: {
-    width: "500px",
-    flexGrow: "0",
-    flexShrink: "0",
-    margin: { right: "16px" }
+    // width: "500px",
+    // flexGrow: "0",
+    // flexShrink: "0",
+    // margin: { right: "16px" }
   }
 });
 
@@ -147,7 +147,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
 
     const drawerContent = useMemo(() => {
       if (drawerType === "COMMIT") {
-        return <CommitDetail commit={selectedCommit!} />;
+        return <ConnectedCommitDetail commit={selectedCommit!} />;
       } else if (drawerType === "REQUIREMENT") {
         return (
           <RequirementDetail
@@ -217,8 +217,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <div className={styles.content}>
-          <div className={styles.contentCardWrapper}>
+        <Row className={styles.content} gutter={[16, 16]}>
+          <Col lg={{ span: 12 }} style={{ width: "100%" }}>
             {!!repo ? (
               <CommitCard
                 commits={repo.commits}
@@ -230,8 +230,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </div>
-          <div className={styles.contentCardWrapper}>
+          </Col>
+          <Col lg={{ span: 12 }}>
             {!!requirement ? (
               <RequirementCard
                 loading={deleteRequirementLoading}
@@ -248,8 +248,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </div>
-        </div>
+          </Col>
+        </Row>
       </Spin>
     );
   }
