@@ -8,13 +8,23 @@ import {
   IAddRequirementSuccessAction,
   IRequirementState,
   RequirementActions,
-  TOGGLE_ADD_REQUIREMENT_MODAL
+  TOGGLE_ADD_REQUIREMENT_MODAL,
+  DELETE_REQUIREMENT,
+  DELETE_REQUIREMENT_SUCCESS,
+  IDeleteRequirementSuccessAction,
+  DELETE_REQUIREMENT_FAILURE,
+  UPDATE_REQUIREMENT,
+  UPDATE_REQUIREMENT_SUCCESS,
+  IUpdateRequirementSuccessAction,
+  UPDATE_REQUIREMENT_FAILURE
 } from "./types";
 
 const initialState: IRequirementState = {
   loading: false,
   addRequirementLoading: false,
-  addRequirementModalVisible: false
+  addRequirementModalVisible: false,
+  deleteRequirementLoading: false,
+  updateRequirementLoading: false
 };
 
 export const requirementReducer = (
@@ -22,6 +32,41 @@ export const requirementReducer = (
   action: RequirementActions
 ): IRequirementState => {
   switch (action.type) {
+    case UPDATE_REQUIREMENT:
+      return {
+        ...state,
+        updateRequirementLoading: true,
+        error: false
+      };
+    case UPDATE_REQUIREMENT_SUCCESS:
+      return {
+        ...state,
+        updateRequirementLoading: false,
+        requirement: (action as IUpdateRequirementSuccessAction).payload
+      };
+    case UPDATE_REQUIREMENT_FAILURE:
+      return {
+        ...state,
+        updateRequirementLoading: false,
+        error: true
+      };
+    case DELETE_REQUIREMENT:
+      return {
+        ...state,
+        deleteRequirementLoading: true
+      };
+    case DELETE_REQUIREMENT_SUCCESS:
+      return {
+        ...state,
+        deleteRequirementLoading: false,
+        requirement: (action as IDeleteRequirementSuccessAction).payload
+      };
+    case DELETE_REQUIREMENT_FAILURE:
+      return {
+        ...state,
+        error: true,
+        deleteRequirementLoading: false
+      };
     case ADD_REQUIREMENT:
       return {
         ...state,

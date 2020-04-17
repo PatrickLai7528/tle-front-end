@@ -2,7 +2,7 @@ import { Button, List } from "antd";
 import moment from "moment";
 import React, { FunctionComponent, memo } from "react";
 import { ITraceLinkMatrix, ITraceLink } from "../../../types";
-import PropertyCard from "../shared/property-card";
+import PropertyCard from "../../../components/property-card/property-card";
 import { createUseStyles } from "react-jss";
 
 export interface ITraceLinkCardProps {

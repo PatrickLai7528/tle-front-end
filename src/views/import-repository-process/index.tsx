@@ -1,19 +1,29 @@
-import { MapStateToProps, MapDispatchToProps, connect } from "react-redux";
-import { RootState } from "../../store/reducers";
-import { ThunkDispatch } from "redux-thunk";
-import { ImportRepositoryAcitons } from "../../store/import-repository/types";
 import {
-  cloneBranches,
-  cloneCommits,
-  cloneFileStructure,
-  cloneFileContent,
-  startImportRepository
+  connect,
+  MapDispatchToProps,
+  MapStateToProps,
+  batch
+} from "react-redux";
+import { ThunkDispatch } from "redux-thunk";
+import {
+  startImportRepository,
+  sendImportedRepository
 } from "../../store/import-repository/action";
+import { ImportRepositoryAcitons } from "../../store/import-repository/types";
+import { RootState } from "../../store/reducers";
+import { RequirementActions } from "../../store/requirement/types";
 import ImportRepositoryProcess, {
-  IStateProps,
   IDispatchProps,
-  IOwnProps
+  IOwnProps,
+  IStateProps
 } from "./import-repository-process";
+import {
+  generateInitialTraceLink,
+  toggleInitTraceLinkModal,
+  sendInitTraceLink
+} from "../../store/trace-link/actions";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { IImportedRepository, ITraceLinkMatrix } from "../../types";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState,
@@ -22,13 +32,17 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   const {
     importRepositoryReducer: {
       importProccess,
-      branches,
-      files,
-      commits,
-      shaContentMap,
-      importDone
+      importDone,
+      importedRepository,
+      loading: sendImportedRepositoryLoading
     },
-    repositoryManagementReducer: { rawRepositories }
+    repositoryManagementReducer: { rawRepositories },
+    traceLinkReducer: {
+      loading: sendTraceLinkLoading,
+      initTraceLinkLoading,
+      initTraceLinkMartix,
+      initTraceLinkConfirmed
+    }
   } = state;
 
   const {
@@ -38,26 +52,34 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   } = ownProps;
 
   return {
+    confirmImportLoading: sendImportedRepositoryLoading && sendTraceLinkLoading,
     repositoryRes: rawRepositories.filter(repo => repo.id.toString() === id)[0],
     importProccess,
-    branches,
-    files,
-    commits,
-    shaContentMap,
-    importDone: !!importDone
+    importedRepostiroy: importedRepository || {},
+    importDone: !!importDone,
+    genInitTraceLinkLoading: initTraceLinkLoading,
+    initTraceLinkMatrix: initTraceLinkMartix,
+    initTraceLinkConfirmed: initTraceLinkConfirmed
   };
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
-  dispatch: ThunkDispatch<RootState, any, ImportRepositoryAcitons>
+  dispatch: ThunkDispatch<
+    RootState,
+    any,
+    ImportRepositoryAcitons | RequirementActions | TraceLinkActions
+  >
 ) => {
   return {
     startImport: repoRes => dispatch(startImportRepository(repoRes)),
-    cloneBranches: () => dispatch(cloneBranches()),
-    cloneCommits: () => dispatch(cloneCommits()),
-    cloneFileStructure: () => dispatch(cloneFileStructure()),
-    cloneFileContent: () => dispatch(cloneFileContent()),
-    finishImport: () => dispatch({ type: "IMPORT_REPOSITORY_SUCCESS" })
+    generateInitTraceLinkMatrix: requirement =>
+      dispatch(generateInitialTraceLink(requirement)),
+    toggleInitTraceLinkModal: () => dispatch(toggleInitTraceLinkModal()),
+    confirmImport: (repo: IImportedRepository, matrix: ITraceLinkMatrix) =>
+      batch(() => {
+        dispatch(sendImportedRepository(repo));
+        dispatch(sendInitTraceLink(matrix));
+      })
   };
 };
 

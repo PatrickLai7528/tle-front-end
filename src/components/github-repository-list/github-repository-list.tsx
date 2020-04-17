@@ -1,34 +1,26 @@
-import { List, Popconfirm, Tooltip } from "antd";
+import { List, Tooltip, Button } from "antd";
 import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { ProgramLanguage } from "../../utils/language-color";
 import { LanguageBadge } from "../language-badge";
+import { Link } from "react-router-dom";
 
 export interface IStateProps {
   loading: boolean;
-  // loadMoreTimes: number;
   repositoryList: IGHRepositoryRes[];
 }
 
-export interface IDispatchProps {
-  // loadMoreRepositories: (loadMoreTimes: number) => void;
-}
+export interface IDispatchProps {}
 
-export interface IOwnProps {}
+export interface IOwnProps {
+  onImportClick: (ghRepoRes: IGHRepositoryRes) => void;
+}
 
 export interface IGitHubRepositoryListProps
   extends IStateProps,
     IDispatchProps,
     IOwnProps {}
-
-// const paginationConfig: PaginationConfig = {
-// 	simple: true,
-// 	position: "top",
-// 	pageSize: 10,
-// 	style: { margin: 0 }
-// };
 
 const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = memo(
   (props: IGitHubRepositoryListProps) => {
@@ -45,6 +37,12 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
             <List.Item
               key={item.name}
               actions={[
+                // <Button
+                // 	style={{ padding: "8px" }}
+                // 	type={"link"}
+                // 	onClick={() => onImportClick(item)}>
+                // 	{t("import")}
+                // </Button>
                 <Link to={`/authed/import_process/${id}`}>{t("import")}</Link>
               ]}
             >

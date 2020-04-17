@@ -1,4 +1,5 @@
-import { Drawer, PageHeader, Skeleton, Spin } from "antd";
+import { Drawer, Empty, PageHeader, Skeleton, Spin, Tabs } from "antd";
+import GGEditor, { Flow } from "gg-editor";
 import React, {
   FunctionComponent,
   memo,
@@ -6,32 +7,65 @@ import React, {
   useMemo,
   useState
 } from "react";
+import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
 import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
+import { ConnectedCommitDetail } from "../../components/commit-detail";
+import { ConnectedFileDetail } from "../../components/file-detail";
+import { RepositoryFiles } from "../../components/repository-files";
+import { ConnectedRequirementDetail } from "../../components/requirement-detail";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
+  IFileTreeNode,
   IImportedRepository,
   IRequirement,
   IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
-import CommitDetail from "./commit/commit-detail";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import RequirementDetail from "./requirement/requirement-detail";
 
+const data = {
+  nodes: [
+    {
+      id: "0",
+      label: "Node",
+      x: 55,
+      y: 55
+    },
+    {
+      id: "1",
+      label: "Node",
+      x: 55,
+      y: 255
+    }
+  ],
+  edges: [
+    {
+      label: "Label",
+      source: "0",
+      target: "1"
+    }
+  ]
+};
 export interface IStateProps {
   repo: IImportedRepository;
   requirement: IRequirement;
   loading: boolean;
+  deleteRequirementLoading: boolean;
 }
 
 export interface IDispatchProps {
   fetchRepoDetail: () => void;
   fetchRepoRequirement: () => void;
   toggleAddRequirementModal: () => void;
+  updateRequirement: (requirement: IRequirement) => void;
+  deleteRequirementDescription: (
+    requirement: IRequirement,
+    description: IRequirementDescription
+  ) => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{ name: string }> {}
@@ -48,29 +82,24 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: "16px",
-    overflowX: "scroll",
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
     background: "#fff"
   },
-  contentCardWrapper: {
-    width: "500px",
-    flexGrow: "0",
-    flexShrink: "0",
-    margin: { right: "16px" }
-  }
+  contentCardWrapper: {}
 });
 
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
+    const { t } = useTranslation();
     const {
       repo,
       fetchRepoDetail,
       loading,
       requirement,
       fetchRepoRequirement,
+      deleteRequirementLoading,
       toggleAddRequirementModal,
+      deleteRequirementDescription,
+      updateRequirement,
       match: {
         params: { name: repoName }
       }
@@ -78,7 +107,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     const styles = useStyles();
 
     const [drawerType, setDrawerType] = useState<
-      null | "COMMIT" | "REQUIREMENT" | "TRACE_LINK"
+      null | "COMMIT" | "REQUIREMENT" | "FILE"
     >(null);
 
     const [selectedCommit, setSelectedCommit] = useState<ICommit | null>(null);
@@ -88,8 +117,17 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       setSelectedRequirementDescription
     ] = useState<IRequirementDescription | null>(null);
 
-    const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "TRACE_LINK") =>
+    const [selectedFile, setSelectedFile] = useState<IFileTreeNode | null>(
+      null
+    );
+
+    const selectedFileContent = selectedFile
+      ? repo.shaFileContentMap[selectedFile.sha]
+      : "";
+
+    const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "FILE") =>
       setDrawerType(type);
+
     const closeDrawer = () => setDrawerType(null);
 
     useEffect(() => {
@@ -138,26 +176,82 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
 
     const drawerContent = useMemo(() => {
       if (drawerType === "COMMIT") {
-        return <CommitDetail commit={selectedCommit!} />;
+        return (
+          <ConnectedCommitDetail commit={selectedCommit!} repoName={repoName} />
+        );
       } else if (drawerType === "REQUIREMENT") {
         return (
-          <RequirementDetail description={selectedRequirementDescription!} />
+          <ConnectedRequirementDetail
+            repoName={repoName}
+            onDescriptionUpdate={(descId: string, descriptionText: string) => {
+              const oldDescriptions: IRequirementDescription[] =
+                requirement.descriptions;
+              const newDescriptions: IRequirementDescription[] = [];
+              for (const oldDesc of oldDescriptions) {
+                if (oldDesc.id === descId) {
+                  newDescriptions.push({
+                    ...oldDesc,
+                    text: descriptionText
+                  });
+                } else {
+                  newDescriptions.push({ ...oldDesc });
+                }
+              }
+              const newRequirement: IRequirement = {
+                ...requirement,
+                descriptions: newDescriptions
+              };
+              updateRequirement(newRequirement);
+            }}
+            description={selectedRequirementDescription!}
+          />
+        );
+      } else if (drawerType === "FILE") {
+        return (
+          <>
+            {selectedFile ? (
+              <ConnectedFileDetail
+                repoName={repoName}
+                fileNode={selectedFile}
+                fileContent={selectedFileContent}
+              />
+            ) : (
+              <Empty />
+            )}
+          </>
         );
       } else return null;
-    }, [selectedCommit, selectedRequirementDescription, drawerType]);
+    }, [
+      repoName,
+      updateRequirement,
+      selectedCommit,
+      selectedFile,
+      selectedRequirementDescription,
+      drawerType,
+      requirement,
+      selectedFileContent
+    ]);
 
     const drawerTitle = useMemo(() => {
       if (drawerType === "COMMIT") {
         return `ID: ${selectedCommit?.sha}`;
-      } else if (drawerType) {
+      } else if (drawerType === "REQUIREMENT") {
         return `ID: ${selectedRequirementDescription?.id}`;
+      } else if (drawerType === "FILE") {
+        return selectedFile?.path;
       } else return <Skeleton.Input />;
-    }, [selectedRequirementDescription, selectedCommit, drawerType]);
+    }, [
+      selectedRequirementDescription,
+      selectedCommit,
+      drawerType,
+      selectedFile
+    ]);
 
     // drawType not equals null
     // one of selectedCommit and selectedRequirementDescription is not null
     const drawerVisible =
-      !!drawerType && (!!selectedCommit || !!selectedRequirementDescription);
+      !!drawerType &&
+      (!!selectedCommit || !!selectedRequirementDescription || !!selectedFile);
 
     return (
       <Spin spinning={loading} className={styles.spining}>
@@ -180,8 +274,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <div className={styles.content}>
-          <div className={styles.contentCardWrapper}>
+        <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
+          <Tabs.TabPane tab={t("commit")} key="1">
             {!!repo ? (
               <CommitCard
                 commits={repo.commits}
@@ -193,11 +287,15 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </div>
-          <div className={styles.contentCardWrapper}>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={t("requirement")} key="2">
             {!!requirement ? (
               <RequirementCard
+                loading={deleteRequirementLoading}
                 toggleAddRequirementModal={toggleAddRequirementModal}
+                onDeleteClick={description =>
+                  deleteRequirementDescription(requirement, description)
+                }
                 requirement={requirement}
                 onDetailClick={description => {
                   openDrawer("REQUIREMENT");
@@ -207,8 +305,29 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             ) : (
               <Skeleton />
             )}
-          </div>
-        </div>
+          </Tabs.TabPane>
+          <Tabs.TabPane tab={"文件"} key={"file"}>
+            {repo ? (
+              <RepositoryFiles
+                onFileNodeClick={node => {
+                  if (node && node.type === "FILE") {
+                    setSelectedFile(node);
+                    openDrawer("FILE");
+                  }
+                }}
+                shaFileContentMap={repo.shaFileContentMap}
+                treeData={repo.trees}
+              />
+            ) : (
+              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
+            )}
+          </Tabs.TabPane>
+          <Tabs.TabPane tab="圖" key="3">
+            <GGEditor>
+              <Flow style={{ width: 500, height: 500 }} data={data} />
+            </GGEditor>
+          </Tabs.TabPane>
+        </Tabs>
       </Spin>
     );
   }

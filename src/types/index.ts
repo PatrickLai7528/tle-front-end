@@ -31,9 +31,8 @@ export interface IImplement {
 export interface ITraceLink {
   id: string;
   requirementDescription: IRequirementDescription;
-  implements: IImplement[];
-  lastUpdateAt: number;
-  lastUpdateByCommit: ICommit; // commit message
+  implement: IImplement;
+  lastUpdateAt?: number;
 }
 
 export interface ITraceLinkMatrix {
@@ -45,7 +44,7 @@ export interface IRequirementDescription {
   traced: boolean;
   lastUpdateAt: number;
   // lastUpdateCommit: string; // commit message
-  relatedImplementIds: string[];
+  // relatedImplementIds: string[];
   id: string;
 }
 
@@ -97,6 +96,8 @@ export interface ICommit {
   stats: { total: number; additions: number; deletions: number };
 }
 
+export type ShaFileContentMap = { [key: string]: string };
+
 export interface IImportedRepository {
   // 倉庫名稱
   name: string;
@@ -121,7 +122,7 @@ export interface IImportedRepository {
    * @key file's sha
    * @value file's content
    */
-  shaFileContentMap: { [key: string]: string };
+  shaFileContentMap: ShaFileContentMap;
 }
 
 export interface IFileTreeNode {
@@ -129,6 +130,8 @@ export interface IFileTreeNode {
   sha: string;
   // 文件名稱不含路徑
   path: string;
+
+  fullyQuilaifiedName: string;
   // 類型
   type: "FOLDER" | "FILE";
   // 子樹

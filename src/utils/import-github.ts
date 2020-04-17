@@ -36,7 +36,6 @@ export const cloneOneCommit = async (url: string, headers: any) => {
   const changedFiles: ICommitChanges[] = await Promise.all<ICommitChanges>(
     fetchRawContentPromises
   );
-  console.log(res);
   return {
     sha: res.sha,
     message: res.commit.message,
@@ -92,11 +91,11 @@ export const cloneManyBranch = async (
   return [clonedBranches, commitUrlsFromOtherBranchs];
 };
 
-type Blobs = { sha: string; url: string }[];
+export type Blobs = { sha: string; url: string }[];
 export const cloneManyTree = async (
   url: string,
   headers: any,
-  update?: (nodes: IFileTreeNode[], blobs: Blobs) => void
+  dir = ""
 ): Promise<[IFileTreeNode[], Blobs]> => {
   const res: IGHTreeRes = await fetch(url, { headers }).then(res => res.json());
   const { tree: trees } = res;
@@ -110,20 +109,27 @@ export const cloneManyTree = async (
     // "size": 182,
     // "url": "https://api.github.com/r
     const { path, url: treeUrl, type, sha } = tree;
+    const newDir = dir === "" ? path : `${dir}/${path}`;
     if (type === "blob") {
       blobs.push({ sha, url: treeUrl });
       rootNode.push({
         type: "FILE",
         path,
+        fullyQuilaifiedName: newDir,
         sha,
         subTrees: []
       });
     } else if (type === "tree") {
-      const [subTrees, subBlobs] = await cloneManyTree(treeUrl, headers);
+      const [subTrees, subBlobs] = await cloneManyTree(
+        treeUrl,
+        headers,
+        newDir
+      );
 
       const folderTreeNode: IFileTreeNode = {
         subTrees,
         type: "FOLDER",
+        fullyQuilaifiedName: newDir,
         path,
         sha
       };

@@ -1,9 +1,8 @@
-import React, { useEffect, FunctionComponent, memo } from "react";
-import { IImportedRepository } from "../../types";
+import { Spin } from "antd";
+import React, { FunctionComponent, memo, useEffect } from "react";
 import { createUseStyles } from "react-jss";
+import { IImportedRepository } from "../../types";
 import { RepositoryCard } from "../repository-card";
-import { Row, Col, Spin } from "antd";
-import { RouteConstants } from "../../routes/constants";
 
 export interface IStateProps {
   repositoryList: IImportedRepository[];
@@ -16,7 +15,7 @@ export interface IDispatchProps {
 
 export interface IOwnProps {}
 
-export interface IImportedRepositoryTabProps
+export interface IImportedRepositoryProps
   extends IStateProps,
     IDispatchProps,
     IOwnProps {}
@@ -34,8 +33,8 @@ const useStyles = createUseStyles({
   }
 });
 
-const ImportedRepositoryTab: FunctionComponent<IImportedRepositoryTabProps> = memo(
-  (props: IImportedRepositoryTabProps) => {
+const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
+  (props: IImportedRepositoryProps) => {
     const { loading, fetchImportedRepositoryList, repositoryList } = props;
     const styles = useStyles();
     useEffect(() => {
@@ -56,4 +55,4 @@ const ImportedRepositoryTab: FunctionComponent<IImportedRepositoryTabProps> = me
   }
 );
 
-export default ImportedRepositoryTab;
+export default ImportedRepository;

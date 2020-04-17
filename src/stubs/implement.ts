@@ -1,4 +1,6 @@
+import { repositories } from "./repository";
 import { IImplement } from "./../types/index";
+
 export const implementStubs: IImplement[] = [
   {
     id: "5b52d23c-a2a9-48a3-b693-ca12ea4a8816",

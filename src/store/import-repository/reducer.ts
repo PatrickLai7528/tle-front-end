@@ -1,72 +1,53 @@
-import { ProgramLanguage } from "./../../utils/language-color";
+import { importedRepository } from "./../../stubs/imported-repositories";
 import { IImportedRepository } from "./../../types/index";
 import {
-  IFinishCloneBranchesAction,
-  IFinishCloneCommitsAction,
-  IFinishCloneFileContentAction,
-  IFinishCloneFileStructureAction,
   IImportRepositoryState,
   ImportRepositoryAcitons,
-  IToggleImportProccessModalAction,
-  IUpdateImportingRepositoryAction,
-  IStartImportRepositoryAction
+  IUpdateImportingRepositoryAction
 } from "./types";
 
-const initialState: IImportRepositoryState = {};
+const initialState: IImportRepositoryState = {
+  importDone: false,
+  importStarted: false,
+  loading: false
+};
 
 export const importRepositoryReducer = (
   state = initialState,
   action: ImportRepositoryAcitons
 ): IImportRepositoryState => {
   switch (action.type) {
-    case "TOGGLE_IMPORT_PROCESS_MODAL":
+    case "SEND_IMPORTED_REPOSITORY":
       return {
         ...state,
-        importProcessModalVisible: !state.importProcessModalVisible,
-        importDone: false
+        loading: true,
+        error: false
+      };
+    case "SEND_IMPORTED_REPOSITORY_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        error: false
+      };
+    case "SEND_IMPORTED_REPOSITORY_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: true
       };
     case "START_IMPORT_REPOSITORY":
-      const { payload: repository } = action as IStartImportRepositoryAction;
       return {
         ...state,
-        importProcessModalVisible: true,
-        repositoryResponse: repository,
-        importedRepository: repository
-          ? {
-              name: repository.name,
-              currentBranch: repository.default_branch,
-              ownerId: repository.owner.login,
-              commits: [],
-              trees: [],
-              branches: [],
-              shaFileContentMap: {},
-              language: repository.language as ProgramLanguage,
-              description: repository.description
-            }
-          : undefined
+        importProccess: undefined,
+        importStarted: true,
+        importDone: false
       };
     case "IMPORT_REPOSITORY_SUCCESS":
-      const {
-        importedRepository,
-        branches,
-        shaContentMap,
-        files,
-        commits
-      } = state;
       let newState = {
         ...state,
-        importedRepository:
-          importedRepository && branches && shaContentMap && files && commits
-            ? {
-                ...importedRepository,
-                trees: files,
-                commits,
-                branches,
-                shaFileContentMap: shaContentMap
-              }
-            : undefined
+        importDone: true,
+        importStarted: false
       };
-      console.log(JSON.stringify(newState.importedRepository));
       return newState;
     case "IMPORT_REPOSITORY_FAILURE":
       return {
@@ -75,61 +56,33 @@ export const importRepositoryReducer = (
         error: true
       };
     case "UPDATE_IMPORTING_REPOSITORY":
+      const newRepo = (action as IUpdateImportingRepositoryAction)
+        .payload as IImportedRepository;
       return {
         ...state,
-        files: [
-          ...(state.files || []),
-          ...(action as IUpdateImportingRepositoryAction).payload.files
-        ]
-      };
-    case "START_CLONE_BRANCHES":
-      return {
-        ...state,
-        commits: undefined,
-        branches: undefined,
-        files: undefined,
-        shaContentMap: undefined,
-        importProccess: undefined,
-        blobs: undefined,
-        otherCommitUrls: undefined
+        importedRepository: {
+          ...newRepo
+        }
       };
     case "FINISH_CLONE_BRANCHES":
       return {
         ...state,
-        importProccess: "BRANCHES",
-        branches: (action as IFinishCloneBranchesAction).payload.branches,
-        otherCommitUrls: (action as IFinishCloneBranchesAction).payload
-          .otherCommitUrls
-      };
-    case "START_CLONE_COMMITS":
-      return {
-        ...state
+        importProccess: "BRANCHES"
       };
     case "FINISH_CLONE_COMMITS":
       return {
         ...state,
-        importProccess: "COMMITS",
-        commits: (action as IFinishCloneCommitsAction).payload.commits
-      };
-    case "START_CLONE_FILE_STRUCTURE":
-      return {
-        ...state
+        importProccess: "COMMITS"
       };
     case "FINISH_CLONE_FILE_STRUCTURE":
       return {
         ...state,
-        importProccess: "FILE_STUCTURE",
-        files: (action as IFinishCloneFileStructureAction).payload.files,
-        blobs: (action as IFinishCloneFileStructureAction).payload.shaNodes
+        importProccess: "FILE_STUCTURE"
       };
-    case "START_CLONE_FILE_CONTENT":
-      return { ...state };
     case "FINISH_CLONE_FILE_CONTENT":
       return {
         ...state,
-        importProccess: "FILE_CONTENT",
-        shaContentMap: (action as IFinishCloneFileContentAction).payload
-          .shaContentMap
+        importProccess: "FILE_CONTENT"
       };
     default:
       return { ...state };

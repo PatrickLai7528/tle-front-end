@@ -6,13 +6,13 @@ import { AppThunk } from "./../store";
 import {
   AuthActions,
   AuthActionTypes,
-  FETCH_GH_PROFILE,
   FETCH_GH_PROFILE_FAILURE,
   FETCH_GH_PROFILE_SUCCESS,
   ILogInData,
   IRegistryData,
   SEND_GITHUB_LOG_IN,
-  TOGGLE_AUTH_MODAL
+  TOGGLE_AUTH_MODAL,
+  FETCH_GH_PROFILE
 } from "./types";
 
 export const toggleAuthModal = (): AuthActions => {
@@ -22,6 +22,7 @@ export const toggleAuthModal = (): AuthActions => {
 export const fetchGHProfile = (
   gitHubAccessToken: string
 ): AppThunk<void, AuthActionTypes> => async dispatch => {
+  dispatch({ type: FETCH_GH_PROFILE });
   try {
     const res = await fetch(`https://api.github.com/user`, {
       headers: {
@@ -52,7 +53,7 @@ export const sendGitHubLogIn = (
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
     const res = await fetch(
-      `${getServerUrl()}/auth/access_token?code=${code}`
+      `${getServerUrl()}/api/auth/access_token?code=${code}`
     ).then(res => res.json());
     const { success, meta, payload: accessToken } = res;
     if (success) {
