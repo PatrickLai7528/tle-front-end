@@ -1,3 +1,4 @@
+import { getServerUrl } from "./../../configs/get-url";
 import { recentRepos } from "./../../stubs/recent-repo";
 import { importedRepository } from "./../../stubs/imported-repositories";
 import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
@@ -55,11 +56,21 @@ export const fetchImportedRepositoryList = (): AppThunk<
 > => async dispatch => {
   dispatch({ type: "FETCH_IMPORTED_REPOSITORY_LIST" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    dispatch({
-      type: "FETCH_IMPORTED_REPOSITORY_LIST_SUCCESS",
-      payload: importedRepository
-    });
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const res = await fetch(`${getServerUrl()}/api/repository`).then(res =>
+      res.json()
+    );
+    if (res && res.success) {
+      dispatch({
+        type: "FETCH_IMPORTED_REPOSITORY_LIST_SUCCESS",
+        payload: res.payload || []
+      });
+    } else {
+      dispatch({
+        type: "FETCH_IMPORTED_REPOSITORY_LIST_FAILURE",
+        meta: res.meta
+      });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
