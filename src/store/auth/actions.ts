@@ -57,7 +57,6 @@ export const sendGitHubLogIn = (
     ).then(res => res.json());
     const { success, meta, payload: accessToken } = res;
     if (success) {
-      dispatch(fetchGHProfile(accessToken));
       dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
     } else {
       dispatch({ type: "SEND_GITHUB_LOG_IN_FAILURE", meta });

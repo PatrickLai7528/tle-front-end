@@ -19,6 +19,7 @@ export const TOGGLE_AUTH_MODAL = "TOGGLE_AUTH_MODAL";
 
 export interface IAuthState {
   loggedIn: boolean;
+  linkedToGitHub?: boolean;
   email?: string;
   token?: string;
   gitHubAccessToken?: string;

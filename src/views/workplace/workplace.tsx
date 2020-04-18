@@ -1,5 +1,5 @@
 import { Avatar, Col, PageHeader, Row, Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo } from "react";
+import React, { FunctionComponent, memo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { ConnectedRecentRepoList } from "../../components/recent-repo-list";
@@ -9,13 +9,16 @@ import QuickAction, { IAction } from "./quick-action";
 import TracingStatistic from "./tracing-statistic";
 
 export interface IStateProps {
+  githubAccessToken?: string;
   loading: boolean;
   userName?: string;
   userAvatarUrl?: string;
   userProfile?: string;
 }
 
-export interface IDispatchProps {}
+export interface IDispatchProps {
+  fetchGHProfile: (ghToken: string) => void;
+}
 
 export interface IOwnProps {}
 
@@ -74,8 +77,30 @@ const actionShortCuts: IAction[] = [
 const Workplace: FunctionComponent<IWorkplaceProps> = memo(
   (props: IWorkplaceProps) => {
     const { t } = useTranslation();
-    const { userAvatarUrl, userName, userProfile } = props;
+    const {
+      userAvatarUrl,
+      userName,
+      userProfile,
+      githubAccessToken,
+      fetchGHProfile
+    } = props;
     const styles = useStyles();
+
+    useEffect(() => {
+      if (githubAccessToken) {
+        const doFetch = async () => {
+          try {
+            await fetchGHProfile(githubAccessToken);
+          } catch (e) {
+            if (process.env.NODE_ENV !== "production") {
+              console.log(e);
+            }
+          }
+        };
+
+        doFetch();
+      }
+    }, [githubAccessToken, fetchGHProfile]);
 
     const routes = [
       {
