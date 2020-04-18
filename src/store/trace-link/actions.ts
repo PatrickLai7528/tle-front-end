@@ -1,6 +1,11 @@
 import { traceLinks } from "../../stubs/trace-link";
 import { traceLinkMatrix } from "./../../stubs/trace-link-matrix";
-import { ICommit, IRequirement, ITraceLinkMatrix } from "./../../types/index";
+import {
+  ICommit,
+  IRequirement,
+  ITraceLinkMatrix,
+  IFileTreeNode
+} from "./../../types/index";
 import { AppDispatch, AppThunk } from "./../store";
 import {
   CONFIRM_INIT_TRACE_LINK,
@@ -31,6 +36,7 @@ import {
   FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
   FETCH_REQUIREMENT_RELATED_TRACE_LINK
 } from "./types";
+import { getServerUrl } from "../../configs/get-url";
 
 export const fetchRequirementRelatedTraceLinks = (
   repoName: string,
@@ -102,8 +108,20 @@ export const sendInitTraceLink = (
 ): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
   dispatch({ type: SEND_INIT_TRACE_LINK });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    dispatch({ type: SEND_INIT_TRACE_LINK_SUCCESS });
+    // await new Promise(resolve => setTimeout(resolve, 1200));
+    const res = await fetch(`${getServerUrl()}/api/tracelink`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(matrix)
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: SEND_INIT_TRACE_LINK_SUCCESS });
+    } else {
+      dispatch({ type: "SEND_INIT_TRACE_LINK_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
@@ -137,15 +155,35 @@ export const confirmInitTraceLink = (
 };
 
 export const generateInitialTraceLink = (
+  files: IFileTreeNode[],
   requirement: IRequirement
 ): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
   dispatch({ type: GENERATE_INIT_TRACE_LINK });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    dispatch({
-      type: GENERATE_INIT_TRACE_LINK_SUCCESS,
-      payload: traceLinkMatrix
-    });
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const res = await fetch(`${getServerUrl()}/api/tracelink/init`, {
+      method: "POST",
+      body: JSON.stringify({
+        files: files,
+        requirement: requirement
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    }).then(res => res.json());
+
+    if (res && res.success) {
+      dispatch({
+        type: GENERATE_INIT_TRACE_LINK_SUCCESS,
+        payload: res.payload
+      });
+    } else {
+      dispatch({
+        type: "GENERATE_INIT_TRACE_LINK_FAILURE",
+        meta: res.meta
+      });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);

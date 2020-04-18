@@ -2,7 +2,8 @@ import { IImportedRepository } from "./../../types/index";
 import {
   IImportRepositoryState,
   ImportRepositoryAcitons,
-  IUpdateImportingRepositoryAction
+  IUpdateImportingRepositoryAction,
+  ISendImportedRepositoryFailureAction
 } from "./types";
 
 const initialState: IImportRepositoryState = {
@@ -32,7 +33,7 @@ export const importRepositoryReducer = (
       return {
         ...state,
         loading: false,
-        error: true
+        error: (action as ISendImportedRepositoryFailureAction).meta
       };
     case "START_IMPORT_REPOSITORY":
       return {

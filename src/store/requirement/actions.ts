@@ -21,6 +21,33 @@ import {
   IDeleteRequirementSuccessAction
 } from "./types";
 import { requirement } from "../../stubs/requirement";
+import { getServerUrl } from "../../configs/get-url";
+
+export const postRequirement = (
+  requirement: IRequirement
+): AppThunk<void, RequirementActionTypes> => async dispatch => {
+  dispatch({ type: "POST_REQUIREMENT" });
+  try {
+    const res = await fetch(`${getServerUrl()}/api/requirement`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(requirement)
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "POST_REQUIREMENT_SUCCESS" });
+    } else {
+      dispatch({ type: "POST_REQUIREMENT_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "ADD_REQUIREMENT_FAILURE" });
+  }
+};
 
 export const toggleAddRequirementModal = (): RequirementActions => {
   return {

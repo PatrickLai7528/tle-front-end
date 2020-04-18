@@ -36,6 +36,7 @@ export interface ISendImportedRepositorSuccessAction {
 
 export interface ISendImportedRepositoryFailureAction {
   type: typeof SEND_IMPORTED_REPOSITORY_FAILURE;
+  meta?: string;
 }
 
 export type ImportProccess =

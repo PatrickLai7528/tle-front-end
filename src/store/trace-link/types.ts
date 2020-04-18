@@ -89,6 +89,7 @@ export interface ISendInitTraceLinkSuccessAction {
 
 export interface ISendInitTraceLinkFailureAction {
   type: typeof SEND_INIT_TRACE_LINK_FAILURE;
+  meta?: string;
 }
 
 export interface IConfirmInitTraceLinkAction {

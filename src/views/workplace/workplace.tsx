@@ -86,21 +86,21 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
     } = props;
     const styles = useStyles();
 
-    // useEffect(() => {
-    //   if (githubAccessToken) {
-    //     const doFetch = async () => {
-    //       try {
-    //         await fetchGHProfile(githubAccessToken);
-    //       } catch (e) {
-    //         if (process.env.NODE_ENV !== "production") {
-    //           console.log(e);
-    //         }
-    //       }
-    //     };
+    useEffect(() => {
+      if (githubAccessToken) {
+        const doFetch = async () => {
+          try {
+            await fetchGHProfile(githubAccessToken);
+          } catch (e) {
+            if (process.env.NODE_ENV !== "production") {
+              console.log(e);
+            }
+          }
+        };
 
-    //     doFetch();
-    //   }
-    // }, [githubAccessToken, fetchGHProfile]);
+        doFetch();
+      }
+    }, [githubAccessToken, fetchGHProfile]);
 
     const routes = [
       {

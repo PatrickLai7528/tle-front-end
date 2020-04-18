@@ -23,7 +23,12 @@ import {
   sendInitTraceLink
 } from "../../store/trace-link/actions";
 import { TraceLinkActions } from "../../store/trace-link/types";
-import { IImportedRepository, ITraceLinkMatrix } from "../../types";
+import {
+  IImportedRepository,
+  ITraceLinkMatrix,
+  IRequirement
+} from "../../types";
+import { postRequirement } from "../../store/requirement/actions";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState,
@@ -37,6 +42,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
       loading: sendImportedRepositoryLoading
     },
     repositoryManagementReducer: { rawRepositories },
+    requirementReducer: { loading: postRequirementLoading },
     traceLinkReducer: {
       loading: sendTraceLinkLoading,
       initTraceLinkLoading,
@@ -52,7 +58,10 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   } = ownProps;
 
   return {
-    confirmImportLoading: sendImportedRepositoryLoading && sendTraceLinkLoading,
+    confirmImportLoading:
+      sendImportedRepositoryLoading &&
+      sendTraceLinkLoading &&
+      postRequirementLoading,
     repositoryRes: rawRepositories.filter(repo => repo.id.toString() === id)[0],
     importProccess,
     importedRepostiroy: importedRepository || {},
@@ -72,12 +81,17 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
 ) => {
   return {
     startImport: repoRes => dispatch(startImportRepository(repoRes)),
-    generateInitTraceLinkMatrix: requirement =>
-      dispatch(generateInitialTraceLink(requirement)),
+    generateInitTraceLinkMatrix: (files, requirement) =>
+      dispatch(generateInitialTraceLink(files, requirement)),
     toggleInitTraceLinkModal: () => dispatch(toggleInitTraceLinkModal()),
-    confirmImport: (repo: IImportedRepository, matrix: ITraceLinkMatrix) =>
+    confirmImport: (
+      repo: IImportedRepository,
+      requirement: IRequirement,
+      matrix: ITraceLinkMatrix
+    ) =>
       batch(() => {
         dispatch(sendImportedRepository(repo));
+        dispatch(postRequirement(requirement));
         dispatch(sendInitTraceLink(matrix));
       })
   };

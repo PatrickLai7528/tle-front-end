@@ -37,6 +37,7 @@ export interface ITraceLink {
 
 export interface ITraceLinkMatrix {
   links: ITraceLink[];
+  relatedRepoName: string;
 }
 
 export interface IRequirementDescription {

@@ -1,3 +1,4 @@
+import { getServerUrl } from "./../../configs/get-url";
 import { IBranch, ICommit, IFileTreeNode } from "../../types";
 import {
   Blobs,
@@ -30,8 +31,22 @@ export const sendImportedRepository = (
 ): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
   dispatch({ type: SEND_IMPORTED_REPOSITORY });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    dispatch({ type: SEND_IMPORTED_REPOSITORY_SUCCESS });
+    // await new Promise(resolve => setTimeout(resolve, 1200));
+
+    const res = await fetch(`${getServerUrl()}/api/repository`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(importedRepo)
+    }).then(res => res.json());
+
+    if (res && res.success) {
+      dispatch({ type: SEND_IMPORTED_REPOSITORY_SUCCESS });
+    } else {
+      dispatch({ type: "SEND_IMPORTED_REPOSITORY_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
