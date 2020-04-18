@@ -122,8 +122,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       history
     } = props;
 
-    console.log(importedRepostiroy);
-
     const [isBlocking, setIsBlocking] = useState<boolean>(
       !!importProccess && !importDone
     );
