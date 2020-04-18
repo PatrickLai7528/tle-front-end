@@ -9,7 +9,8 @@ import {
 const initialState: IImportRepositoryState = {
   importDone: false,
   importStarted: false,
-  loading: false
+  loading: false,
+  stop: false
 };
 
 export const importRepositoryReducer = (
@@ -17,6 +18,11 @@ export const importRepositoryReducer = (
   action: ImportRepositoryAcitons
 ): IImportRepositoryState => {
   switch (action.type) {
+    case "STOP_IMPORT":
+      return {
+        ...state,
+        stop: true
+      };
     case "SEND_IMPORTED_REPOSITORY":
       return {
         ...state,
@@ -38,6 +44,7 @@ export const importRepositoryReducer = (
     case "START_IMPORT_REPOSITORY":
       return {
         ...state,
+        stop: false,
         importProccess: undefined,
         importStarted: true,
         importDone: false

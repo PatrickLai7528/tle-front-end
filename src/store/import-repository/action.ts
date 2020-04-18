@@ -23,8 +23,11 @@ import {
   SEND_IMPORTED_REPOSITORY_FAILURE,
   SEND_IMPORTED_REPOSITORY_SUCCESS,
   START_IMPORT_REPOSITORY,
-  UPDATE_IMPORTING_REPOSITORY
+  UPDATE_IMPORTING_REPOSITORY,
+  IStopImportAction
 } from "./types";
+
+export const stopImport = (): IStopImportAction => ({ type: "STOP_IMPORT" });
 
 export const sendImportedRepository = (
   importedRepo: IImportedRepository
@@ -66,7 +69,10 @@ export const updateImportingRepository = (
 
 export const startImportRepository = (
   importThis: IGHRepositoryRes
-): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+): AppThunk<void, ImportRepositoryActionTypes> => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: START_IMPORT_REPOSITORY });
   try {
     let importedRepo: Partial<IImportedRepository> = {
@@ -78,19 +84,27 @@ export const startImportRepository = (
     };
     dispatch(updateImportingRepository(importedRepo));
 
+    if (getState().importRepositoryReducer.stop) return;
+
     const branches: IBranch[] = await dispatch(cloneBranches(importThis));
     importedRepo = { ...importedRepo, branches: [...branches] };
     dispatch(updateImportingRepository(importedRepo));
 
+    if (getState().importRepositoryReducer.stop) return;
+
     const commits: ICommit[] = await dispatch(cloneCommits(importThis));
     importedRepo = { ...importedRepo, commits: [...commits] };
     dispatch(updateImportingRepository(importedRepo));
+
+    if (getState().importRepositoryReducer.stop) return;
 
     const { trees, blobs } = await dispatch(
       cloneFileStructure(importThis, branches)
     );
     importedRepo = { ...importedRepo, trees: [...trees] };
     dispatch(updateImportingRepository(importedRepo));
+
+    if (getState().importRepositoryReducer.stop) return;
 
     const shaFileContentMap: ShaFileContentMap = await dispatch(
       cloneFileContent(importThis, blobs)

@@ -7,7 +7,8 @@ import {
 import { ThunkDispatch } from "redux-thunk";
 import {
   startImportRepository,
-  sendImportedRepository
+  sendImportedRepository,
+  stopImport
 } from "../../store/import-repository/action";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
 import { RootState } from "../../store/reducers";
@@ -84,6 +85,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
     generateInitTraceLinkMatrix: (files, requirement) =>
       dispatch(generateInitialTraceLink(files, requirement)),
     toggleInitTraceLinkModal: () => dispatch(toggleInitTraceLinkModal()),
+    stopImport: () => dispatch(stopImport()),
     confirmImport: (
       repo: IImportedRepository,
       requirement: IRequirement,

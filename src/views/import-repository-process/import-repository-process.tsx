@@ -7,12 +7,13 @@ import {
   Row,
   Tabs,
   Tooltip,
-  Result
+  Result,
+  Modal
 } from "antd";
 import React, { FC, memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, Prompt } from "react-router-dom";
 import { ImportProcessStep } from "../../components/import-process-step";
 import {
   ImportProccess,
@@ -55,6 +56,7 @@ export interface IDispatchProps {
     requirement: IRequirement,
     matrix: ITraceLinkMatrix
   ) => void;
+  stopImport: () => void;
 }
 
 export interface IOwnProps extends RouteComponentProps<{ id: string }> {}
@@ -115,8 +117,19 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       generateInitTraceLinkMatrix,
       toggleInitTraceLinkModal,
       confirmImport,
-      confirmImportLoading
+      confirmImportLoading,
+      stopImport,
+      history
     } = props;
+
+    const [isBlocking, setIsBlocking] = useState<boolean>(
+      !!importProccess && !importDone
+    );
+
+    useEffect(() => setIsBlocking(!!importProccess && !importDone), [
+      importProccess,
+      importDone
+    ]);
 
     const routes = useMemo(() => {
       return [
@@ -255,6 +268,42 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
 
     return (
       <div className={styles.importProcess}>
+        <Prompt
+          when={isBlocking}
+          message={() => {
+            if (!isBlocking) {
+              return true;
+            }
+            Modal.warning({
+              title: "警告",
+              content: "正在導入中，確定離開?",
+              cancelText: "取消",
+              okText: "確認",
+              onOk: () => {
+                setIsBlocking(false);
+                stopImport();
+                history.goBack();
+              }
+            });
+            // Modal.alert("提示", "是否确认退出补充实名资料?", [
+            // 	{ text: "取消" },
+            // 	{
+            // 		text: "确认",
+            // 		onPress: () =>
+            // 			this.setState(
+            // 				{
+            // 					isPrompt: false,
+            // 				},
+            // 				() =>
+            // 					this.props.dispatch(
+            // 						routerRedux.goBack()
+            // 					)
+            // 			),
+            // 	},
+            // ]);
+            return false;
+          }}
+        />
         <PageHeader
           breadcrumb={{ routes }}
           ghost={false}
@@ -277,18 +326,18 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                   <BasicInfoDescriptions
                     repo={importedRepostiroy as IImportedRepository}
                   />
+                  {confirmImportButtonDisable ? (
+                    <Tooltip title="等待導入或初始化追踪線索">
+                      {confirmImportButton}
+                    </Tooltip>
+                  ) : (
+                    confirmImportButton
+                  )}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
                   {traceLinkTabsContent()}
                 </Tabs.TabPane>
               </Tabs>
-              {confirmImportButtonDisable ? (
-                <Tooltip title="等待導入或初始化追踪線索">
-                  {confirmImportButton}
-                </Tooltip>
-              ) : (
-                confirmImportButton
-              )}
             </div>
           </Col>
         </Row>

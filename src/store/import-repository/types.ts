@@ -26,6 +26,12 @@ export const SEND_IMPORTED_REPOSITORY_SUCCESS =
 export const SEND_IMPORTED_REPOSITORY_FAILURE =
   "SEND_IMPORTED_REPOSITORY_FAILURE";
 
+export const STOP_IMPORT = "STOP_IMPORT";
+
+export interface IStopImportAction {
+  type: typeof STOP_IMPORT;
+}
+
 export interface ISendImportedRepositoryAction {
   type: typeof SEND_IMPORTED_REPOSITORY;
 }
@@ -53,6 +59,7 @@ export interface IImportRepositoryState {
 
   error?: boolean | string;
   loading: boolean;
+  stop: boolean;
 }
 
 export interface IStartImportRepositoryAction {
@@ -104,7 +111,8 @@ export type ImportRepositoryAcitons =
   | IFinishCloneFileStructureAction
   | ISendImportedRepositoryAction
   | ISendImportedRepositorSuccessAction
-  | ISendImportedRepositoryFailureAction;
+  | ISendImportedRepositoryFailureAction
+  | IStopImportAction;
 
 export type ImportRepositoryActionTypes =
   | typeof START_IMPORT_REPOSITORY
@@ -117,4 +125,5 @@ export type ImportRepositoryActionTypes =
   | typeof FINISH_CLONE_FILE_STRUCTURE
   | typeof SEND_IMPORTED_REPOSITORY
   | typeof SEND_IMPORTED_REPOSITORY_SUCCESS
-  | typeof SEND_IMPORTED_REPOSITORY_FAILURE;
+  | typeof SEND_IMPORTED_REPOSITORY_FAILURE
+  | typeof STOP_IMPORT;
