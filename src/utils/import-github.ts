@@ -99,46 +99,60 @@ export const cloneManyTree = async (
 ): Promise<[IFileTreeNode[], Blobs]> => {
   const res: IGHTreeRes = await fetch(url, { headers }).then(res => res.json());
   const { tree: trees } = res;
-  let rootNode: IFileTreeNode[] = [];
-  let blobs: Blobs = [];
-  for (const tree of trees) {
-    //"path": ".travis.yml",
-    // "mode": "100644",
-    // "type": "blob",
-    // "sha": "45d37ed412e7eac04bf7ba3d5e2d9eb87e072f09",
-    // "size": 182,
-    // "url": "https://api.github.com/r
-    const { path, url: treeUrl, type, sha } = tree;
-    const newDir = dir === "" ? path : `${dir}/${path}`;
-    if (type === "blob") {
-      blobs.push({ sha, url: treeUrl });
-      rootNode.push({
-        type: "FILE",
-        path,
-        fullyQuilaifiedName: newDir,
-        sha,
-        subTrees: []
-      });
-    } else if (type === "tree") {
-      const [subTrees, subBlobs] = await cloneManyTree(
-        treeUrl,
-        headers,
-        newDir
-      );
 
-      const folderTreeNode: IFileTreeNode = {
-        subTrees,
-        type: "FOLDER",
-        fullyQuilaifiedName: newDir,
-        path,
-        sha
-      };
-      rootNode = [folderTreeNode, ...rootNode];
-      blobs = [...subBlobs, ...blobs];
-      // if (update) {
-      //    update(rootNode, blobs)
-      // }
-    }
+  const allPromises: Promise<[IFileTreeNode[], Blobs]>[] = [];
+
+  for (const tree of trees) {
+    const fetchTreePromise: Promise<[IFileTreeNode[], Blobs]> = new Promise(
+      (resolve, reject) => {
+        try {
+          let rootNode: IFileTreeNode[] = [];
+          let blobs: Blobs = [];
+          const { path, url: treeUrl, type, sha } = tree;
+          const newDir = dir === "" ? path : `${dir}/${path}`;
+          if (type === "blob") {
+            blobs.push({ sha, url: treeUrl });
+            rootNode.push({
+              type: "FILE",
+              path,
+              fullyQuilaifiedName: newDir,
+              sha,
+              subTrees: []
+            });
+            resolve([rootNode, blobs]);
+          } else if (type === "tree") {
+            cloneManyTree(treeUrl, headers, newDir).then(
+              ([subTrees, subBlobs]) => {
+                const folderTreeNode: IFileTreeNode = {
+                  subTrees,
+                  type: "FOLDER",
+                  fullyQuilaifiedName: newDir,
+                  path,
+                  sha
+                };
+                rootNode = [folderTreeNode, ...rootNode];
+                blobs = [...subBlobs, ...blobs];
+                resolve([rootNode, blobs]);
+              }
+            );
+          }
+        } catch (e) {
+          reject(e);
+        }
+      }
+    ); // end promise
+
+    allPromises.push(fetchTreePromise);
   }
+
+  const finalResult = await Promise.all(allPromises);
+  const rootNode: IFileTreeNode[] = [];
+  const blobs: Blobs = [];
+
+  for (const result of finalResult) {
+    rootNode.push(...result[0]);
+    blobs.push(...result[1]);
+  }
+
   return [rootNode, blobs];
 };
