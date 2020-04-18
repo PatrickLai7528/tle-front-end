@@ -86,7 +86,8 @@ export const sendLogIn = (
         password: data.password
       }),
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Accept: "application/json"
       },
       method: "POST"
     }).then(res => res.json());
@@ -114,9 +115,25 @@ export const sendRegistry = (
 ): AppThunk<Promise<boolean>, AuthActionTypes> => async dispatch => {
   dispatch({ type: "SEND_REGISTRY" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    dispatch({ type: "SEND_REGISTRY_SUCCESS" });
-    return true;
+    // await new Promise(resolve => setTimeout(resolve, 1500));
+    const res = await fetch(`${getServerUrl()}/api/auth/registry`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "SEND_REGISTRY_SUCCESS" });
+      return true;
+    } else {
+      dispatch({ type: "SEND_REGISTRY_FAILRE", meta: res.meta });
+      return false;
+    }
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);

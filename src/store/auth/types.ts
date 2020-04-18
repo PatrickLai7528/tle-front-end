@@ -64,7 +64,10 @@ export interface ILogInData {
   password: string;
 }
 
-export interface IRegistryData {}
+export interface IRegistryData {
+  email: string;
+  password: string;
+}
 
 // 發送登錄請求
 export interface ISendLogInAction {
