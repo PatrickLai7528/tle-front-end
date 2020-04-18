@@ -1,9 +1,11 @@
-import { connect, MapStateToProps } from "react-redux";
+import { connect, MapStateToProps, MapDispatchToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
 import NotificationQueue, {
   IOwnProps,
-  IStateProps
+  IStateProps,
+  IDispatchProps
 } from "./notification-queue";
+import { popNotification } from "../../store/notification/actions";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,
@@ -15,6 +17,16 @@ const mapStateToProps: MapStateToProps<
   };
 };
 
-export const ConnectedNotificatioQueue = connect(mapStateToProps)(
-  NotificationQueue
-);
+const mapDispatchToProps: MapDispatchToProps<
+  IDispatchProps,
+  IOwnProps
+> = dispatch => {
+  return {
+    pop: () => dispatch(popNotification())
+  };
+};
+
+export const ConnectedNotificatioQueue = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(NotificationQueue);

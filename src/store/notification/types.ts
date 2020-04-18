@@ -2,12 +2,6 @@ export const PUSH_NOTIFICATION_QUEUE = "PUSH_NOTIFICATION_QUEUE";
 
 export const POP_NOTIFICATION_QUEUE = "POP_NOTIFICATION_QUEUE";
 
-//notification.success(config)
-// notification.error(config)
-// notification.info(config)
-// notification.warning(config)
-// notification.warn(config)
-
 export interface INotificationQueueItem {
   title: string;
   description?: string;
