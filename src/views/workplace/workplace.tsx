@@ -86,21 +86,21 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
     } = props;
     const styles = useStyles();
 
-    useEffect(() => {
-      if (githubAccessToken) {
-        const doFetch = async () => {
-          try {
-            await fetchGHProfile(githubAccessToken);
-          } catch (e) {
-            if (process.env.NODE_ENV !== "production") {
-              console.log(e);
-            }
-          }
-        };
+    // useEffect(() => {
+    //   if (githubAccessToken) {
+    //     const doFetch = async () => {
+    //       try {
+    //         await fetchGHProfile(githubAccessToken);
+    //       } catch (e) {
+    //         if (process.env.NODE_ENV !== "production") {
+    //           console.log(e);
+    //         }
+    //       }
+    //     };
 
-        doFetch();
-      }
-    }, [githubAccessToken, fetchGHProfile]);
+    //     doFetch();
+    //   }
+    // }, [githubAccessToken, fetchGHProfile]);
 
     const routes = [
       {
@@ -121,23 +121,21 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
           title={t("workplace")}
         >
           <div className={styles.pageHeaderContent}>
-            {userAvatarUrl ? (
-              <Avatar src={userAvatarUrl} size={64} />
+            {userAvatarUrl && userName && userProfile ? (
+              <>
+                <Avatar src={userAvatarUrl} size={64} />
+                <Typography className={styles.contentTypography}>
+                  <Typography.Title
+                    className={styles.contentTitle}
+                    level={3}
+                  >{`您好，${userName}`}</Typography.Title>
+                  <Typography.Paragraph type={"secondary"}>
+                    {userProfile}
+                  </Typography.Paragraph>
+                </Typography>
+              </>
             ) : (
-              <Skeleton.Avatar />
-            )}
-            {userName && userProfile ? (
-              <Typography className={styles.contentTypography}>
-                <Typography.Title
-                  className={styles.contentTitle}
-                  level={3}
-                >{`您好，${userName}`}</Typography.Title>
-                <Typography.Paragraph type={"secondary"}>
-                  {userProfile}
-                </Typography.Paragraph>
-              </Typography>
-            ) : (
-              <Skeleton />
+              <Skeleton avatar={true} title={false} paragraph={{ rows: 5 }} />
             )}
             <div className={styles.statisticArea}>
               <TracingStatistic
