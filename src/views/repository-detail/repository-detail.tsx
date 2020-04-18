@@ -51,7 +51,7 @@ const data = {
   ]
 };
 export interface IStateProps {
-  repo: IImportedRepository;
+  repo?: IImportedRepository;
   requirement: IRequirement;
   loading: boolean;
   deleteRequirementLoading: boolean;
@@ -68,7 +68,7 @@ export interface IDispatchProps {
   ) => void;
 }
 
-export interface IOwnProps extends RouteComponentProps<{ name: string }> {}
+export interface IOwnProps extends RouteComponentProps<{ id: string }> {}
 
 export interface IRepositoryDetailProps
   extends IStateProps,
@@ -101,10 +101,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementDescription,
       updateRequirement,
       match: {
-        params: { name: repoName }
+        params: { id }
       }
     } = props;
     const styles = useStyles();
+    const repoName = repo?.name || "";
 
     const [drawerType, setDrawerType] = useState<
       null | "COMMIT" | "REQUIREMENT" | "FILE"
@@ -121,9 +122,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       null
     );
 
-    const selectedFileContent = selectedFile
-      ? repo.shaFileContentMap[selectedFile.sha]
-      : "";
+    const selectedFileContent =
+      selectedFile && repo ? repo.shaFileContentMap[selectedFile.sha] : "";
 
     const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "FILE") =>
       setDrawerType(type);
@@ -154,11 +154,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           breadcrumbName: "倉庫"
         },
         {
-          path: RouteConstants.REPOSITORY_DETAIL(repoName),
-          breadcrumbName: repoName
+          path: RouteConstants.REPOSITORY_DETAIL(id),
+          breadcrumbName: id
         }
       ];
-    }, [repoName]);
+    }, [id]);
 
     const pageHeaderConfig = useMemo(() => {
       if (repo) {

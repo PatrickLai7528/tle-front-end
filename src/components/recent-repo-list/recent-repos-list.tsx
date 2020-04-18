@@ -78,6 +78,7 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
           return (
             <Col span={8} key={repo.id}>
               <SimpleRepoCard
+                repoId={repo.id}
                 description={repo.description}
                 repositoryName={repo.name}
                 language={repo.language}

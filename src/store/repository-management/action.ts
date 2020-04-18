@@ -33,15 +33,24 @@ export const fetchRecentRepository = (): AppThunk<
 };
 
 export const fetchImportedRepositoryDetail = (
-  repoName: string
+  repoId: string
 ): AppThunk<void, RepositoryManagementActionTypes> => async dispatch => {
   dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    dispatch({
-      type: FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
-      payload: importedRepository[0]
-    });
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const res = await fetch(
+      `${getServerUrl()}/api/repository/${repoId}`
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
+        payload: res.payload
+      });
+    } else {
+      dispatch({
+        type: "FETCH_IMPORTED_REPOSITORY_LIST_FAILURE"
+      });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);

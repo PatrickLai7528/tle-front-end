@@ -30,6 +30,7 @@ import {
   IRequirement
 } from "../../types";
 import { postRequirement } from "../../store/requirement/actions";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState,
@@ -43,6 +44,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
       loading: sendImportedRepositoryLoading
     },
     repositoryManagementReducer: { rawRepositories },
+    searchReducer: { searchResult },
     requirementReducer: { loading: postRequirementLoading },
     traceLinkReducer: {
       loading: sendTraceLinkLoading,
@@ -58,12 +60,21 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     }
   } = ownProps;
 
+  let repositoryRes: IGHRepositoryRes = rawRepositories.filter(
+    repo => repo.id.toString() === id
+  )[0];
+
+  // use search resulte
+  if (!repositoryRes) {
+    repositoryRes = searchResult.filter(res => res.id.toString() === id)[0];
+  }
+
   return {
     confirmImportLoading:
       sendImportedRepositoryLoading &&
       sendTraceLinkLoading &&
       postRequirementLoading,
-    repositoryRes: rawRepositories.filter(repo => repo.id.toString() === id)[0],
+    repositoryRes: repositoryRes,
     importProccess,
     importedRepostiroy: importedRepository || {},
     importDone: !!importDone,
