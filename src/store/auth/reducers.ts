@@ -16,7 +16,8 @@ import {
   FETCH_GH_PROFILE,
   FETCH_GH_PROFILE_SUCCESS,
   FETCH_GH_PROFILE_FAILURE,
-  IFetchGHProfileSuccessAction
+  IFetchGHProfileSuccessAction,
+  ISendLogInFailureAction
 } from "./types";
 
 const initalAuthState: IAuthState = {
@@ -67,7 +68,11 @@ export const authReducer = (
         token: (action as ISendLogInSuccessAction).payload.token
       };
     case SEND_LOG_IN_FAILURE:
-      return { ...state, error: true, loading: false };
+      return {
+        ...state,
+        error: (action as ISendLogInFailureAction).meta || "登錄失敗",
+        loading: false
+      };
     case SEND_REGISTRY:
       return {
         ...state,

@@ -78,13 +78,28 @@ export const sendLogIn = (
 > => async dispatch => {
   dispatch({ type: "SEND_LOG_IN" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    const token = "hahaha hahahaha fake token";
-    dispatch({
-      type: "SEND_LOG_IN_SUCCESS",
-      payload: { token, email: data.email }
-    });
-    return true;
+    // await new Promise(resolve => setTimeout(resolve, 1500));
+    // const token = "hahaha hahahaha fake token";
+    const res = await fetch(`${getServerUrl()}/api/auth/login`, {
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password
+      }),
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST"
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: "SEND_LOG_IN_SUCCESS",
+        payload: { token: res.payload, email: data.email }
+      });
+      return true;
+    } else {
+      dispatch({ type: "SEND_LOG_IN_FAILURE", meta: res.meta });
+      return false;
+    }
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);
