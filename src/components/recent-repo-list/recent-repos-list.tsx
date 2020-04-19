@@ -34,6 +34,14 @@ export interface IRecentReposProps
 const useStyles = createUseStyles({
   recentRepository: {
     width: "100%"
+  },
+  centeredEmpty: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    height: "100%",
+    minHeight: "300px",
+    width: "100%"
   }
 });
 
@@ -72,7 +80,7 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
         }
         return contents;
       } else if (!repos || repos.length === 0) {
-        return <Empty />;
+        return <Empty className={styles.centeredEmpty} />;
       } else {
         return repos.map(repo => {
           return (

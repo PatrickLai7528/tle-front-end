@@ -1,16 +1,15 @@
 import { getServerUrl } from "./../../configs/get-url";
-import { recentRepos } from "./../../stubs/recent-repo";
-import { importedRepository } from "./../../stubs/imported-repositories";
 import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
+import { recentRepos } from "./../../stubs/recent-repo";
 import { AppThunk } from "./../store";
 import {
-  RepositoryManagementActionTypes,
   FETCH_IMPORTED_REPOSITORY_DETAIL,
-  FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
   FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE,
+  FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
   FETCH_RECENT_REPOSITORY,
+  FETCH_RECENT_REPOSITORY_FAILURE,
   FETCH_RECENT_REPOSITORY_SUCCESS,
-  FETCH_RECENT_REPOSITORY_FAILURE
+  RepositoryManagementActionTypes
 } from "./types";
 
 export const fetchRecentRepository = (): AppThunk<
@@ -19,11 +18,17 @@ export const fetchRecentRepository = (): AppThunk<
 > => async dispatch => {
   dispatch({ type: FETCH_RECENT_REPOSITORY });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    dispatch({
-      type: FETCH_RECENT_REPOSITORY_SUCCESS,
-      payload: recentRepos
-    });
+    const res = await fetch(`${getServerUrl()}/api/reposiory/recent`, {
+      credentials: "include"
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: FETCH_RECENT_REPOSITORY_SUCCESS,
+        payload: res.payload
+      });
+    } else {
+      dispatch({ type: "FETCH_RECENT_REPOSITORY_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
