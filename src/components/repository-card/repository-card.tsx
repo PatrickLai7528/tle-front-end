@@ -25,7 +25,7 @@ const bodyStyle = { padding: "8px" };
 const RepositoryCard: FunctionComponent<IRepositoryCardProps> = memo(
   (props: IRepositoryCardProps) => {
     const { repo } = props;
-    const { name, ownerId, currentBranch, commits, lastUpdateAt } = repo;
+    const { name, ownerId, currentBranch, commits, lastUpdateAt, _id } = repo;
     const styles = useStyles();
 
     const lastCommitSha = commits[0].sha;
@@ -38,7 +38,7 @@ const RepositoryCard: FunctionComponent<IRepositoryCardProps> = memo(
             <PropertyItem
               property={ownerId}
               value={
-                <Link to={RouteConstants.REPOSITORY_DETAIL(name)}>{name}</Link>
+                <Link to={RouteConstants.REPOSITORY_DETAIL(_id)}>{name}</Link>
               }
             />
           </Col>

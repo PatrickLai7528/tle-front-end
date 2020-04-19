@@ -1,6 +1,6 @@
 import React, { FunctionComponent, memo } from "react";
 import { createUseStyles } from "react-jss";
-import { dataSource } from "../product-and-service/data-source";
+import { dataSource } from "./data-source";
 
 export interface IUsingStepsProps {}
 
@@ -9,7 +9,8 @@ const useStyles = createUseStyles({
     width: "100%",
     display: "flex",
     flexDirection: "row",
-    justifyContent: "space-around"
+    justifyContent: "space-around",
+    marginBottom: "48px"
   },
   box: {
     padding: "20px",
@@ -32,6 +33,10 @@ const useStyles = createUseStyles({
     marginTop: "36px",
     textAlign: "left",
     transition: "opacity .45s cubic-bezier(.645,.045,.355,1)"
+  },
+  stepImage: {
+    height: "100px",
+    width: "100px"
   }
 });
 
@@ -43,7 +48,7 @@ const UsingSteps: FunctionComponent<IUsingStepsProps> = memo(
         {dataSource.map(data => {
           return (
             <div key={data.title} className={styles.box}>
-              <img src={data.image} alt={"step"} />
+              <img src={data.image} alt={"step"} className={styles.stepImage} />
               <h1 className={styles.boxTitle}>{data.title}</h1>
               <div className={styles.stepDescription}>
                 <span>{data.description} </span>

@@ -17,9 +17,19 @@ export const FETCH_GH_PROFILE_FAILURE = "FETCH_GH_PROFILE_SUCCESS";
 
 export const TOGGLE_AUTH_MODAL = "TOGGLE_AUTH_MODAL";
 
+export const LOGGED_IN = "LOGGED_IN";
+
+export interface ILoggedInAction {
+  type: typeof LOGGED_IN;
+  payload: {
+    token: string;
+    ghToken: string;
+  };
+}
+
 export interface IAuthState {
   loggedIn: boolean;
-  email?: string;
+  githubId?: string;
   token?: string;
   gitHubAccessToken?: string;
   loading?: boolean;
@@ -64,7 +74,10 @@ export interface ILogInData {
   password: string;
 }
 
-export interface IRegistryData {}
+export interface IRegistryData {
+  email: string;
+  password: string;
+}
 
 // 發送登錄請求
 export interface ISendLogInAction {
@@ -75,7 +88,10 @@ export interface ISendLogInAction {
 // 登錄成功
 export interface ISendLogInSuccessAction {
   type: typeof SEND_LOG_IN_SUCCESS;
-  payload: { email: string; token: string };
+  payload: {
+    token: string;
+    githubId?: string;
+  };
 }
 
 // 登錄失敗
@@ -112,7 +128,8 @@ export type AuthActions =
   | IToggleAuthModalAction
   | IFetchGhProfileAction
   | IFetchGHProfileSuccessAction
-  | IFetchGHProfileFailureAction;
+  | IFetchGHProfileFailureAction
+  | ILoggedInAction;
 
 export type AuthActionTypes =
   | typeof SEND_LOG_IN
@@ -127,4 +144,5 @@ export type AuthActionTypes =
   | typeof TOGGLE_AUTH_MODAL
   | typeof FETCH_GH_PROFILE
   | typeof FETCH_GH_PROFILE_SUCCESS
-  | typeof FETCH_GH_PROFILE_FAILURE;
+  | typeof FETCH_GH_PROFILE_FAILURE
+  | typeof LOGGED_IN;

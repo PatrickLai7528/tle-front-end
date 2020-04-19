@@ -18,6 +18,8 @@ export const searchGitHubRepository = (
     const {
       authReducer: { gitHubAccessToken, ghProfile }
     } = getState();
+    console.log(gitHubAccessToken);
+    console.log(ghProfile?.login);
     if (gitHubAccessToken && ghProfile?.login) {
       const queryString = `?q=${searchFor}+user:${ghProfile.login}`;
       const res = await fetch(`${gitHubAuthConfigs.search}${queryString}`, {

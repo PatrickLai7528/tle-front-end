@@ -7,6 +7,10 @@ export const ADD_REQUIREMENT = "ADD_REQUIREMENT";
 export const ADD_REQUIREMENT_SUCCESS = "ADD_REQUIREMENT_SUCCESS";
 export const ADD_REQUIREMENT_FAILURE = "ADD_REQUIREMENT_FAILURE";
 
+export const POST_REQUIREMENT = "POST_REQUIREMENT";
+export const POST_REQUIREMENT_SUCCESS = "POST_REQUIREMENT_SUCCESS";
+export const POST_REQUIREMENT_FAILURE = "POST_REQUIREMENT_FAILURE";
+
 export const UPDATE_REQUIREMENT = "UPDATE_REQUIREMENT";
 export const UPDATE_REQUIREMENT_SUCCESS = "UPDATE_REQUIREMENT_SUCCESS";
 export const UPDATE_REQUIREMENT_FAILURE = "UPDATE_REQUIREMENT_FAILURE";
@@ -16,6 +20,19 @@ export const DELETE_REQUIREMENT_SUCCESS = "DELETE_REQUIREMENT_SUCCESS";
 export const DELETE_REQUIREMENT_FAILURE = "DELETE_REQUIREMENT_FAIULRE";
 
 export const TOGGLE_ADD_REQUIREMENT_MODAL = "TOGGLE_ADD_REQUIREMENT_MODAL";
+
+export interface IPostRequirementAction {
+  type: typeof POST_REQUIREMENT;
+}
+
+export interface IPostRequirementSuccessAction {
+  type: typeof POST_REQUIREMENT_SUCCESS;
+}
+
+export interface IPostRequirementFailureAction {
+  type: typeof POST_REQUIREMENT_FAILURE;
+  meta?: string;
+}
 
 export interface IUpdateRequirementAciton {
   type: typeof UPDATE_REQUIREMENT;
@@ -95,7 +112,10 @@ export type RequirementActions =
   | IUpdateRequirementFailureAction
   | IDeleteRequirementAction
   | IDeleteRequirementSuccessAction
-  | IDeleteRequirementFailreAction;
+  | IDeleteRequirementFailreAction
+  | IPostRequirementAction
+  | IPostRequirementSuccessAction
+  | IPostRequirementFailureAction;
 
 export type RequirementActionTypes =
   | typeof FETCH_REPO_REQUIREMENT
@@ -110,4 +130,7 @@ export type RequirementActionTypes =
   | typeof UPDATE_REQUIREMENT_FAILURE
   | typeof DELETE_REQUIREMENT
   | typeof DELETE_REQUIREMENT_SUCCESS
-  | typeof DELETE_REQUIREMENT_FAILURE;
+  | typeof DELETE_REQUIREMENT_FAILURE
+  | typeof POST_REQUIREMENT
+  | typeof POST_REQUIREMENT_SUCCESS
+  | typeof POST_REQUIREMENT_FAILURE;

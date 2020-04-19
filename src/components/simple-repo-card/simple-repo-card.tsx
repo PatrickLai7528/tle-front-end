@@ -17,6 +17,7 @@ export interface IOwnProps {
   description: string;
   lastUpdateAt: number;
   lastUpdateBy: string;
+  repoId: string;
 }
 
 export interface ISimpleRepoCardProps
@@ -64,12 +65,14 @@ const useStyles = createUseStyles({
 const SimpleRepoCard: FC<ISimpleRepoCardProps> = memo(
   (props: ISimpleRepoCardProps) => {
     const {
+      repoId,
       description,
       repositoryName,
       language,
       lastUpdateAt,
       lastUpdateBy
     } = props;
+
     const styles = useStyles();
     return (
       <Card
@@ -90,7 +93,7 @@ const SimpleRepoCard: FC<ISimpleRepoCardProps> = memo(
             language={language}
           />
           <Typography.Text className={styles.cardTitle}>
-            <Link to={RouteConstants.REPOSITORY_DETAIL(repositoryName)}>
+            <Link to={RouteConstants.REPOSITORY_DETAIL(repoId)}>
               {repositoryName}
             </Link>
           </Typography.Text>

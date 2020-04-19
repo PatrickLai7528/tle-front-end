@@ -1,23 +1,20 @@
 import { Avatar, Col, PageHeader, Row, Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo } from "react";
+import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { RouteComponentProps } from "react-router-dom";
 import { ConnectedRecentRepoList } from "../../components/recent-repo-list";
 import { ConnectedUserActivity } from "../../components/user-activity";
 import { RouteConstants } from "../../routes/constants";
 import QuickAction, { IAction } from "./quick-action";
 import TracingStatistic from "./tracing-statistic";
+import PageHeaderContent from "./page-header-content";
 
-export interface IStateProps {
-  loading: boolean;
-  userName?: string;
-  userAvatarUrl?: string;
-  userProfile?: string;
-}
+export interface IStateProps {}
 
 export interface IDispatchProps {}
 
-export interface IOwnProps {}
+export interface IOwnProps extends RouteComponentProps {}
 
 export interface IWorkplaceProps
   extends IStateProps,
@@ -29,26 +26,13 @@ const useStyles = createUseStyles({
     display: "flex",
     flexDirection: "row"
   },
-  contentTypography: {
-    margin: {
-      left: "18px"
-    }
-  },
-  contentTitle: {
-    margin: { bottom: "12px" },
-    color: "gba(0, 0, 0, 0.85)",
-    fontWeight: 500,
-    fontSize: "20px",
-    lineHeight: "28px"
-  },
-  statisticArea: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    flexGrow: 1
-  },
   homeContent: {
     padding: "16px"
+  },
+  result: {
+    background: "#fff",
+    height: "100vh",
+    width: "100%"
   }
 });
 
@@ -74,7 +58,6 @@ const actionShortCuts: IAction[] = [
 const Workplace: FunctionComponent<IWorkplaceProps> = memo(
   (props: IWorkplaceProps) => {
     const { t } = useTranslation();
-    const { userAvatarUrl, userName, userProfile } = props;
     const styles = useStyles();
 
     const routes = [
@@ -96,35 +79,11 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
           title={t("workplace")}
         >
           <div className={styles.pageHeaderContent}>
-            {userAvatarUrl ? (
-              <Avatar src={userAvatarUrl} size={64} />
-            ) : (
-              <Skeleton.Avatar />
-            )}
-            {userName && userProfile ? (
-              <Typography className={styles.contentTypography}>
-                <Typography.Title
-                  className={styles.contentTitle}
-                  level={3}
-                >{`您好，${userName}`}</Typography.Title>
-                <Typography.Paragraph type={"secondary"}>
-                  {userProfile}
-                </Typography.Paragraph>
-              </Typography>
-            ) : (
-              <Skeleton />
-            )}
-            <div className={styles.statisticArea}>
-              <TracingStatistic
-                repository={123}
-                requirement={312}
-                traceLink={165}
-              />
-            </div>
+            <PageHeaderContent />
           </div>
         </PageHeader>
         <Row className={styles.homeContent} gutter={[16, 16]}>
-          <Col lg={18} md={24}>
+          <Col lg={18} md={24} style={{ width: "100%" }}>
             <Row style={{ width: "100%" }}>
               <Col span={24}>
                 <ConnectedRecentRepoList style={{ marginBottom: "16px" }} />
@@ -136,7 +95,6 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
             <Row style={{ width: "100%" }}>
               <Col span={24}>
                 <QuickAction actions={actionShortCuts} />
-                {/* <RepoTracingChart /> */}
               </Col>
             </Row>
           </Col>

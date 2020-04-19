@@ -1,3 +1,4 @@
+import { getServerUrl } from "./../../configs/get-url";
 import { IBranch, ICommit, IFileTreeNode } from "../../types";
 import {
   Blobs,
@@ -22,16 +23,58 @@ import {
   SEND_IMPORTED_REPOSITORY_FAILURE,
   SEND_IMPORTED_REPOSITORY_SUCCESS,
   START_IMPORT_REPOSITORY,
-  UPDATE_IMPORTING_REPOSITORY
+  UPDATE_IMPORTING_REPOSITORY,
+  IStopImportAction
 } from "./types";
+
+export const stopImport = (): IStopImportAction => ({ type: "STOP_IMPORT" });
+
+export const isRepoImported = (
+  repoName: string
+): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+  dispatch({ type: "IS_REPOSITORY_IMPORTED" });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1300));
+    const res = await fetch(
+      `${getServerUrl()}/api/repository/if_imported?repoName=${repoName}`
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: "IS_REPOSITORY_IMPORTED_SUCCESS",
+        payload: res.payload
+      });
+    } else {
+      dispatch({ type: "IS_REPOSITORY_IMPORTED_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "IS_REPOSITORY_IMPORTED_FAILURE" });
+  }
+};
 
 export const sendImportedRepository = (
   importedRepo: IImportedRepository
 ): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
   dispatch({ type: SEND_IMPORTED_REPOSITORY });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    dispatch({ type: SEND_IMPORTED_REPOSITORY_SUCCESS });
+    // await new Promise(resolve => setTimeout(resolve, 1200));
+
+    const res = await fetch(`${getServerUrl()}/api/repository`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(importedRepo)
+    }).then(res => res.json());
+
+    if (res && res.success) {
+      dispatch({ type: SEND_IMPORTED_REPOSITORY_SUCCESS });
+    } else {
+      dispatch({ type: "SEND_IMPORTED_REPOSITORY_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
@@ -51,7 +94,10 @@ export const updateImportingRepository = (
 
 export const startImportRepository = (
   importThis: IGHRepositoryRes
-): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+): AppThunk<void, ImportRepositoryActionTypes> => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: START_IMPORT_REPOSITORY });
   try {
     let importedRepo: Partial<IImportedRepository> = {
@@ -63,19 +109,27 @@ export const startImportRepository = (
     };
     dispatch(updateImportingRepository(importedRepo));
 
+    if (getState().importRepositoryReducer.stop) return;
+
     const branches: IBranch[] = await dispatch(cloneBranches(importThis));
     importedRepo = { ...importedRepo, branches: [...branches] };
     dispatch(updateImportingRepository(importedRepo));
 
+    if (getState().importRepositoryReducer.stop) return;
+
     const commits: ICommit[] = await dispatch(cloneCommits(importThis));
     importedRepo = { ...importedRepo, commits: [...commits] };
     dispatch(updateImportingRepository(importedRepo));
+
+    if (getState().importRepositoryReducer.stop) return;
 
     const { trees, blobs } = await dispatch(
       cloneFileStructure(importThis, branches)
     );
     importedRepo = { ...importedRepo, trees: [...trees] };
     dispatch(updateImportingRepository(importedRepo));
+
+    if (getState().importRepositoryReducer.stop) return;
 
     const shaFileContentMap: ShaFileContentMap = await dispatch(
       cloneFileContent(importThis, blobs)

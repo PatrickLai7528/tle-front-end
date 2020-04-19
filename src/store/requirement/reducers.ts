@@ -16,7 +16,8 @@ import {
   UPDATE_REQUIREMENT,
   UPDATE_REQUIREMENT_SUCCESS,
   IUpdateRequirementSuccessAction,
-  UPDATE_REQUIREMENT_FAILURE
+  UPDATE_REQUIREMENT_FAILURE,
+  IPostRequirementFailureAction
 } from "./types";
 
 const initialState: IRequirementState = {
@@ -32,6 +33,23 @@ export const requirementReducer = (
   action: RequirementActions
 ): IRequirementState => {
   switch (action.type) {
+    case "POST_REQUIREMENT":
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case "POST_REQUIREMENT_SUCCESS":
+      return {
+        ...state,
+        loading: false
+      };
+    case "POST_REQUIREMENT_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: (action as IPostRequirementFailureAction).meta
+      };
     case UPDATE_REQUIREMENT:
       return {
         ...state,

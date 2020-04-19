@@ -7,7 +7,7 @@ import { RepositoryDescription } from "../../components/repository-description";
 import { IImportedRepository } from "../../types";
 
 export interface IBasicInfoDescriptionsProps {
-  repo: IImportedRepository;
+  repo?: Partial<IImportedRepository>;
 }
 
 const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = memo(
@@ -23,7 +23,7 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
       trees,
       commits,
       branches
-    } = repo;
+    } = repo || ({} as any);
 
     return (
       <Descriptions bordered>
@@ -52,7 +52,7 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
           )}
         </Descriptions.Item>
         <Descriptions.Item label="其它分支" span={3}>
-          {!!branches ? (
+          {!!branches && Array.isArray(branches) ? (
             <Typography.Paragraph>
               <ul>
                 {branches.map(branch => (
@@ -70,7 +70,7 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
           )}
         </Descriptions.Item>
         <Descriptions.Item label={t("commit")} span={3}>
-          {!!commits ? (
+          {!!commits && Array.isArray(commits) ? (
             <Typography.Paragraph>
               <ul>
                 {commits.map(commit => (

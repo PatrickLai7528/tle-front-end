@@ -24,7 +24,8 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   IFetchFileRelatedTraceLinkSuccessAction,
   FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
-  IFetchRequirementRelatedTraceLinkSuccessAction
+  IFetchRequirementRelatedTraceLinkSuccessAction,
+  ISendInitTraceLinkFailureAction
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -116,13 +117,14 @@ export const traceLinkReducer = (
     case SEND_INIT_TRACE_LINK_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
+        initTraceLinkMartix: undefined
       };
     case SEND_INIT_TRACE_LINK_FAILURE:
       return {
         ...state,
         loading: false,
-        error: true
+        error: (action as ISendInitTraceLinkFailureAction).meta
       };
     case CONFIRM_INIT_TRACE_LINK:
       return {
@@ -147,7 +149,8 @@ export const traceLinkReducer = (
     case GENERATE_INIT_TRACE_LINK:
       return {
         ...state,
-        initTraceLinkLoading: true
+        initTraceLinkLoading: true,
+        initTraceLinkConfirmed: false
       };
     case GENERATE_INIT_TRACE_LINK_SUCCESS:
       return {

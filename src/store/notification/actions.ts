@@ -1,7 +1,8 @@
 import {
   INotificationQueueItem,
   PUSH_NOTIFICATION_QUEUE,
-  IPushNotificationQueueAction
+  IPushNotificationQueueAction,
+  IPopNotificationQueueAction
 } from "./types";
 
 export const pushNotification = (
@@ -12,3 +13,7 @@ export const pushNotification = (
     payload: item
   };
 };
+
+export const popNotification = (): IPopNotificationQueueAction => ({
+  type: "POP_NOTIFICATION_QUEUE"
+});

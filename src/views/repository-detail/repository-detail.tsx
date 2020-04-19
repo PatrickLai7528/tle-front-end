@@ -51,7 +51,7 @@ const data = {
   ]
 };
 export interface IStateProps {
-  repo: IImportedRepository;
+  repo?: IImportedRepository;
   requirement: IRequirement;
   loading: boolean;
   deleteRequirementLoading: boolean;
@@ -59,7 +59,7 @@ export interface IStateProps {
 
 export interface IDispatchProps {
   fetchRepoDetail: () => void;
-  fetchRepoRequirement: () => void;
+  fetchRepoRequirement: (repoName: string) => void;
   toggleAddRequirementModal: () => void;
   updateRequirement: (requirement: IRequirement) => void;
   deleteRequirementDescription: (
@@ -68,7 +68,7 @@ export interface IDispatchProps {
   ) => void;
 }
 
-export interface IOwnProps extends RouteComponentProps<{ name: string }> {}
+export interface IOwnProps extends RouteComponentProps<{ id: string }> {}
 
 export interface IRepositoryDetailProps
   extends IStateProps,
@@ -82,7 +82,8 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: "16px",
-    background: "#fff"
+    background: "#fff",
+    margin: { left: "3rem", right: "3rem" }
   },
   contentCardWrapper: {}
 });
@@ -101,10 +102,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementDescription,
       updateRequirement,
       match: {
-        params: { name: repoName }
+        params: { id }
       }
     } = props;
     const styles = useStyles();
+    const repoName = repo?.name || "";
 
     const [drawerType, setDrawerType] = useState<
       null | "COMMIT" | "REQUIREMENT" | "FILE"
@@ -121,9 +123,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       null
     );
 
-    const selectedFileContent = selectedFile
-      ? repo.shaFileContentMap[selectedFile.sha]
-      : "";
+    const selectedFileContent =
+      selectedFile && repo ? repo.shaFileContentMap[selectedFile.sha] : "";
 
     const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "FILE") =>
       setDrawerType(type);
@@ -133,7 +134,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     useEffect(() => {
       const doIt = async () => {
         try {
-          await Promise.all([fetchRepoDetail(), fetchRepoRequirement()]);
+          await fetchRepoDetail();
+          await fetchRepoRequirement(repoName);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
@@ -141,7 +143,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         }
       };
       doIt();
-    }, [fetchRepoDetail, fetchRepoRequirement]);
+    }, [fetchRepoDetail, fetchRepoRequirement, repoName]);
 
     const routes = useMemo(() => {
       return [
@@ -154,11 +156,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           breadcrumbName: "倉庫"
         },
         {
-          path: RouteConstants.REPOSITORY_DETAIL(repoName),
-          breadcrumbName: repoName
+          path: RouteConstants.REPOSITORY_DETAIL(id),
+          breadcrumbName: id
         }
       ];
-    }, [repoName]);
+    }, [id]);
 
     const pageHeaderConfig = useMemo(() => {
       if (repo) {
@@ -274,60 +276,66 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
-          <Tabs.TabPane tab={t("commit")} key="1">
-            {!!repo ? (
-              <CommitCard
-                commits={repo.commits}
-                onDetailClick={commit => {
-                  openDrawer("COMMIT");
-                  setSelectedCommit(commit);
-                }}
-              />
-            ) : (
-              <Skeleton />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={t("requirement")} key="2">
-            {!!requirement ? (
-              <RequirementCard
-                loading={deleteRequirementLoading}
-                toggleAddRequirementModal={toggleAddRequirementModal}
-                onDeleteClick={description =>
-                  deleteRequirementDescription(requirement, description)
-                }
-                requirement={requirement}
-                onDetailClick={description => {
-                  openDrawer("REQUIREMENT");
-                  setSelectedRequirementDescription(description);
-                }}
-              />
-            ) : (
-              <Skeleton />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={"文件"} key={"file"}>
-            {repo ? (
-              <RepositoryFiles
-                onFileNodeClick={node => {
-                  if (node && node.type === "FILE") {
-                    setSelectedFile(node);
-                    openDrawer("FILE");
+        <div style={{ width: "100%", background: "#fff" }}>
+          <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
+            <Tabs.TabPane tab={t("commit")} key="1">
+              {!!repo ? (
+                <CommitCard
+                  commits={repo.commits}
+                  onDetailClick={commit => {
+                    openDrawer("COMMIT");
+                    setSelectedCommit(commit);
+                  }}
+                />
+              ) : (
+                <Skeleton />
+              )}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={t("requirement")} key="2">
+              {!!requirement ? (
+                <RequirementCard
+                  loading={deleteRequirementLoading}
+                  toggleAddRequirementModal={toggleAddRequirementModal}
+                  onDeleteClick={description =>
+                    deleteRequirementDescription(requirement, description)
                   }
-                }}
-                shaFileContentMap={repo.shaFileContentMap}
-                treeData={repo.trees}
-              />
-            ) : (
-              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="圖" key="3">
+                  requirement={requirement}
+                  onDetailClick={description => {
+                    openDrawer("REQUIREMENT");
+                    setSelectedRequirementDescription(description);
+                  }}
+                />
+              ) : (
+                <Skeleton />
+              )}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={"文件"} key={"file"}>
+              {repo ? (
+                <RepositoryFiles
+                  onFileNodeClick={node => {
+                    if (node && node.type === "FILE") {
+                      setSelectedFile(node);
+                      openDrawer("FILE");
+                    }
+                  }}
+                  shaFileContentMap={repo.shaFileContentMap}
+                  treeData={repo.trees}
+                />
+              ) : (
+                <Skeleton
+                  avatar={false}
+                  title={false}
+                  paragraph={{ rows: 5 }}
+                />
+              )}
+            </Tabs.TabPane>
+            {/* <Tabs.TabPane tab="圖" key="3">
             <GGEditor>
               <Flow style={{ width: 500, height: 500 }} data={data} />
             </GGEditor>
-          </Tabs.TabPane>
-        </Tabs>
+          </Tabs.TabPane> */}
+          </Tabs>
+        </div>
       </Spin>
     );
   }

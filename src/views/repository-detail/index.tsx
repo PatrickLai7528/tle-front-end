@@ -43,14 +43,15 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   >,
   {
     match: {
-      params: { name }
+      params: { id }
     }
   }: IOwnProps
 ) => {
   return {
     updateRequirement: requirement => dispatch(updateRequirement(requirement)),
-    fetchRepoRequirement: () => dispatch(fetchRepoRequirement(name)),
-    fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(name)),
+    fetchRepoRequirement: (repoName: string) =>
+      dispatch(fetchRepoRequirement(repoName)),
+    fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(id)),
     toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal()),
     deleteRequirementDescription: (
       requirement: IRequirement,

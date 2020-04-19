@@ -37,6 +37,7 @@ export interface ITraceLink {
 
 export interface ITraceLinkMatrix {
   links: ITraceLink[];
+  relatedRepoName: string;
 }
 
 export interface IRequirementDescription {
@@ -99,6 +100,7 @@ export interface ICommit {
 export type ShaFileContentMap = { [key: string]: string };
 
 export interface IImportedRepository {
+  _id: string;
   // 倉庫名稱
   name: string;
 

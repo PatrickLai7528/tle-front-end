@@ -1,15 +1,14 @@
-import { Button, Modal } from "antd";
+import { Button, Layout, Modal } from "antd";
 import React, { FunctionComponent, memo, useMemo } from "react";
+import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { RouteComponentProps } from "react-router-dom";
+import { ConnectedAuth } from "../../components/auth";
 import { ProductAndService } from "../../components/product-and-service";
 import { UsingSteps } from "../../components/using-steps";
+import { getGitHubLogInUrl } from "../../configs/get-url";
 import bannerImg from "./asset/banner.jpg";
 import SectionLayout from "./section-layout";
-import { Layout } from "antd";
-import { ConnectedAuth } from "../../components/auth";
-import { useTranslation } from "react-i18next";
-import { RouteComponentProps } from "react-router-dom";
-import { RouteConstants } from "../../routes/constants";
 
 export interface IStateProps {
   authModalVisible: boolean;
@@ -69,7 +68,8 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
     return (success: boolean) => {
       if (success) {
         toggle();
-        push(RouteConstants.WORKPLACE);
+        // push(RouteConstants.WORKPLACE);
+        window.location.href = getGitHubLogInUrl();
       }
     };
   }, [toggle, push]);

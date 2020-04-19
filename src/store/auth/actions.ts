@@ -6,18 +6,23 @@ import { AppThunk } from "./../store";
 import {
   AuthActions,
   AuthActionTypes,
+  FETCH_GH_PROFILE,
   FETCH_GH_PROFILE_FAILURE,
   FETCH_GH_PROFILE_SUCCESS,
   ILogInData,
   IRegistryData,
   SEND_GITHUB_LOG_IN,
-  TOGGLE_AUTH_MODAL,
-  FETCH_GH_PROFILE
+  TOGGLE_AUTH_MODAL
 } from "./types";
 
 export const toggleAuthModal = (): AuthActions => {
   return { type: TOGGLE_AUTH_MODAL };
 };
+
+export const loggedIn = (token: string, ghToken: string) => ({
+  type: "LOGGED_IN",
+  payload: { token, ghToken }
+});
 
 export const fetchGHProfile = (
   gitHubAccessToken: string
@@ -53,11 +58,14 @@ export const sendGitHubLogIn = (
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
     const res = await fetch(
-      `${getServerUrl()}/api/auth/access_token?code=${code}`
+      `${getServerUrl()}/api/auth/access_token?code=${code}`,
+      { credentials: "include" }
     ).then(res => res.json());
     const { success, meta, payload: accessToken } = res;
     if (success) {
-      dispatch(fetchGHProfile(accessToken));
+      if (accessToken) {
+        localStorage.setItem("tle_app_gh_token", accessToken);
+      }
       dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
     } else {
       dispatch({ type: "SEND_GITHUB_LOG_IN_FAILURE", meta });
@@ -78,13 +86,31 @@ export const sendLogIn = (
 > => async dispatch => {
   dispatch({ type: "SEND_LOG_IN" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    const token = "hahaha hahahaha fake token";
-    dispatch({
-      type: "SEND_LOG_IN_SUCCESS",
-      payload: { token, email: data.email }
-    });
-    return true;
+    const res = await fetch(`${getServerUrl()}/api/auth/login`, {
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      method: "POST"
+    }).then(res => res.json());
+    if (res && res.success) {
+      const { token, githubId } = res.payload || {};
+      if (token) {
+        localStorage.setItem("tle_app_token", token);
+      }
+      dispatch({
+        type: "SEND_LOG_IN_SUCCESS",
+        payload: { token, githubId }
+      });
+      return true;
+    } else {
+      dispatch({ type: "SEND_LOG_IN_FAILURE", meta: res.meta });
+      return false;
+    }
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);
@@ -99,9 +125,25 @@ export const sendRegistry = (
 ): AppThunk<Promise<boolean>, AuthActionTypes> => async dispatch => {
   dispatch({ type: "SEND_REGISTRY" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    dispatch({ type: "SEND_REGISTRY_SUCCESS" });
-    return true;
+    // await new Promise(resolve => setTimeout(resolve, 1500));
+    const res = await fetch(`${getServerUrl()}/api/auth/registry`, {
+      method: "POST",
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      }
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "SEND_REGISTRY_SUCCESS" });
+      return true;
+    } else {
+      dispatch({ type: "SEND_REGISTRY_FAILRE", meta: res.meta });
+      return false;
+    }
   } catch (e) {
     if (process.env.NODE_ENV === "development") {
       console.log(e);

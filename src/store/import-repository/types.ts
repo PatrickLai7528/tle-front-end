@@ -26,6 +26,28 @@ export const SEND_IMPORTED_REPOSITORY_SUCCESS =
 export const SEND_IMPORTED_REPOSITORY_FAILURE =
   "SEND_IMPORTED_REPOSITORY_FAILURE";
 
+export const STOP_IMPORT = "STOP_IMPORT";
+
+export const IS_REPO_IMPORTED = "IS_REPOSITORY_IMPORTED";
+export const IS_REPO_IMPORTED_SUCCESS = "IS_REPOSITORY_IMPORTED_SUCCESS";
+export const IS_REPO_IMPORTED_FAILURE = "IS_REPOSITORY_IMPORTED_FAILURE";
+
+export interface IIsRepoImportedAction {
+  type: typeof IS_REPO_IMPORTED;
+}
+export interface IIsRepoImprtedSuccessAction {
+  type: typeof IS_REPO_IMPORTED_SUCCESS;
+  payload: boolean;
+}
+export interface IIsRepoImprtedFailureAction {
+  type: typeof IS_REPO_IMPORTED_FAILURE;
+  meta?: string;
+}
+
+export interface IStopImportAction {
+  type: typeof STOP_IMPORT;
+}
+
 export interface ISendImportedRepositoryAction {
   type: typeof SEND_IMPORTED_REPOSITORY;
 }
@@ -36,6 +58,7 @@ export interface ISendImportedRepositorSuccessAction {
 
 export interface ISendImportedRepositoryFailureAction {
   type: typeof SEND_IMPORTED_REPOSITORY_FAILURE;
+  meta?: string;
 }
 
 export type ImportProccess =
@@ -50,8 +73,12 @@ export interface IImportRepositoryState {
   importStarted: boolean;
   importDone: boolean;
 
+  isRepoImported: boolean;
+  checkedRepoImport: boolean;
+
   error?: boolean | string;
   loading: boolean;
+  stop: boolean;
 }
 
 export interface IStartImportRepositoryAction {
@@ -103,7 +130,11 @@ export type ImportRepositoryAcitons =
   | IFinishCloneFileStructureAction
   | ISendImportedRepositoryAction
   | ISendImportedRepositorSuccessAction
-  | ISendImportedRepositoryFailureAction;
+  | ISendImportedRepositoryFailureAction
+  | IStopImportAction
+  | IIsRepoImportedAction
+  | IIsRepoImprtedSuccessAction
+  | IIsRepoImprtedFailureAction;
 
 export type ImportRepositoryActionTypes =
   | typeof START_IMPORT_REPOSITORY
@@ -116,4 +147,8 @@ export type ImportRepositoryActionTypes =
   | typeof FINISH_CLONE_FILE_STRUCTURE
   | typeof SEND_IMPORTED_REPOSITORY
   | typeof SEND_IMPORTED_REPOSITORY_SUCCESS
-  | typeof SEND_IMPORTED_REPOSITORY_FAILURE;
+  | typeof SEND_IMPORTED_REPOSITORY_FAILURE
+  | typeof STOP_IMPORT
+  | typeof IS_REPO_IMPORTED
+  | typeof IS_REPO_IMPORTED_SUCCESS
+  | typeof IS_REPO_IMPORTED_FAILURE;

@@ -7,7 +7,7 @@ export interface ISectionLayoutProps {
 }
 
 const useStyles = createUseStyles({
-  section: { width: "100%", height: "60vh", padding: "36px" },
+  section: { width: "100%", minHeight: "60vh", padding: "36px" },
   titleWrapper: {
     display: "flex",
     justifyContent: "center",

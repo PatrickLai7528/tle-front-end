@@ -6,7 +6,9 @@ export interface IStateProps {
   queue: INotificationQueueItem[];
 }
 
-export interface IDispatchProps {}
+export interface IDispatchProps {
+  pop: () => void;
+}
 
 export interface IOwnProps {}
 
@@ -17,10 +19,10 @@ export interface INotificationQueueProps
 
 const NotificationQueue: FunctionComponent<INotificationQueueProps> = memo(
   (props: INotificationQueueProps) => {
-    const { queue } = props;
+    const { queue, pop } = props;
     queue.forEach(async item => {
       if (item.messageOrNotification === "message") {
-        await message[item.type](item.title, item.duration);
+        message[item.type](item.title, item.duration);
       } else if (item.messageOrNotification === "notification") {
         notification[item.type]({
           message: item.title,
@@ -28,6 +30,7 @@ const NotificationQueue: FunctionComponent<INotificationQueueProps> = memo(
           duration: item.duration
         });
       }
+      await pop();
     });
     return null;
   }
