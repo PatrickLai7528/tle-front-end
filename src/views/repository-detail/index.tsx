@@ -47,10 +47,10 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
     }
   }: IOwnProps
 ) => {
-  const fakeName = "fake name";
   return {
     updateRequirement: requirement => dispatch(updateRequirement(requirement)),
-    fetchRepoRequirement: () => dispatch(fetchRepoRequirement(fakeName)),
+    fetchRepoRequirement: (repoName: string) =>
+      dispatch(fetchRepoRequirement(repoName)),
     fetchRepoDetail: () => dispatch(fetchImportedRepositoryDetail(id)),
     toggleAddRequirementModal: () => dispatch(toggleAddRequirementModal()),
     deleteRequirementDescription: (

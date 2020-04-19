@@ -59,7 +59,7 @@ export interface IStateProps {
 
 export interface IDispatchProps {
   fetchRepoDetail: () => void;
-  fetchRepoRequirement: () => void;
+  fetchRepoRequirement: (repoName: string) => void;
   toggleAddRequirementModal: () => void;
   updateRequirement: (requirement: IRequirement) => void;
   deleteRequirementDescription: (
@@ -133,7 +133,8 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     useEffect(() => {
       const doIt = async () => {
         try {
-          await Promise.all([fetchRepoDetail(), fetchRepoRequirement()]);
+          await fetchRepoDetail();
+          await fetchRepoRequirement(repoName);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
@@ -141,7 +142,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         }
       };
       doIt();
-    }, [fetchRepoDetail, fetchRepoRequirement]);
+    }, [fetchRepoDetail, fetchRepoRequirement, repoName]);
 
     const routes = useMemo(() => {
       return [

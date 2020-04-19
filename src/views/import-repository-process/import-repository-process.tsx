@@ -285,22 +285,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                 history.goBack();
               }
             });
-            // Modal.alert("提示", "是否确认退出补充实名资料?", [
-            // 	{ text: "取消" },
-            // 	{
-            // 		text: "确认",
-            // 		onPress: () =>
-            // 			this.setState(
-            // 				{
-            // 					isPrompt: false,
-            // 				},
-            // 				() =>
-            // 					this.props.dispatch(
-            // 						routerRedux.goBack()
-            // 					)
-            // 			),
-            // 	},
-            // ]);
             return false;
           }}
         />

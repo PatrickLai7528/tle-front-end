@@ -3,14 +3,18 @@ import {
   IImportRepositoryState,
   ImportRepositoryAcitons,
   IUpdateImportingRepositoryAction,
-  ISendImportedRepositoryFailureAction
+  ISendImportedRepositoryFailureAction,
+  IIsRepoImprtedSuccessAction,
+  IIsRepoImprtedFailureAction
 } from "./types";
 
 const initialState: IImportRepositoryState = {
   importDone: false,
   importStarted: false,
   loading: false,
-  stop: false
+  stop: false,
+  isRepoImported: false,
+  checkedRepoImport: false
 };
 
 export const importRepositoryReducer = (
@@ -18,6 +22,27 @@ export const importRepositoryReducer = (
   action: ImportRepositoryAcitons
 ): IImportRepositoryState => {
   switch (action.type) {
+    case "IS_REPOSITORY_IMPORTED":
+      return {
+        ...state,
+        loading: true,
+        error: false,
+        checkedRepoImport: false
+      };
+    case "IS_REPOSITORY_IMPORTED_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        checkedRepoImport: true,
+        isRepoImported: (action as IIsRepoImprtedSuccessAction).payload
+      };
+    case "IS_REPOSITORY_IMPORTED_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        checkedRepoImport: true,
+        error: (action as IIsRepoImprtedFailureAction).meta
+      };
     case "STOP_IMPORT":
       return {
         ...state,

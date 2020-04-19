@@ -14,27 +14,34 @@ const HighlightCode: FunctionComponent<IHighlightCodeProps> = memo(
     if (!code) return null;
 
     const { codeString, addedLineNumbers, removedLineNumbers } = useMemo(() => {
-      const rawPatch: string[] = code.split("\n");
-      const codeString: string[] = [];
-      const addedLineNumbers: number[] = [];
-      const removedLineNumbers: number[] = [];
+      if (useDiff) {
+        const rawPatch: string[] = code.split("\n");
+        const codeString: string[] = [];
+        const addedLineNumbers: number[] = [];
+        const removedLineNumbers: number[] = [];
 
-      // skip the first line, in rawPatch, first line is like `@@ -0,0 +1,2 @@`
-      for (let i = 1; i < rawPatch.length; i++) {
-        const rawLine = rawPatch[i];
-        if (rawLine[0] === "+") {
-          addedLineNumbers.push(i);
-        } else if (rawLine[0] === "-") {
-          removedLineNumbers.push(i);
+        // skip the first line, in rawPatch, first line is like `@@ -0,0 +1,2 @@`
+        for (let i = 1; i < rawPatch.length; i++) {
+          const rawLine = rawPatch[i];
+          if (rawLine[0] === "+") {
+            addedLineNumbers.push(i);
+          } else if (rawLine[0] === "-") {
+            removedLineNumbers.push(i);
+          }
+          codeString.push(rawLine.substr(1));
         }
-        codeString.push(rawLine.substr(1));
-      }
-      return {
-        codeString: codeString.join("\n"),
-        addedLineNumbers,
-        removedLineNumbers
-      };
-    }, [code]);
+        return {
+          codeString: codeString.join("\n"),
+          addedLineNumbers,
+          removedLineNumbers
+        };
+      } else
+        return {
+          codeString: code,
+          addedLineNumbers: [],
+          removedLineNumbers: []
+        };
+    }, [code, useDiff]);
 
     const lineProps = useMemo(() => {
       if (useDiff) {

@@ -29,6 +29,31 @@ import {
 
 export const stopImport = (): IStopImportAction => ({ type: "STOP_IMPORT" });
 
+export const isRepoImported = (
+  repoName: string
+): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+  dispatch({ type: "IS_REPOSITORY_IMPORTED" });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1300));
+    const res = await fetch(
+      `${getServerUrl()}/api/repository/if_imported?repoName=${repoName}`
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: "IS_REPOSITORY_IMPORTED_SUCCESS",
+        payload: res.payload
+      });
+    } else {
+      dispatch({ type: "IS_REPOSITORY_IMPORTED_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "IS_REPOSITORY_IMPORTED_FAILURE" });
+  }
+};
+
 export const sendImportedRepository = (
   importedRepo: IImportedRepository
 ): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {

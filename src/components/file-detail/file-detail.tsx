@@ -63,7 +63,12 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
             paragraph={{ rows: 5 }}
           />
         );
-      } else if (!loading && fileNode && traceLinks) {
+      } else if (
+        !loading &&
+        fileNode &&
+        traceLinks &&
+        traceLinks.length !== 0
+      ) {
         return traceLinks.map(link => (
           <SimpleTraceLinkCard
             key={link.id}
@@ -84,7 +89,7 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
           <Divider />
           <Typography.Title level={3}>源代碼</Typography.Title>
           {!!fileNode ? (
-            <HighlightCode code={fileContent} language={""} />
+            <HighlightCode code={fileContent} language={"Java"} />
           ) : (
             <Empty />
           )}

@@ -28,6 +28,22 @@ export const SEND_IMPORTED_REPOSITORY_FAILURE =
 
 export const STOP_IMPORT = "STOP_IMPORT";
 
+export const IS_REPO_IMPORTED = "IS_REPOSITORY_IMPORTED";
+export const IS_REPO_IMPORTED_SUCCESS = "IS_REPOSITORY_IMPORTED_SUCCESS";
+export const IS_REPO_IMPORTED_FAILURE = "IS_REPOSITORY_IMPORTED_FAILURE";
+
+export interface IIsRepoImportedAction {
+  type: typeof IS_REPO_IMPORTED;
+}
+export interface IIsRepoImprtedSuccessAction {
+  type: typeof IS_REPO_IMPORTED_SUCCESS;
+  payload: boolean;
+}
+export interface IIsRepoImprtedFailureAction {
+  type: typeof IS_REPO_IMPORTED_FAILURE;
+  meta?: string;
+}
+
 export interface IStopImportAction {
   type: typeof STOP_IMPORT;
 }
@@ -56,6 +72,9 @@ export interface IImportRepositoryState {
   importedRepository?: IImportedRepository;
   importStarted: boolean;
   importDone: boolean;
+
+  isRepoImported: boolean;
+  checkedRepoImport: boolean;
 
   error?: boolean | string;
   loading: boolean;
@@ -112,7 +131,10 @@ export type ImportRepositoryAcitons =
   | ISendImportedRepositoryAction
   | ISendImportedRepositorSuccessAction
   | ISendImportedRepositoryFailureAction
-  | IStopImportAction;
+  | IStopImportAction
+  | IIsRepoImportedAction
+  | IIsRepoImprtedSuccessAction
+  | IIsRepoImprtedFailureAction;
 
 export type ImportRepositoryActionTypes =
   | typeof START_IMPORT_REPOSITORY
@@ -126,4 +148,7 @@ export type ImportRepositoryActionTypes =
   | typeof SEND_IMPORTED_REPOSITORY
   | typeof SEND_IMPORTED_REPOSITORY_SUCCESS
   | typeof SEND_IMPORTED_REPOSITORY_FAILURE
-  | typeof STOP_IMPORT;
+  | typeof STOP_IMPORT
+  | typeof IS_REPO_IMPORTED
+  | typeof IS_REPO_IMPORTED_SUCCESS
+  | typeof IS_REPO_IMPORTED_FAILURE;

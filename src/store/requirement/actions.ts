@@ -107,8 +107,15 @@ export const fetchRepoRequirement = (
 ) => {
   dispatch({ type: FETCH_REPO_REQUIREMENT });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    dispatch({ type: FETCH_REPO_REQUIREEMENT_SUCCESS, payload: requirement });
+    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const res = await fetch(
+      `${getServerUrl()}/api/requirement?repoName=${repoName}`
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: FETCH_REPO_REQUIREEMENT_SUCCESS, payload: res.payload });
+    } else {
+      dispatch({ type: "FETCH_REPO_REQUIREMENT_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
