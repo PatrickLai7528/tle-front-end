@@ -1,7 +1,8 @@
 import { Avatar, Col, PageHeader, Row, Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect } from "react";
+import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { RouteComponentProps } from "react-router-dom";
 import { ConnectedRecentRepoList } from "../../components/recent-repo-list";
 import { ConnectedUserActivity } from "../../components/user-activity";
 import { RouteConstants } from "../../routes/constants";
@@ -20,7 +21,7 @@ export interface IDispatchProps {
   fetchGHProfile: (ghToken: string) => void;
 }
 
-export interface IOwnProps {}
+export interface IOwnProps extends RouteComponentProps {}
 
 export interface IWorkplaceProps
   extends IStateProps,
@@ -52,6 +53,11 @@ const useStyles = createUseStyles({
   },
   homeContent: {
     padding: "16px"
+  },
+  result: {
+    background: "#fff",
+    height: "100vh",
+    width: "100%"
   }
 });
 
@@ -78,6 +84,7 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
   (props: IWorkplaceProps) => {
     const { t } = useTranslation();
     const {
+      loading,
       userAvatarUrl,
       userName,
       userProfile,
@@ -113,30 +120,22 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
       }
     ];
 
-    return (
-      <>
-        <PageHeader
-          breadcrumb={{ routes }}
-          ghost={false}
-          title={t("workplace")}
-        >
-          <div className={styles.pageHeaderContent}>
-            {userAvatarUrl && userName && userProfile ? (
-              <>
-                <Avatar src={userAvatarUrl} size={64} />
-                <Typography className={styles.contentTypography}>
-                  <Typography.Title
-                    className={styles.contentTitle}
-                    level={3}
-                  >{`您好，${userName}`}</Typography.Title>
-                  <Typography.Paragraph type={"secondary"}>
-                    {userProfile}
-                  </Typography.Paragraph>
-                </Typography>
-              </>
-            ) : (
-              <Skeleton avatar={true} title={false} paragraph={{ rows: 5 }} />
-            )}
+    const pageHeaderContent = useMemo(() => {
+      if (loading) {
+        return <Skeleton avatar={true} title={false} paragraph={{ rows: 5 }} />;
+      } else if (!loading && userAvatarUrl && userName && userProfile) {
+        return (
+          <>
+            <Avatar src={userAvatarUrl} size={64} />
+            <Typography className={styles.contentTypography}>
+              <Typography.Title
+                className={styles.contentTitle}
+                level={3}
+              >{`您好，${userName}`}</Typography.Title>
+              <Typography.Paragraph type={"secondary"}>
+                {userProfile}
+              </Typography.Paragraph>
+            </Typography>
             <div className={styles.statisticArea}>
               <TracingStatistic
                 repository={123}
@@ -144,7 +143,21 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
                 traceLink={165}
               />
             </div>
-          </div>
+          </>
+        );
+      } else {
+        return null;
+      }
+    }, [loading, userAvatarUrl, userName, userProfile]);
+
+    return (
+      <>
+        <PageHeader
+          breadcrumb={{ routes }}
+          ghost={false}
+          title={t("workplace")}
+        >
+          <div className={styles.pageHeaderContent}>{pageHeaderContent}</div>
         </PageHeader>
         <Row className={styles.homeContent} gutter={[16, 16]}>
           <Col lg={18} md={24}>
@@ -159,11 +172,11 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
             <Row style={{ width: "100%" }}>
               <Col span={24}>
                 <QuickAction actions={actionShortCuts} />
-                {/* <RepoTracingChart /> */}
               </Col>
             </Row>
           </Col>
         </Row>
+        )
       </>
     );
   }

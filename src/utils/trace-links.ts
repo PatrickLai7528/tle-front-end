@@ -45,8 +45,6 @@ export const classifyTraceLinkByFile = (
           ...link
         });
       }
-    } else {
-      console.log(implement);
     }
   }
   return !!Object.keys(res).length

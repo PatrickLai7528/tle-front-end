@@ -6,18 +6,23 @@ import { AppThunk } from "./../store";
 import {
   AuthActions,
   AuthActionTypes,
+  FETCH_GH_PROFILE,
   FETCH_GH_PROFILE_FAILURE,
   FETCH_GH_PROFILE_SUCCESS,
   ILogInData,
   IRegistryData,
   SEND_GITHUB_LOG_IN,
-  TOGGLE_AUTH_MODAL,
-  FETCH_GH_PROFILE
+  TOGGLE_AUTH_MODAL
 } from "./types";
 
 export const toggleAuthModal = (): AuthActions => {
   return { type: TOGGLE_AUTH_MODAL };
 };
+
+export const loggedIn = (token: string, ghToken: string) => ({
+  type: "LOGGED_IN",
+  payload: { token, ghToken }
+});
 
 export const fetchGHProfile = (
   gitHubAccessToken: string
@@ -53,10 +58,14 @@ export const sendGitHubLogIn = (
   dispatch({ type: SEND_GITHUB_LOG_IN });
   try {
     const res = await fetch(
-      `${getServerUrl()}/api/auth/access_token?code=${code}`
+      `${getServerUrl()}/api/auth/access_token?code=${code}`,
+      { credentials: "include" }
     ).then(res => res.json());
     const { success, meta, payload: accessToken } = res;
     if (success) {
+      if (accessToken) {
+        localStorage.setItem("tle_app_gh_token", accessToken);
+      }
       dispatch({ type: "SEND_GITHUB_LOG_IN_SUCCESS", payload: accessToken });
     } else {
       dispatch({ type: "SEND_GITHUB_LOG_IN_FAILURE", meta });
@@ -77,8 +86,6 @@ export const sendLogIn = (
 > => async dispatch => {
   dispatch({ type: "SEND_LOG_IN" });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1500));
-    // const token = "hahaha hahahaha fake token";
     const res = await fetch(`${getServerUrl()}/api/auth/login`, {
       body: JSON.stringify({
         email: data.email,
@@ -91,9 +98,13 @@ export const sendLogIn = (
       method: "POST"
     }).then(res => res.json());
     if (res && res.success) {
+      const { token, githubId } = res.payload || {};
+      if (token) {
+        localStorage.setItem("tle_app_token", token);
+      }
       dispatch({
         type: "SEND_LOG_IN_SUCCESS",
-        payload: { token: res.payload, email: data.email }
+        payload: { token, githubId }
       });
       return true;
     } else {

@@ -1,19 +1,17 @@
-import React, { FunctionComponent, memo, ChangeEvent } from "react";
-import { Form, Input, Button, Checkbox } from "antd";
-import { useTranslation } from "react-i18next";
-import { CheckboxChangeEvent } from "antd/lib/checkbox";
-import { ILogInData } from "../../store/auth/types";
 import { GithubOutlined } from "@ant-design/icons";
-import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
+import { Button, Checkbox, Form, Input } from "antd";
+import { CheckboxChangeEvent } from "antd/lib/checkbox";
+import React, { ChangeEvent, FunctionComponent, memo } from "react";
+import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { getGitHubLogInUrl } from "../../configs/get-url";
+import { ILogInData } from "../../store/auth/types";
 
 export interface ILogInFormProps {
   loading: boolean;
   onFinish: (data: ILogInData, remember: boolean) => void;
   onFinishFailed: (error: any) => void;
 }
-
-const href = `${gitHubAuthConfigs.authorize_uri}?client_id=${gitHubAuthConfigs.client_id}&redirect_uri=${gitHubAuthConfigs.redirect_uri}`;
 
 const useStyles = createUseStyles({
   formItem: {
@@ -105,7 +103,11 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
         </Form.Item>
         <div className={styles.otherLogInArea}>
           <span>{`${t("other login")}:`}</span>
-          <Button icon={<GithubOutlined />} type={"link"} href={href}></Button>
+          <Button
+            icon={<GithubOutlined />}
+            type={"link"}
+            href={getGitHubLogInUrl()}
+          ></Button>
         </div>
       </Form>
     );

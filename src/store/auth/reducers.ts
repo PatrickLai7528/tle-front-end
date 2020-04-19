@@ -1,7 +1,12 @@
 import {
   AuthActions,
+  FETCH_GH_PROFILE,
+  FETCH_GH_PROFILE_FAILURE,
+  FETCH_GH_PROFILE_SUCCESS,
   IAuthState,
+  IFetchGHProfileSuccessAction,
   ISendGitHubLogInSuccessAction,
+  ISendLogInFailureAction,
   ISendLogInSuccessAction,
   SEND_GITHUB_LOG_IN,
   SEND_GITHUB_LOG_IN_FAILURE,
@@ -12,15 +17,10 @@ import {
   SEND_REGISTRY,
   SEND_REGISTRY_FAILRE,
   SEND_REGISTRY_SUCCESS,
-  TOGGLE_AUTH_MODAL,
-  FETCH_GH_PROFILE,
-  FETCH_GH_PROFILE_SUCCESS,
-  FETCH_GH_PROFILE_FAILURE,
-  IFetchGHProfileSuccessAction,
-  ISendLogInFailureAction
+  TOGGLE_AUTH_MODAL
 } from "./types";
 
-const initalAuthState: IAuthState = {
+export const initalAuthState: IAuthState = {
   loggedIn: false,
   authModalVisible: false
 };
@@ -64,8 +64,8 @@ export const authReducer = (
         error: false,
         loading: false,
         loggedIn: true,
-        email: (action as ISendLogInSuccessAction).payload.email,
-        token: (action as ISendLogInSuccessAction).payload.token
+        token: (action as ISendLogInSuccessAction).payload.token,
+        githubId: (action as ISendLogInSuccessAction).payload.githubId
       };
     case SEND_LOG_IN_FAILURE:
       return {
