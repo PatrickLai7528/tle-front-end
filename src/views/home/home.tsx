@@ -56,11 +56,7 @@ const useStyles = createUseStyles({
 });
 
 const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
-  const {
-    toggle,
-    authModalVisible,
-    history: { push }
-  } = props;
+  const { toggle, authModalVisible } = props;
   const { t } = useTranslation();
   const styles = useStyles();
 
@@ -72,7 +68,7 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
         window.location.href = getGitHubLogInUrl();
       }
     };
-  }, [toggle, push]);
+  }, [toggle]);
 
   const memorizedOnRegistryDone = useMemo(() => {
     return (success: boolean) => {

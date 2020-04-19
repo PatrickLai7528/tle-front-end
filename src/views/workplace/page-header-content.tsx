@@ -1,5 +1,5 @@
 import { Avatar, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGHProfile } from "../../store/auth/actions";

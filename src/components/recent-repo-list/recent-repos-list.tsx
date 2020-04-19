@@ -97,7 +97,7 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
           );
         });
       }
-    }, [repos, loading]);
+    }, [repos, loading, styles]);
 
     return (
       <Card

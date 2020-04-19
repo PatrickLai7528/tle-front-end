@@ -1,14 +1,13 @@
-import { Avatar, Col, PageHeader, Row, Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
+import { Col, PageHeader, Row } from "antd";
+import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
 import { ConnectedRecentRepoList } from "../../components/recent-repo-list";
 import { ConnectedUserActivity } from "../../components/user-activity";
 import { RouteConstants } from "../../routes/constants";
-import QuickAction, { IAction } from "./quick-action";
-import TracingStatistic from "./tracing-statistic";
 import PageHeaderContent from "./page-header-content";
+import QuickAction, { IAction } from "./quick-action";
 
 export interface IStateProps {}
 

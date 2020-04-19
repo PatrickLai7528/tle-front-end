@@ -1,10 +1,11 @@
+import { getServerUrl } from "../../configs/get-url";
 import { traceLinks } from "../../stubs/trace-link";
 import { traceLinkMatrix } from "./../../stubs/trace-link-matrix";
 import {
   ICommit,
+  IFileTreeNode,
   IRequirement,
-  ITraceLinkMatrix,
-  IFileTreeNode
+  ITraceLinkMatrix
 } from "./../../types/index";
 import { AppDispatch, AppThunk } from "./../store";
 import {
@@ -18,10 +19,12 @@ import {
   FETCH_REPO_TRACE_LINK,
   FETCH_REPO_TRACE_LINK_FAILURE,
   FETCH_REPO_TRACE_LINK_SUCCESS,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE,
+  FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
   GENERATE_INIT_TRACE_LINK,
   GENERATE_INIT_TRACE_LINK_SUCCESS,
   GENERATE_INTI_TRACE_LINK_FAILURE,
-  ICommitRelatedTraceLinks,
   IConfirmInitTraceLinkAction,
   IToggleInitTraceLinkEditModalAction,
   IUpdateInitTraceLinkAction,
@@ -31,12 +34,8 @@ import {
   TOGGLE_INIT_TRACE_LINK_EDIT_MODAL,
   TraceLinkActions,
   TraceLinkActionTypes,
-  UPDATE_INIT_TRACE_LINK,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK
+  UPDATE_INIT_TRACE_LINK
 } from "./types";
-import { getServerUrl } from "../../configs/get-url";
 
 export const fetchRequirementRelatedTraceLinks = (
   repoName: string,

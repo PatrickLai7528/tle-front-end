@@ -1,9 +1,9 @@
-import Home, { IStateProps, IDispatchProps, IOwnProps } from "./home";
-import { MapStateToProps, connect, MapDispatchToProps } from "react-redux";
-import { RootState } from "../../store/reducers";
+import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { Dispatch } from "redux";
-import { AuthActions } from "../../store/auth/types";
 import { toggleAuthModal } from "../../store/auth/actions";
+import { AuthActions } from "../../store/auth/types";
+import { RootState } from "../../store/reducers";
+import Home, { IDispatchProps, IOwnProps, IStateProps } from "./home";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,

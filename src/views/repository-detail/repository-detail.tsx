@@ -1,5 +1,4 @@
 import { Drawer, Empty, PageHeader, Skeleton, Spin, Tabs } from "antd";
-import GGEditor, { Flow } from "gg-editor";
 import React, {
   FunctionComponent,
   memo,
@@ -27,29 +26,29 @@ import CommitCard from "./commit/commit-card";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 
-const data = {
-  nodes: [
-    {
-      id: "0",
-      label: "Node",
-      x: 55,
-      y: 55
-    },
-    {
-      id: "1",
-      label: "Node",
-      x: 55,
-      y: 255
-    }
-  ],
-  edges: [
-    {
-      label: "Label",
-      source: "0",
-      target: "1"
-    }
-  ]
-};
+// const data = {
+// 	nodes: [
+// 		{
+// 			id: "0",
+// 			label: "Node",
+// 			x: 55,
+// 			y: 55,
+// 		},
+// 		{
+// 			id: "1",
+// 			label: "Node",
+// 			x: 55,
+// 			y: 255,
+// 		},
+// 	],
+// 	edges: [
+// 		{
+// 			label: "Label",
+// 			source: "0",
+// 			target: "1",
+// 		},
+// 	],
+// };
 export interface IStateProps {
   repo?: IImportedRepository;
   requirement: IRequirement;
