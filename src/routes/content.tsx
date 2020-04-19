@@ -12,7 +12,6 @@ export interface IContentProps {}
 
 const Content: FunctionComponent<IContentProps> = memo(
   (props: IContentProps) => {
-    console.log("here");
     return (
       <>
         <AntdContent

@@ -17,7 +17,8 @@ import {
   SEND_REGISTRY,
   SEND_REGISTRY_FAILRE,
   SEND_REGISTRY_SUCCESS,
-  TOGGLE_AUTH_MODAL
+  TOGGLE_AUTH_MODAL,
+  ILoggedInAction
 } from "./types";
 
 export const initalAuthState: IAuthState = {
@@ -30,6 +31,12 @@ export const authReducer = (
   action: AuthActions
 ): IAuthState => {
   switch (action.type) {
+    case "LOGGED_IN":
+      return {
+        ...state,
+        token: (action as ILoggedInAction).payload.token,
+        gitHubAccessToken: (action as ILoggedInAction).payload.ghToken
+      };
     case FETCH_GH_PROFILE:
       return {
         ...state,
