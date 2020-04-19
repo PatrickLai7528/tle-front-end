@@ -38,8 +38,6 @@ const PageHeaderContent: FunctionComponent<IPageHeaderContentProps> = (
     state => state.authReducer.gitHubAccessToken
   );
 
-  console.log(ghToken);
-
   useEffect(() => {
     console.log("in use effect");
     if (ghToken) dispatch(fetchGHProfile(ghToken));

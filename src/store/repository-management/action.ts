@@ -18,7 +18,7 @@ export const fetchRecentRepository = (): AppThunk<
 > => async dispatch => {
   dispatch({ type: FETCH_RECENT_REPOSITORY });
   try {
-    const res = await fetch(`${getServerUrl()}/api/reposiory/recent`, {
+    const res = await fetch(`${getServerUrl()}/api/repository/recent`, {
       credentials: "include"
     }).then(res => res.json());
     if (res && res.success) {
@@ -44,7 +44,7 @@ export const fetchImportedRepositoryDetail = (
   try {
     // await new Promise(resolve => setTimeout(resolve, 1000));
     const res = await fetch(
-      `${getServerUrl()}/api/repository/${repoId}`
+      `${getServerUrl()}/api/repository/id/${repoId}`
     ).then(res => res.json());
     if (res && res.success) {
       dispatch({

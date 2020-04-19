@@ -82,7 +82,8 @@ const useStyles = createUseStyles({
   },
   content: {
     padding: "16px",
-    background: "#fff"
+    background: "#fff",
+    margin: { left: "3rem", right: "3rem" }
   },
   contentCardWrapper: {}
 });
@@ -275,60 +276,66 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
-          <Tabs.TabPane tab={t("commit")} key="1">
-            {!!repo ? (
-              <CommitCard
-                commits={repo.commits}
-                onDetailClick={commit => {
-                  openDrawer("COMMIT");
-                  setSelectedCommit(commit);
-                }}
-              />
-            ) : (
-              <Skeleton />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={t("requirement")} key="2">
-            {!!requirement ? (
-              <RequirementCard
-                loading={deleteRequirementLoading}
-                toggleAddRequirementModal={toggleAddRequirementModal}
-                onDeleteClick={description =>
-                  deleteRequirementDescription(requirement, description)
-                }
-                requirement={requirement}
-                onDetailClick={description => {
-                  openDrawer("REQUIREMENT");
-                  setSelectedRequirementDescription(description);
-                }}
-              />
-            ) : (
-              <Skeleton />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab={"文件"} key={"file"}>
-            {repo ? (
-              <RepositoryFiles
-                onFileNodeClick={node => {
-                  if (node && node.type === "FILE") {
-                    setSelectedFile(node);
-                    openDrawer("FILE");
+        <div style={{ width: "100%", background: "#fff" }}>
+          <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
+            <Tabs.TabPane tab={t("commit")} key="1">
+              {!!repo ? (
+                <CommitCard
+                  commits={repo.commits}
+                  onDetailClick={commit => {
+                    openDrawer("COMMIT");
+                    setSelectedCommit(commit);
+                  }}
+                />
+              ) : (
+                <Skeleton />
+              )}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={t("requirement")} key="2">
+              {!!requirement ? (
+                <RequirementCard
+                  loading={deleteRequirementLoading}
+                  toggleAddRequirementModal={toggleAddRequirementModal}
+                  onDeleteClick={description =>
+                    deleteRequirementDescription(requirement, description)
                   }
-                }}
-                shaFileContentMap={repo.shaFileContentMap}
-                treeData={repo.trees}
-              />
-            ) : (
-              <Skeleton avatar={false} title={false} paragraph={{ rows: 5 }} />
-            )}
-          </Tabs.TabPane>
-          <Tabs.TabPane tab="圖" key="3">
+                  requirement={requirement}
+                  onDetailClick={description => {
+                    openDrawer("REQUIREMENT");
+                    setSelectedRequirementDescription(description);
+                  }}
+                />
+              ) : (
+                <Skeleton />
+              )}
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={"文件"} key={"file"}>
+              {repo ? (
+                <RepositoryFiles
+                  onFileNodeClick={node => {
+                    if (node && node.type === "FILE") {
+                      setSelectedFile(node);
+                      openDrawer("FILE");
+                    }
+                  }}
+                  shaFileContentMap={repo.shaFileContentMap}
+                  treeData={repo.trees}
+                />
+              ) : (
+                <Skeleton
+                  avatar={false}
+                  title={false}
+                  paragraph={{ rows: 5 }}
+                />
+              )}
+            </Tabs.TabPane>
+            {/* <Tabs.TabPane tab="圖" key="3">
             <GGEditor>
               <Flow style={{ width: 500, height: 500 }} data={data} />
             </GGEditor>
-          </Tabs.TabPane>
-        </Tabs>
+          </Tabs.TabPane> */}
+          </Tabs>
+        </div>
       </Spin>
     );
   }

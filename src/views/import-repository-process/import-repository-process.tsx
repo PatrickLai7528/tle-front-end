@@ -165,7 +165,8 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       startImport(repositoryRes);
     }, [startImport, repositoryRes]);
 
-    const confirmImportButtonDisable = !initTraceLinkConfirmed || !importDone;
+    const confirmImportButtonDisable =
+      !initTraceLinkConfirmed || !importDone || !initTraceLinkMatrix;
 
     const requirementLinkMap = useMemo(
       () => classifyTraceLinksByRequirement(initTraceLinkMatrix?.links || []),

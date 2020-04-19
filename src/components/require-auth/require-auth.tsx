@@ -43,13 +43,15 @@ const RequireAuth: FunctionComponent<IRequireAuthProps> = (
   const tokenFromLocalStorage = localStorage.getItem("tle_app_token");
   const ghTokenFromLocalStorage = localStorage.getItem("tle_app_gh_token");
 
-  console.log(tokenFromLocalStorage);
-  console.log(ghTokenFromLocalStorage);
+  useEffect(() => {
+    if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
+      logInFromLocalStorage(tokenFromLocalStorage, ghTokenFromLocalStorage);
+    }
+  }, [tokenFromLocalStorage, ghTokenFromLocalStorage]);
 
   if (loggedIn) {
     return <>{isValidElement(children) ? children : null}</>;
   } else if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
-    logInFromLocalStorage(tokenFromLocalStorage, ghTokenFromLocalStorage);
     return <>{isValidElement(children) ? children : null}</>;
   } else {
     pushNotification({
