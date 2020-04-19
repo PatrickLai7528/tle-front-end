@@ -117,7 +117,8 @@ export const traceLinkReducer = (
     case SEND_INIT_TRACE_LINK_SUCCESS:
       return {
         ...state,
-        loading: false
+        loading: false,
+        initTraceLinkMartix: undefined
       };
     case SEND_INIT_TRACE_LINK_FAILURE:
       return {
@@ -148,7 +149,8 @@ export const traceLinkReducer = (
     case GENERATE_INIT_TRACE_LINK:
       return {
         ...state,
-        initTraceLinkLoading: true
+        initTraceLinkLoading: true,
+        initTraceLinkConfirmed: false
       };
     case GENERATE_INIT_TRACE_LINK_SUCCESS:
       return {

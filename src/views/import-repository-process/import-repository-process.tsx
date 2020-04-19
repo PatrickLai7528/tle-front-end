@@ -37,7 +37,7 @@ export interface IStateProps {
   repositoryRes: IGHRepositoryRes;
   importProccess?: ImportProccessType;
   importDone: boolean;
-  importedRepostiroy: Partial<IImportedRepository>;
+  importedRepostiroy?: Partial<IImportedRepository>;
   initTraceLinkMatrix?: ITraceLinkMatrix;
   genInitTraceLinkLoading: boolean;
   initTraceLinkConfirmed: boolean;
@@ -156,10 +156,14 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
 
     const [initRequirement, setInitRequirement] = useState<string>("");
 
+    //  useEffect(() => {
+    //    if (importDone) return;
+    //    else if (currentStep === 0) startImport(repositoryRes);
+    //  }, [importDone, currentStep, startImport, repositoryRes]);
+
     useEffect(() => {
-      if (importDone) return;
-      else if (currentStep === 0) startImport(repositoryRes);
-    }, [importDone, currentStep, startImport, repositoryRes]);
+      startImport(repositoryRes);
+    }, [startImport, repositoryRes]);
 
     const confirmImportButtonDisable = !initTraceLinkConfirmed || !importDone;
 
@@ -178,7 +182,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
           confirmImport(
             importedRepostiroy as IImportedRepository,
             {
-              relatedRepoName: importedRepostiroy.name!,
+              relatedRepoName: importedRepostiroy!.name!,
               descriptions: initRequirement
                 .split(";")
                 .filter(desc => !!desc)
@@ -190,7 +194,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
             },
             {
               ...initTraceLinkMatrix,
-              relatedRepoName: importedRepostiroy.name!
+              relatedRepoName: importedRepostiroy!.name!
             } as ITraceLinkMatrix
           );
         }}
@@ -238,7 +242,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
               onClick={async () => {
                 const requirement: IRequirement = {
                   relatedRepoName:
-                    importedRepostiroy.name || repositoryRes.name,
+                    importedRepostiroy?.name || repositoryRes.name,
                   descriptions: initRequirement
                     .split(";")
                     .filter(desc => !!desc)
@@ -249,7 +253,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                     })
                 };
                 await generateInitTraceLinkMatrix(
-                  importedRepostiroy.trees || [],
+                  importedRepostiroy?.trees || [],
                   requirement
                 );
                 toggleInitTraceLinkModal();
@@ -307,9 +311,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                 onChange={setActiveTabKey as (str: string) => void}
               >
                 <Tabs.TabPane tab={"基本信息"} key={"BASIC_INFO"}>
-                  <BasicInfoDescriptions
-                    repo={importedRepostiroy as IImportedRepository}
-                  />
+                  <BasicInfoDescriptions repo={importedRepostiroy} />
                   {confirmImportButtonDisable ? (
                     <Tooltip title="等待導入或初始化追踪線索">
                       {confirmImportButton}

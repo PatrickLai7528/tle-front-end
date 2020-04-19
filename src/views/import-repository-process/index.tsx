@@ -79,7 +79,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
       postRequirementLoading,
     repositoryRes: repositoryRes,
     importProccess,
-    importedRepostiroy: importedRepository || {},
+    importedRepostiroy: importedRepository,
     importDone: !!importDone,
     genInitTraceLinkLoading: initTraceLinkLoading,
     initTraceLinkMatrix: initTraceLinkMartix,

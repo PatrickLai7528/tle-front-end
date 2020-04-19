@@ -72,7 +72,8 @@ export const importRepositoryReducer = (
         stop: false,
         importProccess: undefined,
         importStarted: true,
-        importDone: false
+        importDone: false,
+        importedRepository: undefined
       };
     case "IMPORT_REPOSITORY_SUCCESS":
       let newState = {
