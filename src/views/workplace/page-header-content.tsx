@@ -39,9 +39,8 @@ const PageHeaderContent: FunctionComponent<IPageHeaderContentProps> = (
   );
 
   useEffect(() => {
-    console.log("in use effect");
     if (ghToken) dispatch(fetchGHProfile(ghToken));
-  }, [ghToken]);
+  }, [ghToken, dispatch]);
 
   const userAvatarUrl = useSelector<RootState, string | undefined>(
     (state: RootState) => state.authReducer.ghProfile?.avatarUrl

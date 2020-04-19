@@ -46,7 +46,7 @@ const RequireAuth: FunctionComponent<IRequireAuthProps> = (
     if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
       logInFromLocalStorage(tokenFromLocalStorage, ghTokenFromLocalStorage);
     }
-  }, [tokenFromLocalStorage, ghTokenFromLocalStorage]);
+  }, [tokenFromLocalStorage, ghTokenFromLocalStorage, logInFromLocalStorage]);
 
   if (loggedIn) {
     return <>{isValidElement(children) ? children : null}</>;

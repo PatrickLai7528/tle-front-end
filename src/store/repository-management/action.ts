@@ -1,6 +1,5 @@
 import { getServerUrl } from "./../../configs/get-url";
 import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
-import { recentRepos } from "./../../stubs/recent-repo";
 import { AppThunk } from "./../store";
 import {
   FETCH_IMPORTED_REPOSITORY_DETAIL,
