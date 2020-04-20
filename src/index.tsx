@@ -8,13 +8,17 @@ import { Routes } from "./routes";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./store";
 import { ConnectedNotificatioQueue } from "./components/notification-queue";
+import { ThemeProvider } from "react-jss";
+import { theme } from "./theme";
 ReactDOM.render(
-  <ReactReduxProvider store={store}>
-    <Router>
-      <ConnectedNotificatioQueue />
-      <Routes />
-    </Router>
-  </ReactReduxProvider>,
+  <ThemeProvider theme={theme}>
+    <ReactReduxProvider store={store}>
+      <Router>
+        <ConnectedNotificatioQueue />
+        <Routes />
+      </Router>
+    </ReactReduxProvider>
+  </ThemeProvider>,
   document.getElementById("root")
 );
 

@@ -10,7 +10,7 @@ import React, {
 import { createUseStyles } from "react-jss";
 import ReactMarkdown from "react-markdown";
 import { IRequirementDescription, ITraceLink } from "../../types";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { EditableTraceLinkArea } from "../editable-trace-link-area";
 
 export interface IStateProps {
   traceLinks: ITraceLink[];
@@ -88,13 +88,9 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
           <Skeleton title={false} avatar={false} paragraph={{ rows: 5 }} />
         );
       } else if (!loading && traceLinks) {
-        return traceLinks.map(link => (
-          <SimpleTraceLinkCard
-            key={link.id}
-            traceLink={link}
-            showRequirement={false}
-          />
-        ));
+        return (
+          <EditableTraceLinkArea repoName={repoName} traceLinks={traceLinks} />
+        );
       }
     }, [traceLinks, loading]);
 

@@ -25,7 +25,7 @@ export interface IImplement {
   id: string;
   type: "METHOD" | "CLASS";
   fullyQualifiedName: string;
-  traced: boolean;
+  traced?: boolean;
 }
 
 export interface ITraceLink {

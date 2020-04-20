@@ -1,8 +1,8 @@
 import { Col, Divider, Empty, Row, Skeleton, Typography } from "antd";
 import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { IFileTreeNode, ITraceLink } from "../../types";
+import { EditableTraceLinkArea } from "../editable-trace-link-area";
 import { HighlightCode } from "../highlight-code";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IStateProps {
   traceLinks: ITraceLink[];
@@ -69,13 +69,9 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
         traceLinks &&
         traceLinks.length !== 0
       ) {
-        return traceLinks.map(link => (
-          <SimpleTraceLinkCard
-            key={link.id}
-            traceLink={link}
-            showImplement={false}
-          />
-        ));
+        return (
+          <EditableTraceLinkArea traceLinks={traceLinks} repoName={repoName} />
+        );
       } else {
         return <Empty />;
       }

@@ -40,7 +40,9 @@ const initialState: ITraceLinkState = {
     removed: { traceLinks: [] }
   },
   fileRelatedTraceLinks: [],
-  requirementRelatedTraceLinks: []
+  requirementRelatedTraceLinks: [],
+
+  sendNewTraceLinkLoading: false
 };
 
 export const traceLinkReducer = (
@@ -48,6 +50,23 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case "NEW_TRACE_LINK":
+      return {
+        ...state,
+        sendNewTraceLinkLoading: true,
+        error: false
+      };
+    case "NEW_TRACE_LINK_SUCCESS":
+      return {
+        ...state,
+        sendNewTraceLinkLoading: false
+      };
+    case "NEW_TRACE_LINK_FAILURE":
+      return {
+        ...state,
+        sendNewTraceLinkLoading: false,
+        error: true
+      };
     case "FETCH_REQUIREMENT_RELATED_TRACE_LINK":
       return {
         ...state,

@@ -5,7 +5,8 @@ import {
   ICommit,
   IFileTreeNode,
   IRequirement,
-  ITraceLinkMatrix
+  ITraceLinkMatrix,
+  ITraceLink
 } from "./../../types/index";
 import { AppDispatch, AppThunk } from "./../store";
 import {
@@ -36,6 +37,22 @@ import {
   TraceLinkActionTypes,
   UPDATE_INIT_TRACE_LINK
 } from "./types";
+
+export const newTraceLink = (
+  repoName: string,
+  traceLink: ITraceLink
+): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+  dispatch({ type: "NEW_TRACE_LINK" });
+  try {
+    await new Promise(resolve => setTimeout(resolve, 1400));
+    dispatch({ type: "NEW_TRACE_LINK_SUCCESS" });
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "NEW_TRACE_LINK_FAILURE" });
+  }
+};
 
 export const fetchRequirementRelatedTraceLinks = (
   repoName: string,
