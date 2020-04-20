@@ -1,4 +1,4 @@
-import { Button, Layout, Modal } from "antd";
+import { Button, Layout, Modal, Row, Col } from "antd";
 import React, { FunctionComponent, memo, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
@@ -57,7 +57,6 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
     return (success: boolean) => {
       if (success) {
         toggle();
-        // push(RouteConstants.WORKPLACE);
         window.location.href = getGitHubLogInUrl();
       }
     };
@@ -85,21 +84,25 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
       </Modal>
       <Layout>
         <Layout.Content className={styles.banner}>
-          <div className={styles.header}>
-            <div className={styles.title}>Trace Link Evolver</div>
-            <div className={styles.subTitle}>
-              {t(
-                "software traceability maintenance tool based on code refactoring detection and information retrieval technology"
-              )}
-            </div>
-            <Button
-              className={styles.startButton}
-              type={"primary"}
-              onClick={toggle}
-            >
-              {t("start using")}
-            </Button>
-          </div>
+          <Row className={styles.header}>
+            <Col span={24}>
+              <div className={styles.header}>
+                <div className={styles.title}>Trace Link Evolver</div>
+                <div className={styles.subTitle}>
+                  {t(
+                    "software traceability maintenance tool based on code refactoring detection and information retrieval technology"
+                  )}
+                </div>
+                <Button
+                  className={styles.startButton}
+                  type={"primary"}
+                  onClick={toggle}
+                >
+                  {t("start using")}
+                </Button>
+              </div>
+            </Col>
+          </Row>
         </Layout.Content>
         <SectionLayout
           title={t("product and service")}

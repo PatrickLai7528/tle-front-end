@@ -4,13 +4,14 @@ import { TopNavBar } from "../components/nav-bar";
 import { Layout as AntdLayout } from "antd";
 import { createUseStyles } from "react-jss";
 import { RouteConstants } from "./constants";
+import { CustomTheme } from "../theme";
 
 export interface ILayoutProps {
   requireAuth: boolean;
   content: ReactNode;
 }
 
-const useStyles = createUseStyles({
+const useStyles = createUseStyles<CustomTheme>(theme => ({
   outerLayout: {
     minHeight: "100vmin",
     width: "100%",
@@ -25,14 +26,15 @@ const useStyles = createUseStyles({
   header: {
     position: "fixed",
     zIndex: 10,
-    width: "100%"
+    width: "100%",
+    background: theme.primaryColor
   },
   footer: {
     background: "#001529",
     textAlign: "center",
     color: "#999"
   }
-});
+}));
 
 const Layout: FunctionComponent<ILayoutProps> = memo((props: ILayoutProps) => {
   const { requireAuth, content } = props;
