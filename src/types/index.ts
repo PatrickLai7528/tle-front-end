@@ -1,19 +1,4 @@
 import { ProgramLanguage } from "./../utils/language-color";
-import * as stubs from "./../stubs";
-
-// export type GitHubAPIRepositoryResponse = typeof stubs.repositories[0];
-
-// export type GitHubAPIRepositoriesResponse = typeof stubs.repositories;
-
-// export type GitHubAPITreeResponse = typeof stubs.tree;
-
-// export type GitHubAPIBlobResponse = typeof stubs.blob;
-
-// export type GitHubAPIBranchesResponse = typeof stubs.branches;
-
-// export type GitHubAPICommitsResponse = typeof stubs.commits;
-
-// export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
 
 export interface IUserActivity {
   avatarUrl: string;
