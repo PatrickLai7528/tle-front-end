@@ -1,9 +1,10 @@
 import React, { FunctionComponent, memo } from "react";
-import { Descriptions } from "antd";
+import { Descriptions, Tooltip } from "antd";
 import { IImportedRepository } from "../../types";
 import { LanguageBadge } from "../../components/language-badge";
 import { RepositoryDescription } from "../../components/repository-description";
 import moment from "moment";
+import { LinkOutlined } from "@ant-design/icons";
 
 export interface IRepoDetailDescriptionProps {
   repo: IImportedRepository;
@@ -26,6 +27,14 @@ const RepoDetailDescription: FunctionComponent<IRepoDetailDescriptionProps> = me
         </Descriptions.Item>
         <Descriptions.Item label="描述">
           <RepositoryDescription description={repo.description} />
+        </Descriptions.Item>
+        <Descriptions.Item label="GitHub">
+          <Tooltip title="View in GitHub">
+            <a href={`https://github.com/${repo.ownerId}/${repo.name}`}>
+              {"前往"}
+              <LinkOutlined />
+            </a>
+          </Tooltip>
         </Descriptions.Item>
       </Descriptions>
     );
