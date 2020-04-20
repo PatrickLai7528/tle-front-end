@@ -1,8 +1,17 @@
-import { AppstoreOutlined, DashboardOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  DashboardOutlined,
+  HomeOutlined
+} from "@ant-design/icons";
 import React from "react";
 import { RouteConstants } from "./../routes/constants";
 
 export const sideMenuConfigs = [
+  {
+    label: "home",
+    route: RouteConstants.HOME,
+    icon: <HomeOutlined />
+  },
   {
     label: "workplace",
     route: RouteConstants.WORKPLACE,

@@ -47,5 +47,6 @@ export const zhtw = {
   "recent repository": "常用倉庫",
   notification: "通知",
   "search repository placeholder": "Search for repository",
-  search: "搜索"
+  search: "搜索",
+  home: "首頁"
 };
