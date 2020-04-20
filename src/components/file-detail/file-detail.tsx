@@ -70,7 +70,11 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
         traceLinks.length !== 0
       ) {
         return (
-          <EditableTraceLinkArea traceLinks={traceLinks} repoName={repoName} />
+          <EditableTraceLinkArea
+            type="IMPLEMENT"
+            traceLinks={traceLinks}
+            repoName={repoName}
+          />
         );
       } else {
         return <Empty />;

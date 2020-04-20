@@ -89,7 +89,11 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
         );
       } else if (!loading && traceLinks) {
         return (
-          <EditableTraceLinkArea repoName={repoName} traceLinks={traceLinks} />
+          <EditableTraceLinkArea
+            type="REQUIREMENT"
+            repoName={repoName}
+            traceLinks={traceLinks}
+          />
         );
       }
     }, [traceLinks, loading]);

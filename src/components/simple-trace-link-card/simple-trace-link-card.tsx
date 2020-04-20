@@ -112,11 +112,15 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
           description={
             <div className={styles.traceLinkDescription}>
               {showRequirement && (
-                <Typography>
+                <Typography style={{ width: "100%" }}>
                   <Typography.Text>需求描述</Typography.Text>
-                  <Typography.Paragraph strong>
-                    {traceLink.requirementDescription.text}
-                  </Typography.Paragraph>
+                  {input ? (
+                    input
+                  ) : (
+                    <Typography.Paragraph strong>
+                      {traceLink.requirementDescription.text}
+                    </Typography.Paragraph>
+                  )}
                 </Typography>
               )}
               {showImplement && showRequirement && <Divider />}

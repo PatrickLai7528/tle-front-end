@@ -42,7 +42,7 @@ export interface ITraceLinkMatrix {
 
 export interface IRequirementDescription {
   text: string;
-  traced: boolean;
+  traced?: boolean;
   lastUpdateAt: number;
   // lastUpdateCommit: string; // commit message
   // relatedImplementIds: string[];
