@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { ProgramLanguage } from "../../utils/language-color";
 import { LanguageBadge } from "../language-badge";
+import { RouteConstants } from "../../routes/constants";
 
 export interface IStateProps {
   loading: boolean;
@@ -29,7 +30,6 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
     return (
       <List
         loading={loading}
-        // pagination={paginationConfig}
         dataSource={repositoryList}
         renderItem={(item: IGHRepositoryRes) => {
           const { language, html_url: htmlUrl, id } = item;
@@ -37,13 +37,9 @@ const IGitHubRepositoryList: FunctionComponent<IGitHubRepositoryListProps> = mem
             <List.Item
               key={item.name}
               actions={[
-                // <Button
-                // 	style={{ padding: "8px" }}
-                // 	type={"link"}
-                // 	onClick={() => onImportClick(item)}>
-                // 	{t("import")}
-                // </Button>
-                <Link to={`/authed/import_process/${id}`}>{t("import")}</Link>
+                <Link to={RouteConstants.IMPORT_PROCESS(id.toString())}>
+                  {t("import")}
+                </Link>
               ]}
             >
               <List.Item.Meta

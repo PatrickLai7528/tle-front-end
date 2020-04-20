@@ -14,10 +14,10 @@ const mapStateToProps: MapStateToProps<
     searchReducer: { searchResult, loading: searchLoading }
   } = state;
   const {
-    repositoryManagementReducer: { rawRepositories, loading: repoListLoading }
+    repositoryManagementReducer: { rawRepositories, fetchGHRepoLoading }
   } = state;
   return {
-    loading: !!searchLoading || !!repoListLoading,
+    loading: searchLoading || fetchGHRepoLoading,
     repositoryList:
       searchResult && searchResult.length !== 0 ? searchResult : rawRepositories
   };
