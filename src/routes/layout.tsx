@@ -26,6 +26,11 @@ const useStyles = createUseStyles({
     position: "fixed",
     zIndex: 10,
     width: "100%"
+  },
+  footer: {
+    background: "#001529",
+    textAlign: "center",
+    color: "#999"
   }
 });
 
@@ -46,6 +51,9 @@ const Layout: FunctionComponent<ILayoutProps> = memo((props: ILayoutProps) => {
         <TopNavBar />
       </AntdLayout.Header>
       <AntdLayout className={styles.innerLayout}>{content}</AntdLayout>
+      <AntdLayout.Footer className={styles.footer}>
+        TLE ©2020 Created by NJU
+      </AntdLayout.Footer>
     </AntdLayout>
   );
 

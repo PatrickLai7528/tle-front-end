@@ -22,8 +22,6 @@ export interface IOwnProps extends RouteComponentProps {}
 
 export interface INewHomeProps extends IStateProps, IDispatchProps, IOwnProps {}
 
-const { Footer } = Layout;
-
 const useStyles = createUseStyles({
   banner: {
     height: "100vh",
@@ -47,11 +45,6 @@ const useStyles = createUseStyles({
   },
   startButton: {
     marginTop: "10px"
-  },
-  footer: {
-    background: "#001529",
-    textAlign: "center",
-    color: "#999"
   }
 });
 
@@ -113,7 +106,6 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
           content={<ProductAndService />}
         />
         <SectionLayout title={t("using steps")} content={<UsingSteps />} />
-        <Footer className={styles.footer}>TLE ©2020 Created by NJU</Footer>
       </Layout>
     </>
   );
