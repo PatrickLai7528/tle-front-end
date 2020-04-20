@@ -275,7 +275,13 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <div style={{ width: "100%", background: "#fff" }}>
+        <div
+          style={{
+            width: "100%",
+            background: "#fff",
+            minHeight: "80vh"
+          }}
+        >
           <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
             <Tabs.TabPane tab={t("commit")} key="1">
               {!!repo ? (
