@@ -56,7 +56,7 @@ const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
                 return <RepositoryCard repo={repo} key={repo.name} />;
               })
             ) : (
-              <Empty />
+              <Empty className={styles.empty} />
             )}
           </div>
         </div>
