@@ -6,17 +6,12 @@ import { AppThunk } from "./../store";
 import {
   AuthActions,
   AuthActionTypes,
-  FETCH_GH_PROFILE,
-  FETCH_GH_PROFILE_FAILURE,
-  FETCH_GH_PROFILE_SUCCESS,
   ILogInData,
-  IRegistryData,
-  SEND_GITHUB_LOG_IN,
-  TOGGLE_AUTH_MODAL
+  IRegistryData
 } from "./types";
 
 export const toggleAuthModal = (): AuthActions => {
-  return { type: TOGGLE_AUTH_MODAL };
+  return { type: "TOGGLE_AUTH_MODAL" };
 };
 
 export const loggedIn = (token: string, ghToken: string) => ({
@@ -27,7 +22,7 @@ export const loggedIn = (token: string, ghToken: string) => ({
 export const fetchGHProfile = (
   gitHubAccessToken: string
 ): AppThunk<void, AuthActionTypes> => async dispatch => {
-  dispatch({ type: FETCH_GH_PROFILE });
+  dispatch({ type: "FETCH_GH_PROFILE" });
   try {
     const res = await fetch(`https://api.github.com/user`, {
       headers: {
@@ -43,19 +38,19 @@ export const fetchGHProfile = (
       },
       {}
     ) as IGHUserProfile;
-    dispatch({ type: FETCH_GH_PROFILE_SUCCESS, payload: ghProfile });
+    dispatch({ type: "FETCH_GH_PROFILE_SUCCESS", payload: ghProfile });
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
     }
-    dispatch({ type: FETCH_GH_PROFILE_FAILURE });
+    dispatch({ type: "FETCH_GH_PROFILE_FAILURE" });
   }
 };
 
 export const sendGitHubLogIn = (
   code: string
 ): AppThunk<void, AuthActionTypes> => async dispatch => {
-  dispatch({ type: SEND_GITHUB_LOG_IN });
+  dispatch({ type: "SEND_GITHUB_LOG_IN" });
   try {
     const res = await fetch(
       `${getServerUrl()}/api/auth/access_token?code=${code}`,
