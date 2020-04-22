@@ -1,5 +1,5 @@
 import { Button, Layout, Modal, Row, Col } from "antd";
-import React, { FunctionComponent, memo, useMemo } from "react";
+import React, { FunctionComponent, memo, useMemo, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
@@ -52,6 +52,8 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
   const { toggle, authModalVisible } = props;
   const { t } = useTranslation();
   const styles = useStyles();
+
+  useEffect(() => console.log("Home mounted"), []);
 
   const memorizedOnLogInDone = useMemo(() => {
     return (success: boolean) => {

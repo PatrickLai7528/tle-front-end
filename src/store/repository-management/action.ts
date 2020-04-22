@@ -14,11 +14,16 @@ import {
 export const fetchRecentRepository = (): AppThunk<
   void,
   RepositoryManagementActionTypes
-> => async dispatch => {
+> => async (dispatch, getState) => {
   dispatch({ type: FETCH_RECENT_REPOSITORY });
   try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/repository/recent`, {
-      credentials: "include"
+      credentials: "include",
+      headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json());
     if (res && res.success) {
       dispatch({
