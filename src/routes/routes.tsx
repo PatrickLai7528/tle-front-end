@@ -21,7 +21,7 @@ const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
           return (
             <Layout
               requireAuth={false}
-              content={<ConnectedHomeView {...props} />}
+              content={() => <ConnectedHomeView {...props} />}
             />
           );
         }}
@@ -39,8 +39,10 @@ const Routes: FunctionComponent<IRoutesProps> = memo((props: IRoutesProps) => {
       />
       <Route
         path="/authed/*"
-        component={() => {
-          return <Layout requireAuth={true} content={<Content />} />;
+        component={(props: any) => {
+          return (
+            <Layout requireAuth={true} content={() => <Content {...props} />} />
+          );
         }}
       />
     </Switch>

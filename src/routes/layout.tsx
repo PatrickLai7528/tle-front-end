@@ -8,7 +8,7 @@ import { CustomTheme } from "../theme";
 
 export interface ILayoutProps {
   requireAuth: boolean;
-  content: ReactNode;
+  content: () => ReactNode;
 }
 
 const useStyles = createUseStyles<CustomTheme>(theme => ({
@@ -52,7 +52,7 @@ const Layout: FunctionComponent<ILayoutProps> = memo((props: ILayoutProps) => {
       <AntdLayout.Header className={styles.header}>
         <TopNavBar />
       </AntdLayout.Header>
-      <AntdLayout className={styles.innerLayout}>{content}</AntdLayout>
+      <AntdLayout className={styles.innerLayout}>{content()}</AntdLayout>
       <AntdLayout.Footer className={styles.footer}>
         TLE ©2020 Created by NJU
       </AntdLayout.Footer>
