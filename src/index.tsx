@@ -10,6 +10,7 @@ import { store } from "./store";
 import { ConnectedNotificatioQueue } from "./components/notification-queue";
 import { ThemeProvider } from "react-jss";
 import { theme } from "./theme";
+
 ReactDOM.render(
   <ThemeProvider theme={theme}>
     <ReactReduxProvider store={store}>

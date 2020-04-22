@@ -23,7 +23,7 @@ const RepositoryFiles: FunctionComponent<IRepositoryFilesProps> = memo(
   (props: IRepositoryFilesProps) => {
     const { treeData, shaFileContentMap, onFileNodeClick } = props;
     const styles = useStyles();
-
+    console.log(JSON.stringify(treeData));
     return (
       <PropertyCard titleProps={{ text: "文件" }}>
         <div className={styles.fileTreeArea}>

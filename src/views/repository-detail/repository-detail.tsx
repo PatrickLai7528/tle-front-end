@@ -25,30 +25,8 @@ import {
 import CommitCard from "./commit/commit-card";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
+import { TraceLinkGraph } from "../../components/trace-link-graph";
 
-// const data = {
-// 	nodes: [
-// 		{
-// 			id: "0",
-// 			label: "Node",
-// 			x: 55,
-// 			y: 55,
-// 		},
-// 		{
-// 			id: "1",
-// 			label: "Node",
-// 			x: 55,
-// 			y: 255,
-// 		},
-// 	],
-// 	edges: [
-// 		{
-// 			label: "Label",
-// 			source: "0",
-// 			target: "1",
-// 		},
-// 	],
-// };
 export interface IStateProps {
   repo?: IImportedRepository;
   requirement: IRequirement;
@@ -334,11 +312,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 />
               )}
             </Tabs.TabPane>
-            {/* <Tabs.TabPane tab="圖" key="3">
-            <GGEditor>
-              <Flow style={{ width: 500, height: 500 }} data={data} />
-            </GGEditor>
-          </Tabs.TabPane> */}
+            <Tabs.TabPane tab="圖" key="3">
+              <div style={{ width: "100vw", height: "100vh" }}>
+                <TraceLinkGraph />
+              </div>
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </Spin>
