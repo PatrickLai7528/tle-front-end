@@ -43,7 +43,6 @@ const RequireAuth: FunctionComponent<IRequireAuthProps> = (
   const ghTokenFromLocalStorage = localStorage.getItem("tle_app_gh_token");
 
   useEffect(() => {
-    console.log("require auth mounted");
     if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
       logInFromLocalStorage(tokenFromLocalStorage, ghTokenFromLocalStorage);
     }

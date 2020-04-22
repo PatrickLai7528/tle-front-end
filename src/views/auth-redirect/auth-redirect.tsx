@@ -27,7 +27,6 @@ const AuthRedirect: FunctionComponent<IAuthRedirectProps> = memo(
     const code = params.get("code");
 
     const tleAppToken = localStorage.getItem("tle_app_token");
-    console.log(tleAppToken);
     cookies.set("tle_app_token", tleAppToken, { path: "/" });
 
     useEffect(() => {

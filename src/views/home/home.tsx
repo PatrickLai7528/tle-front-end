@@ -53,8 +53,6 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
   const { t } = useTranslation();
   const styles = useStyles();
 
-  useEffect(() => console.log("Home mounted"), []);
-
   const memorizedOnLogInDone = useMemo(() => {
     return (success: boolean) => {
       if (success) {
