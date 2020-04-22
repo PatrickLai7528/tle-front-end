@@ -66,19 +66,19 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
     const initTraceLinkByType = () => {
       if (type === "REQUIREMENT") {
         setNewTraceLink({
-          id: uuidv4(),
+          _id: uuidv4(),
           requirementDescription: traceLinks[0].requirementDescription,
           implement: {
-            id: uuidv4(),
+            _id: uuidv4(),
             fullyQualifiedName: "",
             type: "CLASS"
           }
         });
       } else if (type === "IMPLEMENT") {
         setNewTraceLink({
-          id: uuidv4(),
+          _id: uuidv4(),
           requirementDescription: {
-            id: uuidv4(),
+            _id: uuidv4(),
             text: "",
             lastUpdateAt: Date.now()
           },
@@ -142,7 +142,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
                 </div>
               }
               type="ADDED"
-              key={newTraceLink.id}
+              key={newTraceLink._id}
               traceLink={newTraceLink}
               showRequirement={type !== "REQUIREMENT"}
               showImplement={type !== "IMPLEMENT"}
@@ -152,7 +152,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
         {traceLinks.map(link => (
           <SimpleTraceLinkCard
             showOperation
-            key={link.id}
+            key={link._id}
             traceLink={link}
             showRequirement={type !== "REQUIREMENT"}
             showImplement={type !== "IMPLEMENT"}

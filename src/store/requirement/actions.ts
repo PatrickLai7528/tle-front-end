@@ -25,15 +25,21 @@ import { getServerUrl } from "../../configs/get-url";
 
 export const postRequirement = (
   requirement: IRequirement
-): AppThunk<void, RequirementActionTypes> => async dispatch => {
+): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "POST_REQUIREMENT" });
   try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/requirement`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
+      credentials: "include",
       body: JSON.stringify(requirement)
     }).then(res => res.json());
     if (res && res.success) {
@@ -103,13 +109,23 @@ export const updateRequirement = (
 export const fetchRepoRequirement = (
   repoName: string
 ): AppThunk<void, RequirementActions> => async (
-  dispatch: ThunkDispatch<RootState, any, RequirementActions>
+  dispatch: ThunkDispatch<RootState, any, RequirementActions>,
+  getState
 ) => {
   dispatch({ type: FETCH_REPO_REQUIREMENT });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(
-      `${getServerUrl()}/api/requirement?repoName=${repoName}`
+      `${getServerUrl()}/api/requirement?repoName=${repoName}`,
+      {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     ).then(res => res.json());
     if (res && res.success) {
       dispatch({ type: FETCH_REPO_REQUIREEMENT_SUCCESS, payload: res.payload });
@@ -135,7 +151,7 @@ export const addRequirement = (
 
     //TODO
     let fakeData = requirement.descriptions[0];
-    fakeData = { ...fakeData, text: requirementDesc, id: requirementDesc };
+    fakeData = { ...fakeData, text: requirementDesc, _id: requirementDesc };
 
     dispatch({ type: ADD_REQUIREMENT_SUCCESS, payload: fakeData });
     dispatch(toggleAddRequirementModal());

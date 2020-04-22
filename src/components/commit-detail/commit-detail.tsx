@@ -152,14 +152,14 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
             <>
               {traceLinks.added.traceLinks.map(link => (
                 <SimpleTraceLinkCard
-                  key={link.id}
+                  key={link._id}
                   traceLink={link}
                   type={"ADDED"}
                 />
               ))}
               {traceLinks.removed.traceLinks.map(link => (
                 <SimpleTraceLinkCard
-                  key={link.id}
+                  key={link._id}
                   traceLink={link}
                   type={"REMOVED"}
                 />

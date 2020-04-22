@@ -1,26 +1,28 @@
 import { ProgramLanguage } from "./../utils/language-color";
 
 export interface IUserActivity {
+  _id: string;
   avatarUrl: string;
   title: string;
   description: string;
 }
 
 export interface IImplement {
-  id: string;
+  _id: string;
   type: "METHOD" | "CLASS";
   fullyQualifiedName: string;
   traced?: boolean;
 }
 
 export interface ITraceLink {
-  id: string;
+  _id: string;
   requirementDescription: IRequirementDescription;
   implement: IImplement;
   lastUpdateAt?: number;
 }
 
 export interface ITraceLinkMatrix {
+  _id: string;
   links: ITraceLink[];
   relatedRepoName: string;
 }
@@ -29,12 +31,11 @@ export interface IRequirementDescription {
   text: string;
   traced?: boolean;
   lastUpdateAt: number;
-  // lastUpdateCommit: string; // commit message
-  // relatedImplementIds: string[];
-  id: string;
+  _id: string;
 }
 
 export interface IRequirement {
+  _id: string;
   descriptions: IRequirementDescription[];
   relatedRepoName: string;
 }
@@ -61,7 +62,7 @@ export interface ICommitChanges {
 }
 
 export interface IRecentRepo {
-  id: string;
+  _id: string;
   name: string;
   language: ProgramLanguage;
   lastUpdateBy: string;

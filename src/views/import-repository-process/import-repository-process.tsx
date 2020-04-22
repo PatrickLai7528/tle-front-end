@@ -32,6 +32,7 @@ import { TraceLinkCard } from "./../../components/trace-link-card";
 import BasicInfoDescriptions from "./basic-info-descriptions";
 import { ConnectedEditInitTraceLinkModal } from "../../components/edit-init-trace-link-modal";
 import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
+import { v4 as uuid } from "uuid";
 
 export interface IStateProps {
   repositoryRes: IGHRepositoryRes;
@@ -183,6 +184,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
           confirmImport(
             importedRepostiroy as IImportedRepository,
             {
+              _id: uuid(),
               relatedRepoName: importedRepostiroy!.name!,
               descriptions: initRequirement
                 .split(";")
@@ -242,6 +244,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
               loading={genInitTraceLinkLoading}
               onClick={async () => {
                 const requirement: IRequirement = {
+                  _id: uuid(),
                   relatedRepoName:
                     importedRepostiroy?.name || repositoryRes.name,
                   descriptions: initRequirement

@@ -167,7 +167,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 requirement.descriptions;
               const newDescriptions: IRequirementDescription[] = [];
               for (const oldDesc of oldDescriptions) {
-                if (oldDesc.id === descId) {
+                if (oldDesc._id === descId) {
                   newDescriptions.push({
                     ...oldDesc,
                     text: descriptionText
@@ -215,7 +215,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       if (drawerType === "COMMIT") {
         return `ID: ${selectedCommit?.sha}`;
       } else if (drawerType === "REQUIREMENT") {
-        return `ID: ${selectedRequirementDescription?.id}`;
+        return `ID: ${selectedRequirementDescription?._id}`;
       } else if (drawerType === "FILE") {
         return selectedFile?.path;
       } else return <Skeleton.Input />;
@@ -313,9 +313,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab="圖" key="3">
-              <div style={{ width: "100vw", height: "100vh" }}>
-                <TraceLinkGraph />
-              </div>
+              <TraceLinkGraph />
             </Tabs.TabPane>
           </Tabs>
         </div>

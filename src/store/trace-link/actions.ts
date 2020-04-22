@@ -76,12 +76,21 @@ export const fetchRequirementRelatedTraceLinks = (
 export const fetchFileRelatedTraceLinks = (
   repoName: string,
   fullyQauilfiedName: string
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: FETCH_FILE_RELATED_TRACE_LINK });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1200));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(
-      `${getServerUrl()}/api/tracelink?file=${fullyQauilfiedName}&repoName=${repoName}`
+      `${getServerUrl()}/api/tracelink?file=${fullyQauilfiedName}&repoName=${repoName}`,
+      {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     ).then(res => res.json());
     if (res && res.success) {
       dispatch({
@@ -102,14 +111,23 @@ export const fetchFileRelatedTraceLinks = (
 export const fetchCommitRelatedTraceLinks = (
   repoName: string,
   commit: ICommit
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: FETCH_COMMIT_RELATED_TRACE_LINK });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1200));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(
       `${getServerUrl()}/api/tracelink/history?repoName=${repoName}&commitSha=${
         commit.sha
-      }`
+      }`,
+      {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
     ).then(res => res.json());
     if (res && res.success) {
       dispatch({
@@ -127,15 +145,19 @@ export const fetchCommitRelatedTraceLinks = (
 
 export const sendInitTraceLink = (
   matrix: ITraceLinkMatrix
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: SEND_INIT_TRACE_LINK });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1200));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/tracelink`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(matrix)
     }).then(res => res.json());
@@ -179,17 +201,22 @@ export const confirmInitTraceLink = (
 export const generateInitialTraceLink = (
   files: IFileTreeNode[],
   requirement: IRequirement
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: GENERATE_INIT_TRACE_LINK });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/tracelink/init`, {
       method: "POST",
+      credentials: "include",
       body: JSON.stringify({
         files: files,
         requirement: requirement
       }),
       headers: {
+        Authorization: `Bearer ${token}`,
         Accept: "application/json",
         "Content-Type": "application/json"
       }

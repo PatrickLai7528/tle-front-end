@@ -65,13 +65,13 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
     } = props;
     const styles = useStyles();
     const [editable, setEditable] = useState<boolean>(false);
-    const { text, id } = description;
+    const { text, _id } = description;
     const [textAreaValue, setTextAreaValue] = useState<string>(text);
 
     useEffect(() => {
       const doFetch = async () => {
         try {
-          await fetchRequirementRelatedTraceLinks(repoName, description.id);
+          await fetchRequirementRelatedTraceLinks(repoName, description._id);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
@@ -110,7 +110,7 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
             autoSize
             onBlur={() => {
               setEditable(false);
-              onDescriptionUpdate(id, textAreaValue);
+              onDescriptionUpdate(_id, textAreaValue);
             }}
             value={textAreaValue}
             onChange={e => setTextAreaValue(e.target.value)}

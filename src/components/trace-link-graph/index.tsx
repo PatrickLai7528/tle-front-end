@@ -1,30 +1,38 @@
 import React, { FunctionComponent, memo } from "react";
-import { ResponsiveNetworkCanvas } from "@nivo/network";
 import { data } from "./data";
+import { createUseStyles, useTheme } from "react-jss";
+import { Row, Col } from "antd";
+import { CustomTheme } from "../../theme";
+import { RequirementImplementBarChart } from "./requirement-implement-bar-chart";
+import { ImplementRequirementBarChart } from "./implement-requirement-bar-chart";
+import { CodeCouplingChart } from "./code-coupling-chart";
+import { CommitLinkChangeChart } from "./commit-link-change-chart";
 
 export interface ITraceLinkGraphProps {}
 
+const useStyle = createUseStyles<CustomTheme>(theme => ({
+  graph: {}
+}));
+
 export const TraceLinkGraph: FunctionComponent<ITraceLinkGraphProps> = memo(
   (props: ITraceLinkGraphProps) => {
+    const theme = useTheme();
+    const styles = useStyle({ theme });
     return (
-      <ResponsiveNetworkCanvas
-        nodes={data.nodes}
-        links={data.links}
-        margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-        repulsivity={6}
-        iterations={60}
-        nodeColor={function(t) {
-          return t.color;
-        }}
-        nodeBorderWidth={1}
-        nodeBorderColor={{
-          from: "color",
-          modifiers: [["darker", 0.8]]
-        }}
-        linkThickness={function(t) {
-          return 2 * (2 - t.source.depth);
-        }}
-      />
+      <Row gutter={[16, 16]}>
+        <Col span={12}>
+          <RequirementImplementBarChart />
+        </Col>
+        <Col span={12}>
+          <ImplementRequirementBarChart />
+        </Col>
+        <Col span={12}>
+          <CodeCouplingChart />
+        </Col>
+        <Col span={12}>
+          <CommitLinkChangeChart />
+        </Col>
+      </Row>
     );
   }
 );

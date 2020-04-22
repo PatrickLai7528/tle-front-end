@@ -94,14 +94,13 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
               {type === "ADDED" ? "ADD" : "REMOVE"}
             </Tag>
           )}
-          {`#${traceLink.id}`}
+          {`#${traceLink._id}`}
         </div>
       );
     }, [type, traceLink]);
 
     return (
       <Card
-        key={traceLink.id}
         hoverable
         style={cardStyle}
         bodyStyle={bodyStyle}
