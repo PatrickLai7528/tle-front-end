@@ -8,9 +8,9 @@ import React, {
   useState
 } from "react";
 import { createUseStyles } from "react-jss";
-import ReactMarkdown from "react-markdown";
 import { IRequirementDescription, ITraceLink } from "../../types";
 import { EditableTraceLinkArea } from "../editable-trace-link-area";
+import { RequirementCard } from "../requirement/requirement-card";
 
 export interface IStateProps {
   traceLinks: ITraceLink[];
@@ -50,6 +50,9 @@ const useStyles = createUseStyles({
   },
   editableArea: {
     marginBottom: "16px"
+  },
+  requirementArea: {
+    margin: { bottom: "16px" }
   }
 });
 
@@ -103,21 +106,24 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
         <Typography.Title level={3}>
           需求描述 <EditOutlined onClick={() => setEditable(true)} />
         </Typography.Title>
-        {editable ? (
-          <Input.TextArea
-            autoFocus
-            className={styles.editableArea}
-            autoSize
-            onBlur={() => {
-              setEditable(false);
-              onDescriptionUpdate(_id, textAreaValue);
-            }}
-            value={textAreaValue}
-            onChange={e => setTextAreaValue(e.target.value)}
-          />
-        ) : (
-          <ReactMarkdown source={textAreaValue} />
-        )}
+        <div className={styles.requirementArea}>
+          {editable ? (
+            <Input.TextArea
+              autoFocus
+              className={styles.editableArea}
+              autoSize
+              onBlur={() => {
+                setEditable(false);
+                onDescriptionUpdate(_id, textAreaValue);
+              }}
+              value={textAreaValue}
+              onChange={e => setTextAreaValue(e.target.value)}
+            />
+          ) : (
+            // <ReactMarkdown source={textAreaValue} />
+            <RequirementCard description={description} useCard={false} />
+          )}
+        </div>
         <Typography.Title level={3}>追踪線索</Typography.Title>
         {traceLinksContent}
       </div>
