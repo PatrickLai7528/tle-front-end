@@ -24,11 +24,11 @@ export interface ITraceLink {
 export interface ITraceLinkMatrix {
   _id: string;
   links: ITraceLink[];
+  relatedRepoOwnerId?: string;
   relatedRepoName: string;
 }
 
 export interface IRequirementDescription {
-  // text: string;
   traced?: boolean;
   lastUpdateAt: number;
   name: string;
@@ -48,6 +48,7 @@ export interface IRequirementDescription {
 
 export interface IRequirement {
   _id: string;
+  relatedRepoOwnerId?: string;
   descriptions: IRequirementDescription[];
   relatedRepoName: string;
 }

@@ -5,21 +5,19 @@ import {
   MapStateToProps
 } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
+import { RouteConstants } from "../../routes/constants";
 import {
   sendImportedRepository,
   startImportRepository,
   stopImport
 } from "../../store/import-repository/action";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
+import { pushNotification } from "../../store/notification/actions";
 import { NotificationActions } from "../../store/notification/types";
 import { RootState } from "../../store/reducers";
 import { postRequirement } from "../../store/requirement/actions";
 import { RequirementActions } from "../../store/requirement/types";
-import {
-  generateInitialTraceLink,
-  sendInitTraceLink,
-  toggleInitTraceLinkModal
-} from "../../store/trace-link/actions";
+import { sendInitTraceLink } from "../../store/trace-link/actions";
 import { TraceLinkActions } from "../../store/trace-link/types";
 import {
   IImportedRepository,
@@ -32,8 +30,6 @@ import ImportRepositoryProcess, {
   IOwnProps,
   IStateProps
 } from "./import-repository-process";
-import { pushNotification } from "../../store/notification/actions";
-import { RouteConstants } from "../../routes/constants";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState,
@@ -49,7 +45,11 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     repositoryManagementReducer: { rawRepositories },
     searchReducer: { searchResult },
     requirementReducer: { loading: postRequirementLoading },
-    traceLinkReducer: { loading: sendTraceLinkLoading, initTraceLinkConfirmed }
+    traceLinkReducer: {
+      loading: sendTraceLinkLoading,
+      initTraceLinkConfirmed,
+      initTraceLinkMartix
+    }
   } = state;
 
   const {
@@ -76,6 +76,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     importProccess,
     importedRepostiroy: importedRepository,
     importDone: !!importDone,
+    initTraceLinkMatrix: initTraceLinkMartix,
     initTraceLinkConfirmed: initTraceLinkConfirmed
   };
 };

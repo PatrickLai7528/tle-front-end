@@ -121,6 +121,8 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       !!importProccess && !importDone
     );
 
+    console.log(initTraceLinkMatrix);
+
     useEffect(() => setIsBlocking(!!importProccess && !importDone), [
       importProccess,
       importDone

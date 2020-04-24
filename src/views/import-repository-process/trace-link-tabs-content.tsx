@@ -61,15 +61,11 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
     );
     const { importedRepository, repositoryRes, initTraceLinkMatrix } = props;
     const dispatch = useDispatch();
-    const toggleModel = React.useCallback(
-      () => dispatch(toggleInitTraceLinkModal()),
-      [dispatch]
-    );
-    const generateInit = React.useCallback(
-      (files: IFileTreeNode[], requirement: IRequirement) =>
-        dispatch(generateInitialTraceLink(files, requirement)),
-      [dispatch]
-    );
+
+    const toggleModel = () => dispatch(toggleInitTraceLinkModal());
+
+    const generateInit = (files: IFileTreeNode[], requirement: IRequirement) =>
+      dispatch(generateInitialTraceLink(files, requirement));
 
     const [descriptions, setDescriptions] = React.useState<
       IRequirementDescription[]
@@ -79,6 +75,18 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
       () => classifyTraceLinksByRequirement(initTraceLinkMatrix?.links || []),
       [initTraceLinkMatrix]
     );
+
+    const handleButtonClick = React.useCallback(() => {
+      const requirement: IRequirement = {
+        _id: uuid(),
+        relatedRepoName: importedRepository?.name || repositoryRes?.name || "",
+        descriptions: descriptions
+      };
+      generateInit(importedRepository?.trees || [], requirement);
+      toggleModel();
+    }, [toggleModel, generateInit]);
+
+    console.log(initTraceLinkMatrix);
 
     if (!importDone) {
       return <Result status="warning" title="請先等待導入結束" />;
@@ -101,39 +109,29 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
             })}
         </>
       );
+    } else {
+      return (
+        <>
+          <RequirementForm
+            onDone={(description: IRequirementDescription) => {
+              setDescriptions(old => [description, ...old]);
+            }}
+          />
+          <Descriptions descriptions={descriptions} />
+          <Button
+            block
+            className={styles.button}
+            loading={generateInitTraceLinkLoading}
+            onClick={handleButtonClick}
+          >
+            生成追踪線索
+          </Button>
+          <ConnectedEditInitTraceLinkModal
+            width={"80vw"}
+            traceLinkMatrix={initTraceLinkMatrix}
+          />
+        </>
+      );
     }
-
-    const handleButtonClick = React.useCallback(() => {
-      const requirement: IRequirement = {
-        _id: uuid(),
-        relatedRepoName: importedRepository?.name || repositoryRes?.name || "",
-        descriptions: descriptions
-      };
-      generateInit(importedRepository?.trees || [], requirement);
-      toggleModel();
-    }, [toggleModel, generateInit]);
-
-    return (
-      <>
-        <RequirementForm
-          onDone={(description: IRequirementDescription) => {
-            setDescriptions(old => [description, ...old]);
-          }}
-        />
-        <Descriptions descriptions={descriptions} />
-        <Button
-          block
-          className={styles.button}
-          loading={generateInitTraceLinkLoading}
-          onClick={handleButtonClick}
-        >
-          生成追踪線索
-        </Button>
-        <ConnectedEditInitTraceLinkModal
-          width={"80vw"}
-          traceLinkMatrix={initTraceLinkMatrix}
-        />
-      </>
-    );
   }
 );
