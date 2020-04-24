@@ -149,9 +149,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       "BASIC_INFO" | "INIT_TRACE_LINKS"
     >("BASIC_INFO");
 
-    const [descriptions, setDescriptions] = useState<IRequirementDescription[]>(
-      []
-    );
+    const [initRequirement, setInitRequirement] = useState<string>("");
 
     useEffect(() => {
       startImport(repositoryRes);
@@ -172,7 +170,14 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
             {
               _id: uuid(),
               relatedRepoName: importedRepostiroy!.name!,
-              descriptions: [...descriptions]
+              descriptions: initRequirement
+                .split(";")
+                .filter(desc => !!desc)
+                .map(desc => {
+                  return {
+                    name: desc
+                  } as IRequirementDescription;
+                })
             },
             {
               ...initTraceLinkMatrix,
@@ -238,9 +243,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
                   <TraceLinkTabsContent
-                    onDescriptionsConfirmed={descriptions =>
-                      setDescriptions(descriptions)
-                    }
                     initTraceLinkMatrix={initTraceLinkMatrix}
                     repositoryRes={repositoryRes}
                     importedRepository={importedRepostiroy}
