@@ -32,6 +32,7 @@ const useStyles = createUseStyles({
     alignItems: "flex-start"
   },
   empty: {
+    width: "100%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -56,7 +57,9 @@ const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
                 return <RepositoryCard repo={repo} key={repo.name} />;
               })
             ) : (
-              <Empty className={styles.empty} />
+              <div className={styles.empty}>
+                <Empty />
+              </div>
             )}
           </div>
         </div>
