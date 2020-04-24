@@ -121,8 +121,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       !!importProccess && !importDone
     );
 
-    console.log(initTraceLinkMatrix);
-
     useEffect(() => setIsBlocking(!!importProccess && !importDone), [
       importProccess,
       importDone
@@ -244,7 +242,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                   )}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
-                  {/* {traceLinkTabsContent()} */}
                   <TraceLinkTabsContent
                     initTraceLinkMatrix={initTraceLinkMatrix}
                     repositoryRes={repositoryRes}

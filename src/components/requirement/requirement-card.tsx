@@ -48,7 +48,7 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
     } = description;
     return (
       <Card>
-        <Descriptions column={3} bordered title="Custom Size" size={"small"}>
+        <Descriptions column={2} bordered title="Custom Size" size={"small"}>
           <Descriptions.Item label={"ID"} span={1}>
             {_id}
           </Descriptions.Item>
