@@ -151,7 +151,7 @@ export const addRequirement = (
 
     //TODO
     let fakeData = requirement.descriptions[0];
-    fakeData = { ...fakeData, text: requirementDesc, _id: requirementDesc };
+    fakeData = { ...fakeData, name: requirementDesc, _id: requirementDesc };
 
     dispatch({ type: ADD_REQUIREMENT_SUCCESS, payload: fakeData });
     dispatch(toggleAddRequirementModal());

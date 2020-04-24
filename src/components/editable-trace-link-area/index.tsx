@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../store/reducers";
 import { newTraceLink as sendNewTraceLink } from "../../store/trace-link/actions";
-import { ITraceLink } from "../../types";
+import { ITraceLink, IRequirementDescription } from "../../types";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IEditableTraceLinkAreaProps {
@@ -57,7 +57,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
           ...newTraceLink,
           requirementDescription: {
             ...newTraceLink.requirementDescription,
-            text: value
+            name: value
           }
         });
       }
@@ -79,9 +79,9 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
           _id: uuidv4(),
           requirementDescription: {
             _id: uuidv4(),
-            text: "",
+            name: "",
             lastUpdateAt: Date.now()
-          },
+          } as IRequirementDescription,
           implement: (traceLinks[0] || {}).implement
         });
       }
@@ -91,7 +91,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
       if (type === "REQUIREMENT" && newTraceLink) {
         return newTraceLink.implement.fullyQualifiedName;
       } else if (type === "IMPLEMENT" && newTraceLink) {
-        return newTraceLink.requirementDescription.text;
+        return newTraceLink.requirementDescription.name;
       }
     };
 

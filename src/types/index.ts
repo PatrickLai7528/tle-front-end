@@ -28,9 +28,21 @@ export interface ITraceLinkMatrix {
 }
 
 export interface IRequirementDescription {
-  text: string;
+  // text: string;
   traced?: boolean;
   lastUpdateAt: number;
+  name: string;
+  createBy: string;
+  lastUpdateBy: string;
+  createAt: number;
+  participants: string;
+  triggeringCondition: string;
+  preCondition: string;
+  postCondition: string;
+  priority: string;
+  normalProcess: string;
+  expansionProcess: string;
+  specialNeeds: string;
   _id: string;
 }
 

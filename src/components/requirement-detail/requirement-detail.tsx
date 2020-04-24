@@ -65,8 +65,8 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
     } = props;
     const styles = useStyles();
     const [editable, setEditable] = useState<boolean>(false);
-    const { text, _id } = description;
-    const [textAreaValue, setTextAreaValue] = useState<string>(text);
+    const { name, _id } = description;
+    const [textAreaValue, setTextAreaValue] = useState<string>(name);
 
     useEffect(() => {
       const doFetch = async () => {

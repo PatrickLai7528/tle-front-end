@@ -117,7 +117,7 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
                     input
                   ) : (
                     <Typography.Paragraph strong>
-                      {traceLink.requirementDescription.text}
+                      {traceLink.requirementDescription.name}
                     </Typography.Paragraph>
                   )}
                 </Typography>

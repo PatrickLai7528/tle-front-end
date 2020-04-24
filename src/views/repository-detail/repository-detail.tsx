@@ -170,7 +170,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 if (oldDesc._id === descId) {
                   newDescriptions.push({
                     ...oldDesc,
-                    text: descriptionText
+                    name: descriptionText
                   });
                 } else {
                   newDescriptions.push({ ...oldDesc });

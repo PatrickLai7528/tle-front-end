@@ -48,5 +48,8 @@ export const zhtw = {
   notification: "通知",
   "search repository placeholder": "Search for repository",
   search: "搜索",
-  home: "首頁"
+  home: "首頁",
+  low: "低",
+  medium: "中等",
+  high: "高"
 };

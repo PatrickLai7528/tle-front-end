@@ -49,12 +49,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     repositoryManagementReducer: { rawRepositories },
     searchReducer: { searchResult },
     requirementReducer: { loading: postRequirementLoading },
-    traceLinkReducer: {
-      loading: sendTraceLinkLoading,
-      initTraceLinkLoading,
-      initTraceLinkMartix,
-      initTraceLinkConfirmed
-    }
+    traceLinkReducer: { loading: sendTraceLinkLoading, initTraceLinkConfirmed }
   } = state;
 
   const {
@@ -81,8 +76,6 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     importProccess,
     importedRepostiroy: importedRepository,
     importDone: !!importDone,
-    genInitTraceLinkLoading: initTraceLinkLoading,
-    initTraceLinkMatrix: initTraceLinkMartix,
     initTraceLinkConfirmed: initTraceLinkConfirmed
   };
 };
@@ -100,9 +93,6 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
 ) => {
   return {
     startImport: repoRes => dispatch(startImportRepository(repoRes)),
-    generateInitTraceLinkMatrix: (files, requirement) =>
-      dispatch(generateInitialTraceLink(files, requirement)),
-    toggleInitTraceLinkModal: () => dispatch(toggleInitTraceLinkModal()),
     stopImport: () => dispatch(stopImport()),
     confirmImport: (
       repo: IImportedRepository,

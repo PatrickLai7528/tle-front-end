@@ -48,7 +48,7 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
           description={
             <Typography>
               <Typography.Title level={4}>需求描述</Typography.Title>
-              <Typography.Paragraph>{requirement.text}</Typography.Paragraph>
+              <Typography.Paragraph>{requirement.name}</Typography.Paragraph>
             </Typography>
           }
         />

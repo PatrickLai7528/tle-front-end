@@ -74,7 +74,7 @@ const RequirementCard: FunctionComponent<IRequirementCardProps> = memo(
               ]}
             >
               <List.Item.Meta
-                title={desc.text}
+                title={desc.name}
                 description={`Update at ${moment(desc.lastUpdateAt).fromNow()}`}
               />
             </List.Item>
