@@ -55,7 +55,7 @@ export const isRepoImported = (
 };
 
 export const sendImportedRepository = (
-  importedRepo: IImportedRepository
+  importedRepo: Omit<IImportedRepository, "_id">
 ): AppThunk<void, ImportRepositoryActionTypes> => async (
   dispatch,
   getState

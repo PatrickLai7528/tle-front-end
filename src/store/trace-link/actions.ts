@@ -144,7 +144,7 @@ export const fetchCommitRelatedTraceLinks = (
 };
 
 export const sendInitTraceLink = (
-  matrix: ITraceLinkMatrix
+  matrix: Omit<ITraceLinkMatrix, "_id">
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: SEND_INIT_TRACE_LINK });
   try {
@@ -201,7 +201,7 @@ export const confirmInitTraceLink = (
 
 export const generateInitialTraceLink = (
   files: IFileTreeNode[],
-  requirement: IRequirement
+  requirement: Omit<IRequirement, "_id">
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: GENERATE_INIT_TRACE_LINK });
   try {

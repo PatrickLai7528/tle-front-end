@@ -96,16 +96,14 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
     startImport: repoRes => dispatch(startImportRepository(repoRes)),
     stopImport: () => dispatch(stopImport()),
     confirmImport: (
-      repo: IImportedRepository,
-      requirement: IRequirement,
-      matrix: ITraceLinkMatrix
+      repo: Omit<IImportedRepository, "_id">,
+      requirement: Omit<IRequirement, "_id">,
+      matrix: Omit<ITraceLinkMatrix, "_id">
     ) =>
       batch(async () => {
-        await Promise.all([
-          dispatch(sendImportedRepository(repo)),
-          dispatch(postRequirement(requirement)),
-          dispatch(sendInitTraceLink(matrix))
-        ]);
+        await dispatch(sendImportedRepository(repo));
+        await dispatch(postRequirement(requirement));
+        await dispatch(sendInitTraceLink(matrix));
         dispatch(
           pushNotification({
             title: "導入成功",

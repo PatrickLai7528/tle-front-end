@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
 
 export interface IRequirementFormProps {
-  onDone: (desc: IRequirementDescription) => void;
+  onDone: (desc: Omit<IRequirementDescription, "_id">) => void;
 }
 
 // ID
@@ -37,8 +37,7 @@ export const RequirementForm: React.FunctionComponent<IRequirementFormProps> = R
       <Card>
         <Form
           onFinish={value => {
-            const description: IRequirementDescription = {
-              _id: v4(),
+            const description: Omit<IRequirementDescription, "_id"> = {
               name: value.name,
               lastUpdateAt: Date.now(),
               createAt: Date.now(),

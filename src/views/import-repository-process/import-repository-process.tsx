@@ -50,9 +50,9 @@ export interface IStateProps {
 export interface IDispatchProps {
   startImport: (repositoryRes: IGHRepositoryRes) => void;
   confirmImport: (
-    repo: IImportedRepository,
-    requirement: IRequirement,
-    matrix: ITraceLinkMatrix
+    repo: Omit<IImportedRepository, "_id">,
+    requirement: Omit<IRequirement, "_id">,
+    matrix: Omit<ITraceLinkMatrix, "_id">
   ) => void;
   stopImport: () => void;
 }
@@ -149,7 +149,9 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       "BASIC_INFO" | "INIT_TRACE_LINKS"
     >("BASIC_INFO");
 
-    const [initRequirement, setInitRequirement] = useState<string>("");
+    const [descriptions, setDescriptions] = useState<
+      Omit<IRequirementDescription, "_id">[]
+    >([]);
 
     useEffect(() => {
       startImport(repositoryRes);
@@ -168,16 +170,8 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
           confirmImport(
             importedRepostiroy as IImportedRepository,
             {
-              _id: uuid(),
               relatedRepoName: importedRepostiroy!.name!,
-              descriptions: initRequirement
-                .split(";")
-                .filter(desc => !!desc)
-                .map(desc => {
-                  return {
-                    name: desc
-                  } as IRequirementDescription;
-                })
+              descriptions: descriptions as any
             },
             {
               ...initTraceLinkMatrix,
@@ -243,6 +237,9 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
                   <TraceLinkTabsContent
+                    onDescriptionsConfirmed={descriptions =>
+                      setDescriptions(descriptions)
+                    }
                     initTraceLinkMatrix={initTraceLinkMatrix}
                     repositoryRes={repositoryRes}
                     importedRepository={importedRepostiroy}

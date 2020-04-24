@@ -5,7 +5,7 @@ import moment from "moment";
 import { useTranslation } from "react-i18next";
 
 export interface IRequirementCardProps {
-  description: IRequirementDescription;
+  description: IRequirementDescription | Omit<IRequirementDescription, "_id">;
 }
 
 const MomentDate = React.memo<{ date: number }>(({ date }) => {
@@ -31,7 +31,6 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
     const { description } = props;
     const { t } = useTranslation();
     const {
-      _id,
       name,
       createBy,
       lastUpdateAt,
@@ -50,7 +49,7 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
       <Card>
         <Descriptions column={2} bordered title="Custom Size" size={"small"}>
           <Descriptions.Item label={"ID"} span={1}>
-            {_id}
+            {(description as any)._id || "暫無"}
           </Descriptions.Item>
           <Descriptions.Item label={"名稱"} span={1}>
             {name}

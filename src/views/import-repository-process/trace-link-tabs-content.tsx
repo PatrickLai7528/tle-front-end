@@ -27,15 +27,18 @@ export interface ITraceLinkTabsContentProps {
   importedRepository?: Partial<IImportedRepository>;
   repositoryRes?: IGHRepositoryRes;
   initTraceLinkMatrix?: ITraceLinkMatrix;
+  onDescriptionsConfirmed: (
+    descriptions: Omit<IRequirementDescription, "_id">[]
+  ) => void;
 }
 
 const Descriptions = React.memo<{
-  descriptions: IRequirementDescription[];
+  descriptions: Omit<IRequirementDescription, "_id">[];
 }>(({ descriptions }) => {
   return (
     <>
-      {(descriptions || []).map(description => (
-        <RequirementCard key={description._id} description={description} />
+      {(descriptions || []).map((description, index) => (
+        <RequirementCard key={index} description={description} />
       ))}
     </>
   );
@@ -59,16 +62,23 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
     const initTraceLinkConfirmed = useSelector<RootState, boolean>(
       state => state.traceLinkReducer.initTraceLinkConfirmed
     );
-    const { importedRepository, repositoryRes, initTraceLinkMatrix } = props;
+    const {
+      importedRepository,
+      repositoryRes,
+      initTraceLinkMatrix,
+      onDescriptionsConfirmed
+    } = props;
     const dispatch = useDispatch();
 
     const toggleModel = () => dispatch(toggleInitTraceLinkModal());
 
-    const generateInit = (files: IFileTreeNode[], requirement: IRequirement) =>
-      dispatch(generateInitialTraceLink(files, requirement));
+    const generateInit = (
+      files: IFileTreeNode[],
+      requirement: Omit<IRequirement, "_id">
+    ) => dispatch(generateInitialTraceLink(files, requirement));
 
     const [descriptions, setDescriptions] = React.useState<
-      IRequirementDescription[]
+      Omit<IRequirementDescription, "_id">[]
     >([]);
 
     const requirementLinkMap = React.useMemo(
@@ -77,20 +87,18 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
     );
 
     const handleButtonClick = React.useCallback(() => {
-      const requirement: IRequirement = {
-        _id: uuid(),
+      const requirement: Omit<IRequirement, "_id"> = {
         relatedRepoName: importedRepository?.name || repositoryRes?.name || "",
-        descriptions: descriptions
+        descriptions: descriptions as any
       };
       generateInit(importedRepository?.trees || [], requirement);
       toggleModel();
     }, [toggleModel, generateInit]);
 
-    console.log(initTraceLinkMatrix);
-
     if (!importDone) {
       return <Result status="warning" title="請先等待導入結束" />;
     } else if (initTraceLinkConfirmed && requirementLinkMap) {
+      onDescriptionsConfirmed(descriptions);
       return (
         <>
           {Object.keys(requirementLinkMap || {})
@@ -113,7 +121,7 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
       return (
         <>
           <RequirementForm
-            onDone={(description: IRequirementDescription) => {
+            onDone={(description: Omit<IRequirementDescription, "_id">) => {
               setDescriptions(old => [description, ...old]);
             }}
           />

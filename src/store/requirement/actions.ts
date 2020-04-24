@@ -24,7 +24,7 @@ import { requirement } from "../../stubs/requirement";
 import { getServerUrl } from "../../configs/get-url";
 
 export const postRequirement = (
-  requirement: IRequirement
+  requirement: Omit<IRequirement, "_id">
 ): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "POST_REQUIREMENT" });
   try {
