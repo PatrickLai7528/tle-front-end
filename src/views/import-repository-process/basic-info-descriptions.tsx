@@ -5,6 +5,8 @@ import { FileTree } from "../../components/file-tree";
 import { LanguageBadge } from "../../components/language-badge";
 import { RepositoryDescription } from "../../components/repository-description";
 import { IImportedRepository } from "../../types";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
 
 export interface IBasicInfoDescriptionsProps {
   repo?: Partial<IImportedRepository>;
@@ -13,6 +15,9 @@ export interface IBasicInfoDescriptionsProps {
 const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = memo(
   (props: IBasicInfoDescriptionsProps) => {
     const { repo } = props;
+    const importDone = useSelector<RootState, boolean>(
+      state => state.importRepositoryReducer.importDone
+    );
     const { t } = useTranslation();
     const {
       name,
@@ -45,10 +50,14 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
           )}
         </Descriptions.Item>
         <Descriptions.Item label="描述" span={3}>
-          {!!description ? (
-            <RepositoryDescription description={description} />
+          {importDone ? (
+            !!description ? (
+              <RepositoryDescription description={description} />
+            ) : (
+              <Skeleton.Input active />
+            )
           ) : (
-            <Skeleton.Input active />
+            <span>無描述</span>
           )}
         </Descriptions.Item>
         <Descriptions.Item label="其它分支" span={3}>
