@@ -154,6 +154,7 @@ export const sendInitTraceLink = (
     if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/tracelink`, {
       method: "POST",
+      credentials: "include",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
