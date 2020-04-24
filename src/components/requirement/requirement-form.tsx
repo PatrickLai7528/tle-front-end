@@ -1,11 +1,8 @@
-import { Card, Form, Input, Radio, Button } from "antd";
+import { Button, Card, Form, Input, Radio } from "antd";
 import React from "react";
-import { IRequirementDescription } from "../../types";
-// import ReactQuill from "react-quill";
-// import "react-quill/dist/quill.snow.css";
-import { v4 } from "uuid";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
+import { IRequirementDescription } from "../../types";
 
 export interface IRequirementFormProps {
   onDone: (desc: Omit<IRequirementDescription, "_id">) => void;
@@ -115,7 +112,6 @@ export const RequirementForm: React.FunctionComponent<IRequirementFormProps> = R
             rules={[{ required: true }]}
           >
             <Input.TextArea autoSize={{ minRows: 5 }} />
-            {/* <ReactQuill theme="snow" /> */}
           </Form.Item>
 
           <Form.Item
@@ -124,12 +120,10 @@ export const RequirementForm: React.FunctionComponent<IRequirementFormProps> = R
             rules={[{ required: true }]}
           >
             <Input.TextArea autoSize={{ minRows: 5 }} />
-            {/* <ReactQuill theme="snow" /> */}
           </Form.Item>
 
           <Form.Item name={"specialNeeds"} label={"特別需求"}>
             <Input.TextArea autoSize={{ minRows: 5 }} />
-            {/* <ReactQuill theme="snow" /> */}
           </Form.Item>
 
           <Form.Item wrapperCol={{ offset: 5, span: 14 }}>
