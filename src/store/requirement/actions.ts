@@ -64,21 +64,35 @@ export const toggleAddRequirementModal = (): RequirementActions => {
 export const deleteRequirement = (
   requirement: IRequirement,
   description: IRequirementDescription
-): AppThunk<void, RequirementActionTypes> => async dispatch => {
+): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
   dispatch({ type: DELETE_REQUIREMENT });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    const descriptions = requirement.descriptions;
-    descriptions.splice(descriptions.indexOf(description), 1);
-    const newRequirement: IRequirement = {
-      ...requirement,
-      descriptions: [...descriptions]
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const url = `${getServerUrl()}/api/requirement/description/${
+      requirement._id
+    }/${description._id}`;
+    const options: RequestInit = {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      credentials: "include"
     };
-    const action: IDeleteRequirementSuccessAction = {
-      type: DELETE_REQUIREMENT_SUCCESS,
-      payload: newRequirement
-    };
-    dispatch(action);
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      const action: IDeleteRequirementSuccessAction = {
+        type: DELETE_REQUIREMENT_SUCCESS,
+        payload: res.payload
+      };
+      dispatch(action);
+    } else {
+      dispatch({ type: "DELETE_REQUIREMENT_FAIULRE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
