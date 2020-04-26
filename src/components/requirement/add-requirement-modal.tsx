@@ -5,7 +5,7 @@ import { Dispatch } from "redux";
 import { RootState } from "../../store/reducers";
 import { RequirementActions } from "../../store/requirement/types";
 import { IRequirementDescription } from "../../types";
-import { RequirementForm } from "../requirement/requirement-form";
+import { RequirementForm } from "./requirement-form";
 import {
   toggleAddRequirementModal,
   addRequirement
