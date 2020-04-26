@@ -121,7 +121,11 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
             />
           ) : (
             // <ReactMarkdown source={textAreaValue} />
-            <RequirementCard description={description} useCard={false} />
+            <RequirementCard
+              description={description}
+              useCard={false}
+              editable
+            />
           )}
         </div>
         <Typography.Title level={3}>追踪線索</Typography.Title>

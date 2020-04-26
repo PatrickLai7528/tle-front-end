@@ -1,5 +1,5 @@
-import React from "react";
-import { Card, Descriptions, Input } from "antd";
+import React, { ReactNode } from "react";
+import { Card, Descriptions, Input, Select } from "antd";
 import { IRequirementDescription } from "../../types";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -31,65 +31,118 @@ const MomentDate = React.memo<{ date: number }>(({ date }) => {
 export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = React.memo(
   (props: IRequirementCardProps) => {
     const { description, useCard, editable } = props;
-
-    type DescriptionKeys = keyof typeof description;
-
-    type Editables = Partial<{ [key in DescriptionKeys]: boolean }>;
-
-    type ValueState = Partial<{ [key in DescriptionKeys]: string }>;
-
-    const [editables, setEditables] = React.useState<Editables>({});
-    const [valueState, setValueState] = React.useState<ValueState>({});
-
-    const { t } = useTranslation();
     const {
-      name,
       createBy,
       lastUpdateAt,
       lastUpdateBy,
       createAt,
-      priority,
+      _id,
+      traced,
+      ...editablePart
+    } = description as IRequirementDescription;
+
+    type DescriptionKeys = keyof typeof description;
+
+    type CannotEditKeys =
+      | "lastUpdateBy"
+      | "lastUpdateAt"
+      | "createBy"
+      | "createAt"
+      | "_id";
+
+    type EditableDescriptionKeys = Exclude<DescriptionKeys, CannotEditKeys>;
+
+    type Editables = Partial<{ [key in EditableDescriptionKeys]: boolean }>;
+
+    type ValueState = Partial<{ [key in EditableDescriptionKeys]: string }>;
+
+    const [editables, setEditables] = React.useState<Editables>({});
+
+    const [valueState, setValueState] = React.useState<ValueState>(
+      editablePart
+    );
+
+    const {
+      expansionProcess,
       participants,
       postCondition,
       preCondition,
-      expansionProcess,
+      priority,
+      name,
+      normalProcess,
       specialNeeds,
-      triggeringCondition,
-      normalProcess
-    } = description;
+      triggeringCondition
+    } = valueState;
+
+    console.log(valueState);
+
+    const { t } = useTranslation();
+
+    type ComponentProps = {
+      onChange: (value: string) => void;
+      onBlur: () => void;
+      value: string;
+    };
 
     const renderItem = (
-      key: keyof typeof description,
-      value: string | React.ReactNode
+      key: EditableDescriptionKeys,
+      value: string | React.ReactNode,
+      Component?: ({
+        onChange,
+        onBlur,
+        value
+      }: ComponentProps) => React.ReactElement
     ) => {
       const keyEditable = editables[key];
       if (keyEditable) {
         const value = valueState[key] || "";
-        const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const onChange = (value: string) => {
           setValueState({
             ...valueState,
-            [key]: e.target.value
+            [key]: value
           });
         };
-        return <Input value={value} onChange={onChange} />;
+
+        const onBlur = () => {
+          setEditables(prev => ({ ...prev, [key]: false }));
+        };
+
+        if (Component) {
+          return Component({ onBlur, onChange, value });
+        } else
+          return (
+            <Input
+              autoFocus
+              value={value}
+              onChange={e => onChange(e.target.value)}
+              onBlur={onBlur}
+            />
+          );
       } else if (editable) {
         const onClick = () => {
           setEditables(prev => ({ ...prev, [key]: true }));
           setValueState(prev => ({ ...prev, [key]: value }));
         };
 
-        const onBlur = () => {
-          setEditables(prev => ({ ...prev, [key]: false }));
-          setValueState(prev => ({ ...prev, [key]: "" }));
-        };
-
         return (
-          <span onClick={onClick} onBlur={onBlur}>
+          <div
+            onClick={onClick}
+            style={{ width: "100%", display: "inline-block" }}
+          >
             {value}
-          </span>
+          </div>
         );
-      } else return value;
+      } else return <>{value}</>;
     };
+
+    const EditableTextArea = ({ onBlur, onChange, value }: ComponentProps) => (
+      <Input.TextArea
+        value={value}
+        onBlur={onBlur}
+        onChange={e => onChange(e.target.value)}
+        autoSize={{ minRows: 5 }}
+      />
+    );
 
     const descriptions = (
       <Descriptions column={2} bordered size={"small"}>
@@ -100,40 +153,56 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
           {renderItem("name", name)}
         </Descriptions.Item>
         <Descriptions.Item label="創建者" span={1}>
-          {renderItem("createBy", createBy)}
+          {createBy}
         </Descriptions.Item>
         <Descriptions.Item label="優先級" span={1}>
-          {renderItem("priority", t(priority))}
+          {renderItem(
+            "priority",
+            t(priority as string),
+            ({ value, onBlur, onChange }) => {
+              return (
+                <Select value={value} onBlur={onBlur} onChange={onChange}>
+                  <Select.Option value="low">{t("low")}</Select.Option>
+                  <Select.Option value="medium">{t("medium")}</Select.Option>
+                  <Select.Option value="high">{t("high")}</Select.Option>
+                </Select>
+              );
+            }
+          )}
         </Descriptions.Item>
         <Descriptions.Item label="最後更新者" span={1}>
-          {renderItem("lastUpdateBy", lastUpdateBy)}
+          {lastUpdateBy}
         </Descriptions.Item>
         <Descriptions.Item label="創建日期" span={1}>
-          {renderItem("createAt", <MomentDate date={createAt} />)}
+          {<MomentDate date={createAt} />}
         </Descriptions.Item>
         <Descriptions.Item label="最後更新日期" span={1}>
-          {renderItem("lastUpdateAt", <MomentDate date={lastUpdateAt} />)}
+          {<MomentDate date={lastUpdateAt} />}
         </Descriptions.Item>
         <Descriptions.Item label="參與者" span={2}>
           {renderItem("participants", participants)}
         </Descriptions.Item>
         <Descriptions.Item label="觸發條件" span={3}>
-          {renderItem("triggeringCondition", triggeringCondition)}
+          {renderItem(
+            "triggeringCondition",
+            triggeringCondition,
+            EditableTextArea
+          )}
         </Descriptions.Item>
         <Descriptions.Item label="前置條件" span={3}>
-          {renderItem("preCondition", preCondition)}
+          {renderItem("preCondition", preCondition, EditableTextArea)}
         </Descriptions.Item>
         <Descriptions.Item label="後置條件" span={3}>
-          {renderItem("postCondition", postCondition)}
+          {renderItem("postCondition", postCondition, EditableTextArea)}
         </Descriptions.Item>
         <Descriptions.Item label="正常流程" span={3}>
-          {renderItem("normalProcess", normalProcess)}
+          {renderItem("normalProcess", normalProcess, EditableTextArea)}
         </Descriptions.Item>
         <Descriptions.Item label="擴展流程" span={3}>
-          {renderItem("expansionProcess", expansionProcess)}
+          {renderItem("expansionProcess", expansionProcess, EditableTextArea)}
         </Descriptions.Item>
         <Descriptions.Item label="特殊需求" span={3}>
-          {renderItem("specialNeeds", specialNeeds)}
+          {renderItem("specialNeeds", specialNeeds, EditableTextArea)}
         </Descriptions.Item>
       </Descriptions>
     );
