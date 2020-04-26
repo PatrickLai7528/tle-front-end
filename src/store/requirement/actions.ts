@@ -155,7 +155,7 @@ export const fetchRepoRequirement = (
 };
 
 export const addRequirement = (
-  requirementDesc: string
+  requirementDescription: Omit<IRequirementDescription, "_id">
 ): AppThunk<void, RootState> => async (
   dispatch: AppDispatch<RequirementActions>
 ) => {
@@ -165,7 +165,7 @@ export const addRequirement = (
 
     //TODO
     let fakeData = requirement.descriptions[0];
-    fakeData = { ...fakeData, name: requirementDesc, _id: requirementDesc };
+    // fakeData = { ...fakeData, name: requirementDesc, _id: requirementDesc };
 
     dispatch({ type: ADD_REQUIREMENT_SUCCESS, payload: fakeData });
     dispatch(toggleAddRequirementModal());

@@ -11,6 +11,7 @@ import AddRequirementModal, {
   IOwnProps,
   IStateProps
 } from "./add-requirement-modal";
+import { IRequirement, IRequirementDescription } from "../../types";
 
 const mapStateToProps: MapStateToProps<
   IStateProps,
@@ -28,7 +29,7 @@ const mapDispatchToProps: MapDispatchToProps<IDisipatchProps, IOwnProps> = (
 ) => {
   return {
     toggleModal: () => dispatch(toggleAddRequirementModal()),
-    addRequirement: (description: string) =>
+    addRequirement: (description: Omit<IRequirementDescription, "_id">) =>
       dispatch(addRequirement(description))
   };
 };
