@@ -25,7 +25,7 @@ import CommitCard from "./commit/commit-card";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
-import { AddRequirementModal } from "../../components/add-requirement-modal/add-requirement-modal";
+import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
 
 export interface IStateProps {
   repo?: IImportedRepository;
