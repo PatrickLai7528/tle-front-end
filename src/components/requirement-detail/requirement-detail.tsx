@@ -1,12 +1,5 @@
-import { EditOutlined } from "@ant-design/icons";
-import { Input, Skeleton, Typography } from "antd";
-import React, {
-  FunctionComponent,
-  memo,
-  useEffect,
-  useMemo,
-  useState
-} from "react";
+import { Skeleton, Typography } from "antd";
+import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { IRequirementDescription, ITraceLink } from "../../types";
 import { EditableTraceLinkArea } from "../editable-trace-link-area";
@@ -67,9 +60,6 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
       traceLinks
     } = props;
     const styles = useStyles();
-    const [editable, setEditable] = useState<boolean>(false);
-    const { name, _id } = description;
-    const [textAreaValue, setTextAreaValue] = useState<string>(name);
 
     useEffect(() => {
       const doFetch = async () => {
@@ -103,30 +93,14 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
 
     return (
       <div className={styles.requirementDetail}>
-        <Typography.Title level={3}>
-          需求描述 <EditOutlined onClick={() => setEditable(true)} />
-        </Typography.Title>
+        <Typography.Title level={3}>需求描述</Typography.Title>
         <div className={styles.requirementArea}>
-          {editable ? (
-            <Input.TextArea
-              autoFocus
-              className={styles.editableArea}
-              autoSize
-              onBlur={() => {
-                setEditable(false);
-                onDescriptionUpdate(_id, textAreaValue);
-              }}
-              value={textAreaValue}
-              onChange={e => setTextAreaValue(e.target.value)}
-            />
-          ) : (
-            // <ReactMarkdown source={textAreaValue} />
-            <RequirementCard
-              description={description}
-              useCard={false}
-              editable
-            />
-          )}
+          <RequirementCard
+            description={description}
+            useCard={false}
+            editable
+            useTooltips
+          />
         </div>
         <Typography.Title level={3}>追踪線索</Typography.Title>
         {traceLinksContent}

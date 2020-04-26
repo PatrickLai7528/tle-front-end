@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { Card, Descriptions, Input, Select } from "antd";
+import { Card, Descriptions, Input, Select, Tooltip } from "antd";
 import { IRequirementDescription } from "../../types";
 import moment from "moment";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import { useTranslation } from "react-i18next";
 export interface IRequirementCardProps {
   description: IRequirementDescription | Omit<IRequirementDescription, "_id">;
   useCard?: boolean;
+  useTooltips?: boolean;
   editable?: boolean;
 }
 
@@ -30,7 +31,7 @@ const MomentDate = React.memo<{ date: number }>(({ date }) => {
 // Special needs
 export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = React.memo(
   (props: IRequirementCardProps) => {
-    const { description, useCard, editable } = props;
+    const { description, useCard, editable, useTooltips } = props;
     const {
       createBy,
       lastUpdateAt,
@@ -73,8 +74,6 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
       specialNeeds,
       triggeringCondition
     } = valueState;
-
-    console.log(valueState);
 
     const { t } = useTranslation();
 
@@ -124,7 +123,7 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
           setValueState(prev => ({ ...prev, [key]: value }));
         };
 
-        return (
+        const node = (
           <div
             onClick={onClick}
             style={{ width: "100%", display: "inline-block" }}
@@ -132,6 +131,16 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
             {value}
           </div>
         );
+
+        const withTooltips = () => {
+          return (
+            <Tooltip title="點擊修改" placement="left">
+              {node}
+            </Tooltip>
+          );
+        };
+
+        return useTooltips ? withTooltips() : node;
       } else return <>{value}</>;
     };
 
