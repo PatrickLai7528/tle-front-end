@@ -1,5 +1,5 @@
 import React, { FunctionComponent, memo } from "react";
-import { Button } from "antd";
+import { Button, Popconfirm } from "antd";
 import { List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { IRequirement, IRequirementDescription } from "../../../types";
@@ -64,13 +64,16 @@ const RequirementCard: FunctionComponent<IRequirementCardProps> = memo(
                 >
                   詳情
                 </Button>,
-                <Button
-                  size="small"
-                  type="danger"
-                  onClick={() => onDeleteClick(desc)}
+                <Popconfirm
+                  title="確認刪除？"
+                  onConfirm={() => onDeleteClick(desc)}
+                  okText="確認"
+                  cancelText="取消"
                 >
-                  刪除
-                </Button>
+                  <Button size="small" type="danger">
+                    刪除
+                  </Button>
+                </Popconfirm>
               ]}
             >
               <List.Item.Meta
