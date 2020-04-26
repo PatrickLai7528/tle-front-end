@@ -36,6 +36,7 @@ export const AddRequirementModal: FunctionComponent<IAddRequirementModalProps> =
 
     return (
       <Modal
+        width={"80vw"}
         closable={false}
         maskClosable
         footer={null}
