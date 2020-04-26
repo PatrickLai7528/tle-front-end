@@ -20,8 +20,41 @@ import {
   DELETE_REQUIREMENT_SUCCESS,
   IDeleteRequirementSuccessAction
 } from "./types";
-import { requirement } from "../../stubs/requirement";
 import { getServerUrl } from "../../configs/get-url";
+
+export const updateDescription = (
+  description: IRequirementDescription
+): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
+  dispatch({ type: "UPDATE_DESCRIPTION" });
+  try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const options: RequestInit = {
+      method: "PUT",
+      body: JSON.stringify({ ...description }),
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    };
+    const res = await fetch(
+      `${getServerUrl()}/api/requirement/descriptions/${description._id}`,
+      options
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "UPDATE_DESCRIPTION_SUCCESS", payload: res.payload });
+    } else {
+      dispatch({ type: "UPDATE_DESCRIPTION_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") console.log(e);
+    dispatch({ type: "UPDATE_DESCRIPTION_FAILURE" });
+  }
+};
 
 export const postRequirement = (
   requirement: Omit<IRequirement, "_id">
