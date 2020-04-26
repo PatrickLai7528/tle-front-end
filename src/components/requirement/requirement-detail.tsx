@@ -3,19 +3,12 @@ import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { createUseStyles } from "react-jss";
 import { IRequirementDescription, ITraceLink } from "../../types";
 import { EditableTraceLinkArea } from "../editable-trace-link-area";
-import { RequirementCard } from "../requirement/requirement-card";
-
-export interface IStateProps {
-  traceLinks: ITraceLink[];
-  loading: boolean;
-}
-
-export interface IDispatchProps {
-  fetchRequirementRelatedTraceLinks: (
-    repoName: string,
-    requirementId: string
-  ) => void;
-}
+import { RequirementCard } from "./requirement-card";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { fetchRequirementRelatedTraceLinks } from "../../store/trace-link/actions";
+import { AppDispatch } from "../../store/store";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -23,10 +16,7 @@ export interface IOwnProps {
   onDescriptionUpdate: (id: string, descriptionText: string) => void;
 }
 
-export interface IRequirementDetailProps
-  extends IStateProps,
-    IDispatchProps,
-    IOwnProps {}
+export interface IRequirementDetailProps extends IOwnProps {}
 
 const useStyles = createUseStyles({
   requirementDetail: {
@@ -49,29 +39,36 @@ const useStyles = createUseStyles({
   }
 });
 
-const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
+export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
   (props: IRequirementDetailProps) => {
     const {
       repoName,
-      description,
-      onDescriptionUpdate,
-      fetchRequirementRelatedTraceLinks,
-      loading,
-      traceLinks
+      description
+      // fetchRequirementRelatedTraceLinks,
     } = props;
     const styles = useStyles();
+    const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
+    const loading = useSelector<RootState, boolean>(
+      state => state.traceLinkReducer.loading
+    );
+
+    const traceLinks = useSelector<RootState, ITraceLink[]>(
+      state => state.traceLinkReducer.requirementRelatedTraceLinks
+    );
+
+    const fetchTraceLinks = (repoName: string, descriptionId: string) =>
+      dispatch(fetchRequirementRelatedTraceLinks(repoName, descriptionId));
 
     useEffect(() => {
       const doFetch = async () => {
         try {
-          await fetchRequirementRelatedTraceLinks(repoName, description._id);
+          await fetchTraceLinks(repoName, description._id);
         } catch (e) {
           if (process.env.NODE_ENV !== "production") {
             console.log(e);
           }
         }
       };
-
       doFetch();
     }, [repoName, fetchRequirementRelatedTraceLinks, description]);
 
@@ -108,5 +105,3 @@ const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
     );
   }
 );
-
-export default RequirementDetail;

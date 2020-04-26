@@ -12,7 +12,6 @@ import { RouteComponentProps } from "react-router-dom";
 import { ConnectedCommitDetail } from "../../components/commit-detail";
 import { ConnectedFileDetail } from "../../components/file-detail";
 import { RepositoryFiles } from "../../components/repository-files";
-import { ConnectedRequirementDetail } from "../../components/requirement-detail";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -26,6 +25,7 @@ import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
 import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
+import { RequirementDetail } from "../../components/requirement/requirement-detail";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -160,7 +160,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         );
       } else if (drawerType === "REQUIREMENT") {
         return (
-          <ConnectedRequirementDetail
+          <RequirementDetail
             repoName={repoName}
             onDescriptionUpdate={(descId: string, descriptionText: string) => {
               const oldDescriptions: IRequirementDescription[] =
