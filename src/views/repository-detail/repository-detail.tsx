@@ -9,7 +9,6 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
-import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
 import { ConnectedCommitDetail } from "../../components/commit-detail";
 import { ConnectedFileDetail } from "../../components/file-detail";
 import { RepositoryFiles } from "../../components/repository-files";
@@ -26,6 +25,7 @@ import CommitCard from "./commit/commit-card";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
+import { AddRequirementModal } from "../../components/add-requirement-modal/add-requirement-modal";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -234,9 +234,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
 
     return (
       <Spin spinning={loading} className={styles.spining}>
-        {requirement && (
-          <ConnectedAddRequirementModal requirementId={requirement._id} />
-        )}
+        {requirement && <AddRequirementModal requirementId={requirement._id} />}
         <Drawer
           destroyOnClose
           width={"80vw"}

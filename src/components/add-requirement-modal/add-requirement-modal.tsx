@@ -1,58 +1,51 @@
 import { Modal, Spin } from "antd";
 import React, { FunctionComponent, memo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Dispatch } from "redux";
+import { RootState } from "../../store/reducers";
+import { RequirementActions } from "../../store/requirement/types";
 import { IRequirementDescription } from "../../types";
 import { RequirementForm } from "../requirement/requirement-form";
+import {
+  toggleAddRequirementModal,
+  addRequirement
+} from "../../store/requirement/actions";
+import { AppDispatch } from "../../store/store";
 
-export interface IStateProps {
-  visible: boolean;
-  loading: boolean;
-}
-
-export interface IDisipatchProps {
-  toggleModal: () => void;
-  addRequirement: (
-    requirementId: string,
-    description: Omit<IRequirementDescription, "_id">
-  ) => void;
-}
-
-export interface IOwnProps {
+export interface IAddRequirementModalProps {
   requirementId: string;
 }
 
-export interface IAddRequirementModalProps
-  extends IStateProps,
-    IDisipatchProps,
-    IOwnProps {}
-
-const AddRequirementModal: FunctionComponent<IAddRequirementModalProps> = memo(
+export const AddRequirementModal: FunctionComponent<IAddRequirementModalProps> = memo(
   (props: IAddRequirementModalProps) => {
-    const {
-      toggleModal,
-      visible,
-      loading,
-      addRequirement,
-      requirementId
-    } = props;
+    const { requirementId } = props;
+
+    const visible = useSelector<RootState, boolean>(
+      state => state.requirementReducer.addRequirementModalVisible
+    );
+    const loading = useSelector<RootState, boolean>(
+      state => state.requirementReducer.addRequirementLoading
+    );
+
+    const dispatch = useDispatch<AppDispatch<RequirementActions>>();
+
+    const onCancel = () => dispatch(toggleAddRequirementModal());
+
+    const onDone = (description: Omit<IRequirementDescription, "_id">) =>
+      dispatch(addRequirement(requirementId, description));
 
     return (
       <Modal
         closable={false}
         maskClosable
         footer={null}
-        onCancel={toggleModal}
+        onCancel={onCancel}
         visible={visible}
       >
         <Spin spinning={loading}>
-          <RequirementForm
-            onDone={description => {
-              addRequirement(requirementId, description);
-            }}
-          />
+          <RequirementForm onDone={onDone} />
         </Spin>
       </Modal>
     );
   }
 );
-
-export default AddRequirementModal;
