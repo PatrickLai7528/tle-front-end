@@ -155,20 +155,37 @@ export const fetchRepoRequirement = (
 };
 
 export const addRequirement = (
+  requirementId: string,
   requirementDescription: Omit<IRequirementDescription, "_id">
 ): AppThunk<void, RootState> => async (
-  dispatch: AppDispatch<RequirementActions>
+  dispatch: AppDispatch<RequirementActions>,
+  getState
 ) => {
   dispatch({ type: ADD_REQUIREMENT });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
 
-    //TODO
-    let fakeData = requirement.descriptions[0];
-    // fakeData = { ...fakeData, name: requirementDesc, _id: requirementDesc };
-
-    dispatch({ type: ADD_REQUIREMENT_SUCCESS, payload: fakeData });
-    dispatch(toggleAddRequirementModal());
+    const url = `${getServerUrl()}/api/requirement/description/${requirementId}`;
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify({ ...requirementDescription }),
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: ADD_REQUIREMENT_SUCCESS, payload: res.payload });
+      dispatch(toggleAddRequirementModal());
+    } else {
+      dispatch({ type: "ADD_REQUIREMENT_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);

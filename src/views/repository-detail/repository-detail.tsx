@@ -234,7 +234,9 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
 
     return (
       <Spin spinning={loading} className={styles.spining}>
-        <ConnectedAddRequirementModal />
+        {requirement && (
+          <ConnectedAddRequirementModal requirementId={requirement._id} />
+        )}
         <Drawer
           destroyOnClose
           width={"80vw"}

@@ -29,8 +29,10 @@ const mapDispatchToProps: MapDispatchToProps<IDisipatchProps, IOwnProps> = (
 ) => {
   return {
     toggleModal: () => dispatch(toggleAddRequirementModal()),
-    addRequirement: (description: Omit<IRequirementDescription, "_id">) =>
-      dispatch(addRequirement(description))
+    addRequirement: (
+      requirementId: string,
+      description: Omit<IRequirementDescription, "_id">
+    ) => dispatch(addRequirement(requirementId, description))
   };
 };
 

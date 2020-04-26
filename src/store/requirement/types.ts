@@ -70,7 +70,7 @@ export interface IAddRequirementAction {
 
 export interface IAddRequirementSuccessAction {
   type: typeof ADD_REQUIREMENT_SUCCESS;
-  payload: IRequirementDescription;
+  payload: IRequirement;
 }
 
 export interface IAddRequirementFailureAction {

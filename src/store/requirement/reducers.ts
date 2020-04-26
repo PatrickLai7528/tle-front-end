@@ -96,11 +96,7 @@ export const requirementReducer = (
         addRequirementLoading: false,
         requirement: state.requirement
           ? {
-              ...state.requirement,
-              descriptions: [
-                (action as IAddRequirementSuccessAction).payload,
-                ...state.requirement.descriptions
-              ]
+              ...(action as IAddRequirementSuccessAction).payload
             }
           : undefined
       };

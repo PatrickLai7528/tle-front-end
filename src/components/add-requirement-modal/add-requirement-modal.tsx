@@ -1,8 +1,7 @@
-import { Input, Modal, Spin } from "antd";
-import React, { ChangeEvent, FunctionComponent, memo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import { RequirementForm } from "../requirement/requirement-form";
+import { Modal, Spin } from "antd";
+import React, { FunctionComponent, memo } from "react";
 import { IRequirementDescription } from "../../types";
+import { RequirementForm } from "../requirement/requirement-form";
 
 export interface IStateProps {
   visible: boolean;
@@ -11,10 +10,15 @@ export interface IStateProps {
 
 export interface IDisipatchProps {
   toggleModal: () => void;
-  addRequirement: (description: Omit<IRequirementDescription, "_id">) => void;
+  addRequirement: (
+    requirementId: string,
+    description: Omit<IRequirementDescription, "_id">
+  ) => void;
 }
 
-export interface IOwnProps {}
+export interface IOwnProps {
+  requirementId: string;
+}
 
 export interface IAddRequirementModalProps
   extends IStateProps,
@@ -23,7 +27,13 @@ export interface IAddRequirementModalProps
 
 const AddRequirementModal: FunctionComponent<IAddRequirementModalProps> = memo(
   (props: IAddRequirementModalProps) => {
-    const { toggleModal, visible, loading, addRequirement } = props;
+    const {
+      toggleModal,
+      visible,
+      loading,
+      addRequirement,
+      requirementId
+    } = props;
 
     return (
       <Modal
@@ -36,7 +46,7 @@ const AddRequirementModal: FunctionComponent<IAddRequirementModalProps> = memo(
         <Spin spinning={loading}>
           <RequirementForm
             onDone={description => {
-              addRequirement(description);
+              addRequirement(requirementId, description);
             }}
           />
         </Spin>
