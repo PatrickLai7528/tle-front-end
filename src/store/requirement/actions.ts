@@ -23,6 +23,7 @@ import {
 import { getServerUrl } from "../../configs/get-url";
 
 export const updateDescription = (
+  requirementId: string,
   description: IRequirementDescription
 ): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "UPDATE_DESCRIPTION" });
@@ -42,7 +43,7 @@ export const updateDescription = (
       }
     };
     const res = await fetch(
-      `${getServerUrl()}/api/requirement/descriptions/${description._id}`,
+      `${getServerUrl()}/api/requirement/description/${requirementId}`,
       options
     ).then(res => res.json());
     if (res && res.success) {

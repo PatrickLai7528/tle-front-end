@@ -161,6 +161,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       } else if (drawerType === "REQUIREMENT") {
         return (
           <RequirementDetail
+            requirementId={requirement._id}
             repoName={repoName}
             onDescriptionUpdate={(descId: string, descriptionText: string) => {
               const oldDescriptions: IRequirementDescription[] =

@@ -31,7 +31,6 @@ export interface IUpdateDescriptionAction {
 
 export interface IUpdateDescriptionSuccessAction {
   type: typeof UPDATE_DESCRIPTION_SUCCESS;
-  payload: IRequirementDescription;
 }
 
 export interface IUpdateDescriptionFailureAction {

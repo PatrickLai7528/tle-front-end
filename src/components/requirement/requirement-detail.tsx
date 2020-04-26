@@ -9,11 +9,13 @@ import { RootState } from "../../store/reducers";
 import { TraceLinkActions } from "../../store/trace-link/types";
 import { fetchRequirementRelatedTraceLinks } from "../../store/trace-link/actions";
 import { AppDispatch } from "../../store/store";
+import { updateDescription } from "../../store/requirement/actions";
 
 export interface IOwnProps {
   description: IRequirementDescription;
   repoName: string;
   onDescriptionUpdate: (id: string, descriptionText: string) => void;
+  requirementId: string;
 }
 
 export interface IRequirementDetailProps extends IOwnProps {}
@@ -41,11 +43,7 @@ const useStyles = createUseStyles({
 
 export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
   (props: IRequirementDetailProps) => {
-    const {
-      repoName,
-      description
-      // fetchRequirementRelatedTraceLinks,
-    } = props;
+    const { repoName, requirementId, description } = props;
     const styles = useStyles();
     const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
     const loading = useSelector<RootState, boolean>(
@@ -58,6 +56,9 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
 
     const fetchTraceLinks = (repoName: string, descriptionId: string) =>
       dispatch(fetchRequirementRelatedTraceLinks(repoName, descriptionId));
+
+    const onUpdateDescription = (description: IRequirementDescription) =>
+      dispatch(updateDescription(requirementId, description));
 
     useEffect(() => {
       const doFetch = async () => {
@@ -93,6 +94,7 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
         <Typography.Title level={3}>需求描述</Typography.Title>
         <div className={styles.requirementArea}>
           <RequirementCard
+            onUpdateDescription={onUpdateDescription}
             description={description}
             useCard={false}
             editable

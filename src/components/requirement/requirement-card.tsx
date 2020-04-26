@@ -1,18 +1,38 @@
-import React, { ReactNode } from "react";
-import { Card, Descriptions, Input, Select, Tooltip } from "antd";
-import { IRequirementDescription } from "../../types";
+import { Card, Descriptions, Input, Select, Tooltip, Button } from "antd";
 import moment from "moment";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { IRequirementDescription } from "../../types";
+import { createUseStyles } from "react-jss";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../store/store";
+import { RequirementActions } from "../../store/requirement/types";
 
 export interface IRequirementCardProps {
   description: IRequirementDescription | Omit<IRequirementDescription, "_id">;
+  onUpdateDescription?: (description: IRequirementDescription) => void;
   useCard?: boolean;
   useTooltips?: boolean;
   editable?: boolean;
+  // onButtonClick?: (
+  // 	description:
+  // 		| IRequirementDescription
+  // 		| Omit<IRequirementDescription, "_id">
+  // ) => void;
 }
 
 const MomentDate = React.memo<{ date: number }>(({ date }) => {
   return <span>{moment(date).format("YYYY-MM-DD HH:mm:SS")}</span>;
+});
+
+const useStyles = createUseStyles({
+  buttonWrapper: {
+    margin: { top: "16px" },
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end"
+  }
 });
 
 // ID
@@ -31,7 +51,14 @@ const MomentDate = React.memo<{ date: number }>(({ date }) => {
 // Special needs
 export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = React.memo(
   (props: IRequirementCardProps) => {
-    const { description, useCard, editable, useTooltips } = props;
+    const {
+      description,
+      useCard,
+      editable,
+      useTooltips,
+      onUpdateDescription
+    } = props;
+    const styles = useStyles();
     const {
       createBy,
       lastUpdateAt,
@@ -49,6 +76,7 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
       | "lastUpdateAt"
       | "createBy"
       | "createAt"
+      | "traced"
       | "_id";
 
     type EditableDescriptionKeys = Exclude<DescriptionKeys, CannotEditKeys>;
@@ -104,6 +132,12 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
 
         const onBlur = () => {
           setEditables(prev => ({ ...prev, [key]: false }));
+          if (typeof onUpdateDescription === "function") {
+            onUpdateDescription({
+              ...description,
+              ...valueState
+            } as IRequirementDescription);
+          }
         };
 
         if (Component) {
@@ -154,66 +188,68 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
     );
 
     const descriptions = (
-      <Descriptions column={2} bordered size={"small"}>
-        <Descriptions.Item label={"ID"} span={1}>
-          {(description as any)._id || "暫無"}
-        </Descriptions.Item>
-        <Descriptions.Item label={"名稱"} span={1}>
-          {renderItem("name", name)}
-        </Descriptions.Item>
-        <Descriptions.Item label="創建者" span={1}>
-          {createBy}
-        </Descriptions.Item>
-        <Descriptions.Item label="優先級" span={1}>
-          {renderItem(
-            "priority",
-            t(priority as string),
-            ({ value, onBlur, onChange }) => {
-              return (
-                <Select value={value} onBlur={onBlur} onChange={onChange}>
-                  <Select.Option value="low">{t("low")}</Select.Option>
-                  <Select.Option value="medium">{t("medium")}</Select.Option>
-                  <Select.Option value="high">{t("high")}</Select.Option>
-                </Select>
-              );
-            }
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="最後更新者" span={1}>
-          {lastUpdateBy}
-        </Descriptions.Item>
-        <Descriptions.Item label="創建日期" span={1}>
-          {<MomentDate date={createAt} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="最後更新日期" span={1}>
-          {<MomentDate date={lastUpdateAt} />}
-        </Descriptions.Item>
-        <Descriptions.Item label="參與者" span={2}>
-          {renderItem("participants", participants)}
-        </Descriptions.Item>
-        <Descriptions.Item label="觸發條件" span={3}>
-          {renderItem(
-            "triggeringCondition",
-            triggeringCondition,
-            EditableTextArea
-          )}
-        </Descriptions.Item>
-        <Descriptions.Item label="前置條件" span={3}>
-          {renderItem("preCondition", preCondition, EditableTextArea)}
-        </Descriptions.Item>
-        <Descriptions.Item label="後置條件" span={3}>
-          {renderItem("postCondition", postCondition, EditableTextArea)}
-        </Descriptions.Item>
-        <Descriptions.Item label="正常流程" span={3}>
-          {renderItem("normalProcess", normalProcess, EditableTextArea)}
-        </Descriptions.Item>
-        <Descriptions.Item label="擴展流程" span={3}>
-          {renderItem("expansionProcess", expansionProcess, EditableTextArea)}
-        </Descriptions.Item>
-        <Descriptions.Item label="特殊需求" span={3}>
-          {renderItem("specialNeeds", specialNeeds, EditableTextArea)}
-        </Descriptions.Item>
-      </Descriptions>
+      <>
+        <Descriptions column={2} bordered size={"small"}>
+          <Descriptions.Item label={"ID"} span={1}>
+            {(description as any)._id || "暫無"}
+          </Descriptions.Item>
+          <Descriptions.Item label={"名稱"} span={1}>
+            {renderItem("name", name)}
+          </Descriptions.Item>
+          <Descriptions.Item label="創建者" span={1}>
+            {createBy}
+          </Descriptions.Item>
+          <Descriptions.Item label="優先級" span={1}>
+            {renderItem(
+              "priority",
+              t(priority as string),
+              ({ value, onBlur, onChange }) => {
+                return (
+                  <Select value={value} onBlur={onBlur} onChange={onChange}>
+                    <Select.Option value="low">{t("low")}</Select.Option>
+                    <Select.Option value="medium">{t("medium")}</Select.Option>
+                    <Select.Option value="high">{t("high")}</Select.Option>
+                  </Select>
+                );
+              }
+            )}
+          </Descriptions.Item>
+          <Descriptions.Item label="最後更新者" span={1}>
+            {lastUpdateBy}
+          </Descriptions.Item>
+          <Descriptions.Item label="創建日期" span={1}>
+            {<MomentDate date={createAt} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="最後更新日期" span={1}>
+            {<MomentDate date={lastUpdateAt} />}
+          </Descriptions.Item>
+          <Descriptions.Item label="參與者" span={2}>
+            {renderItem("participants", participants)}
+          </Descriptions.Item>
+          <Descriptions.Item label="觸發條件" span={3}>
+            {renderItem(
+              "triggeringCondition",
+              triggeringCondition,
+              EditableTextArea
+            )}
+          </Descriptions.Item>
+          <Descriptions.Item label="前置條件" span={3}>
+            {renderItem("preCondition", preCondition, EditableTextArea)}
+          </Descriptions.Item>
+          <Descriptions.Item label="後置條件" span={3}>
+            {renderItem("postCondition", postCondition, EditableTextArea)}
+          </Descriptions.Item>
+          <Descriptions.Item label="正常流程" span={3}>
+            {renderItem("normalProcess", normalProcess, EditableTextArea)}
+          </Descriptions.Item>
+          <Descriptions.Item label="擴展流程" span={3}>
+            {renderItem("expansionProcess", expansionProcess, EditableTextArea)}
+          </Descriptions.Item>
+          <Descriptions.Item label="特殊需求" span={3}>
+            {renderItem("specialNeeds", specialNeeds, EditableTextArea)}
+          </Descriptions.Item>
+        </Descriptions>
+      </>
     );
 
     return useCard ? <Card>{descriptions}</Card> : descriptions;
