@@ -118,7 +118,11 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
                       }
                     }}
                   /> */}
-                  <ImplementationAutoComplete repoId={repoId} />
+                  <ImplementationAutoComplete
+                    onChange={setTraceLinkByType}
+                    value={getValueByType() as string}
+                    repoId={repoId}
+                  />
                   <div className={styles.buttons}>
                     <Button
                       onClick={async () => {
