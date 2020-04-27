@@ -245,12 +245,27 @@ export const generateInitialTraceLink = (
 export const fetchRepoTraceLink = (
   repoName: string
 ): AppThunk<void, TraceLinkActionTypes> => async (
-  dispatch: AppDispatch<TraceLinkActions>
+  dispatch: AppDispatch<TraceLinkActions>,
+  getState
 ) => {
   dispatch({ type: FETCH_REPO_TRACE_LINK });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    dispatch({ type: FETCH_REPO_TRACE_LINK_SUCCESS, payload: traceLinkMatrix });
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const url = `${getServerUrl()}/api/tracelink/matrix?repoName=${repoName}`;
+    const res = await fetch(url, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "FETCH_REPO_TRACE_LINK_SUCCESS", payload: res.payload });
+    } else {
+      dispatch({ type: "FETCH_REPO_TRACE_LINK_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);

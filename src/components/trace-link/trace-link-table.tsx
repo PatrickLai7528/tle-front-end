@@ -3,9 +3,14 @@ import { ITraceLink, IRequirementDescription, IImplement } from "../../types";
 import { Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { AppDispatch } from "../../store/store";
+import { fetchRepoTraceLink } from "../../store/trace-link/actions";
 
 export interface ITraceLinkTableProps {
-  traceLinks: ITraceLink[];
+  repoName: string;
 }
 
 // _id: string;
@@ -40,9 +45,27 @@ const columns: ColumnsType<ITraceLink> = [
 ];
 
 export const TraceLinkTable: React.FunctionComponent<ITraceLinkTableProps> = React.memo(
-  ({ traceLinks }: ITraceLinkTableProps) => {
+  (props: ITraceLinkTableProps) => {
+    const { repoName } = props;
+    const loading = useSelector<RootState, boolean>(
+      state => state.traceLinkReducer.loading
+    );
+
+    const traceLinks = useSelector<RootState, ITraceLink[]>(
+      state => state.traceLinkReducer.traceLinkMatrix?.links || []
+    );
+
+    const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
+
+    React.useEffect(() => {
+      if (repoName) dispatch(fetchRepoTraceLink(repoName));
+    }, [repoName]);
+
+    console.log(traceLinks);
+
     return (
       <Table
+        loading={loading}
         columns={columns}
         expandable={{
           expandedRowRender: record => <p style={{ margin: 0 }}>123</p>

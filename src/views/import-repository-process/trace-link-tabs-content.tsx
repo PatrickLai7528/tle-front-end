@@ -95,10 +95,14 @@ export const TraceLinkTabsContent: React.FunctionComponent<ITraceLinkTabsContent
       toggleModel();
     }, [toggleModel, generateInit]);
 
+    React.useEffect(() => {
+      if (initTraceLinkConfirmed && requirementLinkMap)
+        onDescriptionsConfirmed(descriptions);
+    }, [initTraceLinkConfirmed, requirementLinkMap]);
+
     if (!importDone) {
       return <Result status="warning" title="請先等待導入結束" />;
     } else if (initTraceLinkConfirmed && requirementLinkMap) {
-      onDescriptionsConfirmed(descriptions);
       return (
         <>
           {Object.keys(requirementLinkMap || {})

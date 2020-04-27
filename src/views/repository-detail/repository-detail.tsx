@@ -24,6 +24,7 @@ import CommitCard from "./commit/commit-card";
 import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
+import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -63,7 +64,11 @@ const useStyles = createUseStyles({
   contentCardWrapper: {}
 });
 
-export type RepositoryDetailDrawerType = "COMMIT" | "REQUIREMENT" | "FILE";
+export type RepositoryDetailDrawerType =
+  | "COMMIT"
+  | "REQUIREMENT"
+  | "FILE"
+  | "TRACE_LINK";
 
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
@@ -219,8 +224,15 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             minHeight: "80vh"
           }}
         >
-          <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
-            <Tabs.TabPane tab={t("commit")} key="1">
+          <Tabs
+            defaultActiveKey={"TRACE_LINK"}
+            type="card"
+            className={styles.content}
+          >
+            <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
+              <TraceLinkTable repoName={repoName} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={t("commit")} key="COMMIT">
               {!!repo ? (
                 <CommitCard
                   commits={repo.commits}
@@ -233,7 +245,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 <Skeleton />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab={t("requirement")} key="2">
+            <Tabs.TabPane tab={t("requirement")} key="REQUIREMENT">
               {!!requirement ? (
                 <RequirementCard
                   loading={deleteRequirementLoading}
@@ -251,7 +263,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 <Skeleton />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab={"文件"} key={"file"}>
+            <Tabs.TabPane tab={"文件"} key={"FILE"}>
               {repo ? (
                 <RepositoryFiles
                   onFileNodeClick={node => {
@@ -271,7 +283,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab="圖" key="3">
+            <Tabs.TabPane tab="圖" key="GRAPH">
               <TraceLinkGraph />
             </Tabs.TabPane>
           </Tabs>

@@ -218,9 +218,9 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
                   <TraceLinkTabsContent
-                    onDescriptionsConfirmed={descriptions =>
-                      setDescriptions(descriptions)
-                    }
+                    onDescriptionsConfirmed={descriptions => {
+                      setDescriptions(descriptions);
+                    }}
                     initTraceLinkMatrix={initTraceLinkMatrix}
                     repositoryRes={repositoryRes}
                     importedRepository={importedRepostiroy}
