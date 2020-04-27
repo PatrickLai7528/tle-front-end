@@ -1,4 +1,4 @@
-import { Drawer, Empty, PageHeader, Skeleton, Spin, Tabs } from "antd";
+import { Drawer, PageHeader, Skeleton, Spin, Tabs } from "antd";
 import React, {
   FunctionComponent,
   memo,
@@ -9,9 +9,9 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
-import { ConnectedCommitDetail } from "../../components/commit-detail";
-import { ConnectedFileDetail } from "../../components/file-detail";
 import { RepositoryFiles } from "../../components/repository-files";
+import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
+import { TraceLinkGraph } from "../../components/trace-link-graph";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -21,12 +21,9 @@ import {
   IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
+import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import { TraceLinkGraph } from "../../components/trace-link-graph";
-import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
-import { RequirementDetail } from "../../components/requirement/requirement-detail";
-import { DrawerContent } from "./drawer-content";
 
 export interface IStateProps {
   repo?: IImportedRepository;
