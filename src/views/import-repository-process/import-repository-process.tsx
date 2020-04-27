@@ -1,19 +1,8 @@
-import {
-  Alert,
-  Button,
-  Col,
-  Input,
-  PageHeader,
-  Row,
-  Tabs,
-  Tooltip,
-  Result,
-  Modal
-} from "antd";
+import { Button, Col, Modal, PageHeader, Row, Tabs, Tooltip } from "antd";
 import React, { FC, memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { RouteComponentProps, Prompt } from "react-router-dom";
+import { Prompt, RouteComponentProps } from "react-router-dom";
 import { ImportProcessStep } from "../../components/import-process-step";
 import {
   ImportProccess,
@@ -23,15 +12,11 @@ import {
   IImportedRepository,
   IRequirement,
   IRequirementDescription,
-  ITraceLinkMatrix,
-  ITraceLink,
-  IFileTreeNode
+  ITraceLinkMatrix
 } from "../../types";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
-import { TraceLinkCard } from "./../../components/trace-link-card";
 import BasicInfoDescriptions from "./basic-info-descriptions";
-import { ConnectedEditInitTraceLinkModal } from "../../components/edit-init-trace-link-modal";
-import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
+import { TraceLinkTabsContent } from "./trace-link-tabs-content";
 
 export interface IStateProps {
   repositoryRes: IGHRepositoryRes;
@@ -39,22 +24,16 @@ export interface IStateProps {
   importDone: boolean;
   importedRepostiroy?: Partial<IImportedRepository>;
   initTraceLinkMatrix?: ITraceLinkMatrix;
-  genInitTraceLinkLoading: boolean;
   initTraceLinkConfirmed: boolean;
   confirmImportLoading: boolean;
 }
 
 export interface IDispatchProps {
   startImport: (repositoryRes: IGHRepositoryRes) => void;
-  generateInitTraceLinkMatrix: (
-    files: IFileTreeNode[],
-    requirement: IRequirement
-  ) => void;
-  toggleInitTraceLinkModal: () => void;
   confirmImport: (
-    repo: IImportedRepository,
-    requirement: IRequirement,
-    matrix: ITraceLinkMatrix
+    repo: Omit<IImportedRepository, "_id">,
+    requirement: Omit<IRequirement, "_id">,
+    matrix: Omit<ITraceLinkMatrix, "_id">
   ) => void;
   stopImport: () => void;
 }
@@ -113,9 +92,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       initTraceLinkConfirmed,
       repositoryRes,
       initTraceLinkMatrix,
-      genInitTraceLinkLoading,
-      generateInitTraceLinkMatrix,
-      toggleInitTraceLinkModal,
       confirmImport,
       confirmImportLoading,
       stopImport,
@@ -154,12 +130,9 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
       "BASIC_INFO" | "INIT_TRACE_LINKS"
     >("BASIC_INFO");
 
-    const [initRequirement, setInitRequirement] = useState<string>("");
-
-    //  useEffect(() => {
-    //    if (importDone) return;
-    //    else if (currentStep === 0) startImport(repositoryRes);
-    //  }, [importDone, currentStep, startImport, repositoryRes]);
+    const [descriptions, setDescriptions] = useState<
+      Omit<IRequirementDescription, "_id">[]
+    >([]);
 
     useEffect(() => {
       startImport(repositoryRes);
@@ -167,11 +140,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
 
     const confirmImportButtonDisable =
       !initTraceLinkConfirmed || !importDone || !initTraceLinkMatrix;
-
-    const requirementLinkMap = useMemo(
-      () => classifyTraceLinksByRequirement(initTraceLinkMatrix?.links || []),
-      [initTraceLinkMatrix]
-    );
 
     const confirmImportButton = (
       <Button
@@ -184,14 +152,7 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
             importedRepostiroy as IImportedRepository,
             {
               relatedRepoName: importedRepostiroy!.name!,
-              descriptions: initRequirement
-                .split(";")
-                .filter(desc => !!desc)
-                .map(desc => {
-                  return {
-                    text: desc
-                  } as IRequirementDescription;
-                })
+              descriptions: descriptions as any
             },
             {
               ...initTraceLinkMatrix,
@@ -204,72 +165,6 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
         確認導入
       </Button>
     );
-
-    const traceLinkTabsContent = () => {
-      if (!importDone) {
-        return <Result status="warning" title="請先等待導入結束" />;
-      } else if (initTraceLinkConfirmed && requirementLinkMap) {
-        return Object.keys(requirementLinkMap || {})
-          .sort()
-          .map(requirementId => {
-            const traceLinks: ITraceLink[] = requirementLinkMap[requirementId];
-            return (
-              <TraceLinkCard
-                key={requirementId}
-                editable={false}
-                tracelinks={traceLinks}
-                requirement={traceLinks[0].requirementDescription}
-              />
-            );
-          });
-      } else {
-        return (
-          <>
-            <Alert
-              className={styles.initRequirementAlert}
-              message="數據格式"
-              description="用;分隔需求描述"
-              type="info"
-              showIcon
-            />
-            <Input.TextArea
-              className={styles.initRequirementTextArea}
-              value={initRequirement}
-              onChange={e => setInitRequirement(e.target.value)}
-              autoSize={{ minRows: 10 }}
-            />
-            <Button
-              loading={genInitTraceLinkLoading}
-              onClick={async () => {
-                const requirement: IRequirement = {
-                  relatedRepoName:
-                    importedRepostiroy?.name || repositoryRes.name,
-                  descriptions: initRequirement
-                    .split(";")
-                    .filter(desc => !!desc)
-                    .map(desc => {
-                      return {
-                        text: desc
-                      } as IRequirementDescription;
-                    })
-                };
-                await generateInitTraceLinkMatrix(
-                  importedRepostiroy?.trees || [],
-                  requirement
-                );
-                toggleInitTraceLinkModal();
-              }}
-            >
-              生成追踪線索
-            </Button>
-            <ConnectedEditInitTraceLinkModal
-              width={"80vw"}
-              traceLinkMatrix={initTraceLinkMatrix}
-            />
-          </>
-        );
-      }
-    };
 
     return (
       <div className={styles.importProcess}>
@@ -322,7 +217,14 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
                   )}
                 </Tabs.TabPane>
                 <Tabs.TabPane tab={"追踪線索"} key={"INIT_TRACE_LINK"}>
-                  {traceLinkTabsContent()}
+                  <TraceLinkTabsContent
+                    onDescriptionsConfirmed={descriptions => {
+                      setDescriptions(descriptions);
+                    }}
+                    initTraceLinkMatrix={initTraceLinkMatrix}
+                    repositoryRes={repositoryRes}
+                    importedRepository={importedRepostiroy}
+                  />
                 </Tabs.TabPane>
               </Tabs>
             </div>

@@ -48,7 +48,7 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
           description={
             <Typography>
               <Typography.Title level={4}>需求描述</Typography.Title>
-              <Typography.Paragraph>{requirement.text}</Typography.Paragraph>
+              <Typography.Paragraph>{requirement.name}</Typography.Paragraph>
             </Typography>
           }
         />
@@ -76,11 +76,11 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
                 onClick={() => {
                   if (newImplValue && newImplValue !== "" && onAddLink) {
                     onAddLink({
-                      id: uuidv4(),
+                      _id: uuidv4(),
                       requirementDescription: requirement,
                       implement: {
                         traced: true,
-                        id: uuidv4(),
+                        _id: uuidv4(),
                         type: "CLASS",
                         fullyQualifiedName: newImplValue
                       }
@@ -120,7 +120,7 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
               }
             >
               <List.Item.Meta
-                description={`#${link.implement.id}`}
+                description={`#${link.implement._id}`}
                 title={link.implement.fullyQualifiedName}
               />
             </List.Item>

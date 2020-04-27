@@ -1,4 +1,4 @@
-import { IRequirement, IRequirementDescription } from "./../../types/index";
+import { IRequirement, IDescriptionHistory } from "./../../types/index";
 export const FETCH_REPO_REQUIREMENT = "FETCH_REPO_REQUIREMENT";
 export const FETCH_REPO_REQUIREEMENT_SUCCESS = "FETCH_REPO_REQUIREMENT_SUCCESS";
 export const FETCH_REPO_REQUIREMENT_FAILURE = "FETCH_REPO_REQUIREMENT_FAILURE";
@@ -20,6 +20,41 @@ export const DELETE_REQUIREMENT_SUCCESS = "DELETE_REQUIREMENT_SUCCESS";
 export const DELETE_REQUIREMENT_FAILURE = "DELETE_REQUIREMENT_FAIULRE";
 
 export const TOGGLE_ADD_REQUIREMENT_MODAL = "TOGGLE_ADD_REQUIREMENT_MODAL";
+
+export const UPDATE_DESCRIPTION = "UPDATE_DESCRIPTION";
+export const UPDATE_DESCRIPTION_SUCCESS = "UPDATE_DESCRIPTION_SUCCESS";
+export const UPDATE_DESCRIPTION_FAILURE = "UPDATE_DESCRIPTION_FAILURE";
+
+export const FETCH_DESCRIPTION_HISTORY = "FETCH_DESCRIPTION_HISTORY";
+export const FETCH_DESCRIPTION_HISTORY_SUCCESS =
+  "FETCH_DESCRIPTION_HISTORY_SUCCESS";
+export const FETCH_DESCRIPTION_HISTORY_FAILURE =
+  "FETCH_DESCRIPTION_HISTORY_FAILURE";
+
+export interface IFetchDescriptionHistoryAction {
+  type: typeof FETCH_DESCRIPTION_HISTORY;
+}
+
+export interface IFetchDescriptionHistorySuccessAction {
+  type: typeof FETCH_DESCRIPTION_HISTORY_SUCCESS;
+  payload: IDescriptionHistory[];
+}
+
+export interface IFetchDescriptionHistoryFailureAction {
+  type: typeof FETCH_DESCRIPTION_HISTORY_FAILURE;
+}
+
+export interface IUpdateDescriptionAction {
+  type: typeof UPDATE_DESCRIPTION;
+}
+
+export interface IUpdateDescriptionSuccessAction {
+  type: typeof UPDATE_DESCRIPTION_SUCCESS;
+}
+
+export interface IUpdateDescriptionFailureAction {
+  type: typeof UPDATE_DESCRIPTION_FAILURE;
+}
 
 export interface IPostRequirementAction {
   type: typeof POST_REQUIREMENT;
@@ -70,7 +105,7 @@ export interface IAddRequirementAction {
 
 export interface IAddRequirementSuccessAction {
   type: typeof ADD_REQUIREMENT_SUCCESS;
-  payload: IRequirementDescription;
+  payload: IRequirement;
 }
 
 export interface IAddRequirementFailureAction {
@@ -84,6 +119,8 @@ export interface IRequirementState {
   deleteRequirementLoading: boolean;
   updateRequirementLoading: boolean;
   error?: boolean | any;
+
+  histories?: IDescriptionHistory[];
 }
 
 export interface IFetchRepoRequirementAction {
@@ -115,7 +152,13 @@ export type RequirementActions =
   | IDeleteRequirementFailreAction
   | IPostRequirementAction
   | IPostRequirementSuccessAction
-  | IPostRequirementFailureAction;
+  | IPostRequirementFailureAction
+  | IUpdateDescriptionAction
+  | IUpdateDescriptionSuccessAction
+  | IUpdateDescriptionFailureAction
+  | IFetchDescriptionHistoryAction
+  | IFetchDescriptionHistorySuccessAction
+  | IFetchDescriptionHistoryFailureAction;
 
 export type RequirementActionTypes =
   | typeof FETCH_REPO_REQUIREMENT
@@ -133,4 +176,10 @@ export type RequirementActionTypes =
   | typeof DELETE_REQUIREMENT_FAILURE
   | typeof POST_REQUIREMENT
   | typeof POST_REQUIREMENT_SUCCESS
-  | typeof POST_REQUIREMENT_FAILURE;
+  | typeof POST_REQUIREMENT_FAILURE
+  | typeof UPDATE_DESCRIPTION
+  | typeof UPDATE_DESCRIPTION_SUCCESS
+  | typeof UPDATE_DESCRIPTION_FAILURE
+  | typeof FETCH_DESCRIPTION_HISTORY
+  | typeof FETCH_DESCRIPTION_HISTORY_SUCCESS
+  | typeof FETCH_DESCRIPTION_HISTORY_FAILURE;

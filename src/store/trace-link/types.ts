@@ -40,6 +40,20 @@ export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS =
 export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE =
   "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE";
 
+export const NEW_TRACE_LINK = "NEW_TRACE_LINK";
+export const NEW_TRACE_LINK_SUCCESS = "NEW_TRACE_LINK_SUCCESS";
+export const NEW_TRACE_LINK_FAILURE = "NEW_TRACE_LINK_FAILURE";
+
+export interface INewTraceLinkAction {
+  type: typeof NEW_TRACE_LINK;
+}
+export interface INewTraceLinkSuccessAction {
+  type: typeof NEW_TRACE_LINK_SUCCESS;
+}
+export interface INewTraceLinkFailureAction {
+  type: typeof NEW_TRACE_LINK_FAILURE;
+}
+
 export interface IFetchRequirementRelatedTraceLinkAction {
   type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK;
 }
@@ -136,6 +150,7 @@ export interface ITraceLinkState {
   commitRelatedTraceLinks: ICommitRelatedTraceLinks;
   fileRelatedTraceLinks: ITraceLink[];
   requirementRelatedTraceLinks: ITraceLink[];
+  sendNewTraceLinkLoading: boolean;
 }
 
 export interface IFetchRepoTraceLinkAction {
@@ -172,7 +187,10 @@ export type TraceLinkActions =
   | IFetchFileRelatedTraceLinkFailureAction
   | IFetchRequirementRelatedTraceLinkAction
   | IFetchRequirementRelatedTraceLinkSuccessAction
-  | IFetchRequirementRelatedTraceLinkFailureAction;
+  | IFetchRequirementRelatedTraceLinkFailureAction
+  | INewTraceLinkAction
+  | INewTraceLinkSuccessAction
+  | INewTraceLinkFailureAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -195,4 +213,7 @@ export type TraceLinkActionTypes =
   | typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE
   | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK
   | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS
-  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE;
+  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE
+  | typeof NEW_TRACE_LINK
+  | typeof NEW_TRACE_LINK_SUCCESS
+  | typeof NEW_TRACE_LINK_FAILURE;

@@ -11,11 +11,11 @@ export const classifyTraceLinksByRequirement = (
   for (const link of traceLinks) {
     const { requirementDescription } = link;
     if (requirementDescription) {
-      const { id } = requirementDescription;
-      if (!res[id]) {
-        res[id] = [{ ...link }];
+      const { _id } = requirementDescription;
+      if (!res[_id]) {
+        res[_id] = [{ ...link }];
       } else {
-        res[id]?.push({
+        res[_id]?.push({
           ...link
         });
       }

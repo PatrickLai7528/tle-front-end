@@ -1,18 +1,27 @@
-import React, { FunctionComponent, memo, useMemo } from "react";
+import { Button, Card, Divider, Tag, Typography } from "antd";
+import React, {
+  CSSProperties,
+  FunctionComponent,
+  memo,
+  ReactNode,
+  useMemo
+} from "react";
+import { createUseStyles, useTheme } from "react-jss";
+import { CustomTheme } from "../../theme";
 import { ITraceLink } from "../../types";
-import { Card, Divider, Typography, Tag } from "antd";
-import { createUseStyles } from "react-jss";
-
 export interface ISimpleTraceLinkCardProps {
   traceLink: ITraceLink;
   showImplement?: boolean;
   showRequirement?: boolean;
   type?: "ADDED" | "REMOVED";
+  showOperation?: boolean;
+  input?: ReactNode;
+  style?: CSSProperties;
 }
 
 const bodyStyle = { padding: "8px 12px" };
 
-const useStyle = createUseStyles({
+const useStyle = createUseStyles<CustomTheme>(theme => ({
   traceLinkCard: {
     margin: { top: "8px" },
     width: "100%"
@@ -23,39 +32,75 @@ const useStyle = createUseStyles({
     justifyContent: "flex-start",
     alignItems: "center"
   },
-  traceLinkDescription: {}
-});
+  traceLinkDescription: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start"
+  },
+  operations: {
+    flexGrow: 1,
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end"
+  },
+  modifyButton: {
+    background: theme.confirmColor,
+    height: "100%",
+    color: "#fff"
+  },
+  deleteButton: {
+    background: theme.warningColor,
+    height: "100%",
+    color: "#fff",
+    "&:hover": {
+      background: theme.warningColor,
+      color: "#fff !important"
+    }
+  }
+}));
 
 const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
   (props: ISimpleTraceLinkCardProps) => {
-    const { traceLink, showImplement, showRequirement, type } = props;
-    const styles = useStyle();
+    const {
+      traceLink,
+      showImplement,
+      showRequirement,
+      type,
+      showOperation,
+      input,
+      style
+    } = props;
+    const theme: CustomTheme = useTheme() as CustomTheme;
+    const styles = useStyle({ theme });
 
     const cardStyle = useMemo(() => {
       return type
         ? {
-            borderLeftColor: type === "ADDED" ? "#57BC90" : "#FF3F3B",
-            borderLeftWidth: "8px"
+            borderLeftColor:
+              type === "ADDED" ? theme.confirmColor : theme.warningColor,
+            borderLeftWidth: "8px",
+            ...style
           }
-        : {};
-    }, [type]);
+        : style;
+    }, [type, style]);
 
     const cardTitle = useMemo(() => {
       return (
         <div>
           {!!type && (
-            <Tag color={type === "ADDED" ? "#57BC90" : "#FF3F3B"}>
+            <Tag
+              color={type === "ADDED" ? theme.confirmColor : theme.warningColor}
+            >
               {type === "ADDED" ? "ADD" : "REMOVE"}
             </Tag>
           )}
-          {`#${traceLink.id}`}
+          {`#${traceLink._id}`}
         </div>
       );
     }, [type, traceLink]);
 
     return (
       <Card
-        key={traceLink.id}
         hoverable
         style={cardStyle}
         bodyStyle={bodyStyle}
@@ -64,25 +109,38 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
         <Card.Meta
           title={cardTitle}
           description={
-            <div>
+            <div className={styles.traceLinkDescription}>
               {showRequirement && (
-                <Typography>
+                <Typography style={{ width: "100%" }}>
                   <Typography.Text>需求描述</Typography.Text>
-                  <Typography.Paragraph strong>
-                    {traceLink.requirementDescription.text}
-                  </Typography.Paragraph>
+                  {input ? (
+                    input
+                  ) : (
+                    <Typography.Paragraph strong>
+                      {traceLink.requirementDescription.name}
+                    </Typography.Paragraph>
+                  )}
                 </Typography>
               )}
               {showImplement && showRequirement && <Divider />}
               {showImplement && (
                 <>
-                  <Typography>
+                  <Typography style={{ width: "100%" }}>
                     <Typography.Text>實現類或函數</Typography.Text>
-                    <Typography.Paragraph strong>
-                      {traceLink.implement.fullyQualifiedName}
-                    </Typography.Paragraph>
+                    {input ? (
+                      input
+                    ) : (
+                      <Typography.Paragraph strong>
+                        {traceLink.implement.fullyQualifiedName}
+                      </Typography.Paragraph>
+                    )}
                   </Typography>
                 </>
+              )}
+              {!!showOperation && (
+                <div className={styles.operations}>
+                  <Button type="danger">刪除</Button>
+                </div>
               )}
             </div>
           }
@@ -94,7 +152,8 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
 
 SimpleTraceLinkCard.defaultProps = {
   showImplement: true,
-  showRequirement: true
+  showRequirement: true,
+  style: {}
 };
 
 export default SimpleTraceLinkCard;

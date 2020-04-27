@@ -14,11 +14,16 @@ import {
 export const fetchRecentRepository = (): AppThunk<
   void,
   RepositoryManagementActionTypes
-> => async dispatch => {
+> => async (dispatch, getState) => {
   dispatch({ type: FETCH_RECENT_REPOSITORY });
   try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/repository/recent`, {
-      credentials: "include"
+      credentials: "include",
+      headers: { Authorization: `Bearer ${token}` }
     }).then(res => res.json());
     if (res && res.success) {
       dispatch({
@@ -38,13 +43,22 @@ export const fetchRecentRepository = (): AppThunk<
 
 export const fetchImportedRepositoryDetail = (
   repoId: string
-): AppThunk<void, RepositoryManagementActionTypes> => async dispatch => {
+): AppThunk<void, RepositoryManagementActionTypes> => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
-    const res = await fetch(
-      `${getServerUrl()}/api/repository/id/${repoId}`
-    ).then(res => res.json());
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const res = await fetch(`${getServerUrl()}/api/repository/id/${repoId}`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(res => res.json());
     if (res && res.success) {
       dispatch({
         type: FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS,
@@ -66,13 +80,19 @@ export const fetchImportedRepositoryDetail = (
 export const fetchImportedRepositoryList = (): AppThunk<
   void,
   RepositoryManagementActionTypes
-> => async dispatch => {
+> => async (dispatch, getState) => {
   dispatch({ type: "FETCH_IMPORTED_REPOSITORY_LIST" });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1000));
-    const res = await fetch(`${getServerUrl()}/api/repository`).then(res =>
-      res.json()
-    );
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("token");
+    const res = await fetch(`${getServerUrl()}/api/repository`, {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then(res => res.json());
     if (res && res.success) {
       dispatch({
         type: "FETCH_IMPORTED_REPOSITORY_LIST_SUCCESS",

@@ -17,7 +17,8 @@ const initialState: IRepositoryManagementState = {
   rawRepositories: [],
   loadMoreTimes: 0,
   importedRepositoryList: [],
-  recentRepos: []
+  recentRepos: [],
+  fetchGHRepoLoading: false
 };
 
 export const repositoryManagementReducer = (
@@ -84,19 +85,19 @@ export const repositoryManagementReducer = (
     case "FETCH_REPOSITORY_FROM_GITHUB":
       return {
         ...state,
-        loading: true
+        fetchGHRepoLoading: true
       };
     case "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS":
       return {
         ...state,
-        loading: false,
+        fetchGHRepoLoading: false,
         rawRepositories: (action as IFetchRepositoryFromGitHubSuccessAction)
           .payload
       };
     case "FETCH_REPOSITORY_FROM_GITHUB_FAILURE":
       return {
         ...state,
-        loading: false,
+        fetchGHRepoLoading: false,
         error: true
       };
     case "LOAD_MORE_REPOSITORY":

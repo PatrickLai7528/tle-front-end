@@ -7,6 +7,7 @@ import { authReducer } from "./auth/reducers";
 import { importRepositoryReducer } from "./import-repository/reducer";
 import { repositoryManagementReducer } from "./repository-management/reducer";
 import { searchReducer } from "./search-github-repository/reducers";
+import { implementationReducer } from "./implementation/reducers";
 
 const rootReducer = combineReducers({
   authReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   requirementReducer,
   traceLinkReducer,
   notificationReducer,
-  userActivityReducer
+  userActivityReducer,
+  implementationReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -1,55 +1,65 @@
 import { ProgramLanguage } from "./../utils/language-color";
-import * as stubs from "./../stubs";
 
-// export type GitHubAPIRepositoryResponse = typeof stubs.repositories[0];
-
-// export type GitHubAPIRepositoriesResponse = typeof stubs.repositories;
-
-// export type GitHubAPITreeResponse = typeof stubs.tree;
-
-// export type GitHubAPIBlobResponse = typeof stubs.blob;
-
-// export type GitHubAPIBranchesResponse = typeof stubs.branches;
-
-// export type GitHubAPICommitsResponse = typeof stubs.commits;
-
-// export type GitHubAPIDetailCommitResponse = typeof stubs.detailCommit;
+export interface IDescriptionHistory {
+  _id: string;
+  ownerId: string;
+  requirementId: string;
+  descriptionId: string;
+  oldDescription: IRequirementDescription;
+  newDescription: Partial<IRequirementDescription>;
+  createAt: number;
+  lastUpdateAt: number;
+}
 
 export interface IUserActivity {
+  _id: string;
   avatarUrl: string;
   title: string;
   description: string;
 }
 
 export interface IImplement {
-  id: string;
+  _id: string;
   type: "METHOD" | "CLASS";
   fullyQualifiedName: string;
-  traced: boolean;
+  traced?: boolean;
 }
 
 export interface ITraceLink {
-  id: string;
+  _id: string;
   requirementDescription: IRequirementDescription;
   implement: IImplement;
   lastUpdateAt?: number;
 }
 
 export interface ITraceLinkMatrix {
+  _id: string;
   links: ITraceLink[];
+  relatedRepoOwnerId?: string;
   relatedRepoName: string;
 }
 
 export interface IRequirementDescription {
-  text: string;
-  traced: boolean;
+  traced?: boolean;
   lastUpdateAt: number;
-  // lastUpdateCommit: string; // commit message
-  // relatedImplementIds: string[];
-  id: string;
+  name: string;
+  createBy: string;
+  lastUpdateBy: string;
+  createAt: number;
+  participants: string;
+  triggeringCondition: string;
+  preCondition: string;
+  postCondition: string;
+  priority: string;
+  normalProcess: string;
+  expansionProcess: string;
+  specialNeeds: string;
+  _id: string;
 }
 
 export interface IRequirement {
+  _id: string;
+  relatedRepoOwnerId?: string;
   descriptions: IRequirementDescription[];
   relatedRepoName: string;
 }
@@ -76,7 +86,7 @@ export interface ICommitChanges {
 }
 
 export interface IRecentRepo {
-  id: string;
+  _id: string;
   name: string;
   language: ProgramLanguage;
   lastUpdateBy: string;
@@ -133,7 +143,7 @@ export interface IFileTreeNode {
   // 文件名稱不含路徑
   path: string;
 
-  fullyQuilaifiedName: string;
+  fullyQualifiedName: string;
   // 類型
   type: "FOLDER" | "FILE";
   // 子樹

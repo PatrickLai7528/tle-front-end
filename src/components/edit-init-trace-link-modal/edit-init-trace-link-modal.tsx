@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { ITraceLink, ITraceLinkMatrix } from "../../types";
 import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
-import { TraceLinkCard } from "../trace-link-card";
+import TraceLinkCard from "../trace-link/trace-link-card";
 export interface IStateProps {
   visible: boolean;
 }
@@ -45,16 +45,14 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
     );
 
     const handleDeleteLink = (link: ITraceLink) => {
-      console.log(link);
       if (traceLinkMatrix) {
         const oldLinks = traceLinkMatrix.links;
         const newLinks = [];
         for (const oldLink of oldLinks) {
-          if (oldLink.id !== link.id) {
+          if (oldLink._id !== link._id) {
             newLinks.push({ ...oldLink });
           }
         }
-        console.log(newLinks);
         setTraceLinkMatrix({
           ...traceLinkMatrix,
           links: [...newLinks]

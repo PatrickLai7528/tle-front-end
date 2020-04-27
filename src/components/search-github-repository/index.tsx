@@ -14,9 +14,7 @@ export const mapStateToProps: MapStateToProps<
   IOwnProps,
   RootState
 > = state => {
-  return {
-    loading: !!state.searchReducer.loading
-  };
+  return {};
 };
 
 export const mapDispatchToProps: MapDispatchToProps<

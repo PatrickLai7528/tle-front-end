@@ -115,7 +115,7 @@ export const cloneManyTree = async (
             rootNode.push({
               type: "FILE",
               path,
-              fullyQuilaifiedName: newDir,
+              fullyQualifiedName: newDir,
               sha,
               subTrees: []
             });
@@ -126,7 +126,7 @@ export const cloneManyTree = async (
                 const folderTreeNode: IFileTreeNode = {
                   subTrees,
                   type: "FOLDER",
-                  fullyQuilaifiedName: newDir,
+                  fullyQualifiedName: newDir,
                   path,
                   sha
                 };

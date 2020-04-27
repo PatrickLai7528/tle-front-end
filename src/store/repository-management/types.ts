@@ -37,6 +37,8 @@ export interface IRepositoryManagementState {
   importedRepositoryList: IImportedRepository[];
   importedRepositoryDetail?: IImportedRepository;
   recentRepos: IRecentRepo[];
+
+  fetchGHRepoLoading: boolean;
 }
 
 export interface IFetchRecentRepositoryAction {

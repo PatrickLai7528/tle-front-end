@@ -1,4 +1,4 @@
-import { Drawer, Empty, PageHeader, Skeleton, Spin, Tabs } from "antd";
+import { Drawer, PageHeader, Skeleton, Spin, Tabs } from "antd";
 import React, {
   FunctionComponent,
   memo,
@@ -9,11 +9,9 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
-import { ConnectedAddRequirementModal } from "../../components/add-requirement-modal";
-import { ConnectedCommitDetail } from "../../components/commit-detail";
-import { ConnectedFileDetail } from "../../components/file-detail";
 import { RepositoryFiles } from "../../components/repository-files";
-import { ConnectedRequirementDetail } from "../../components/requirement-detail";
+import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
+import { TraceLinkGraph } from "../../components/trace-link-graph";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -23,32 +21,11 @@ import {
   IRequirementDescription
 } from "../../types";
 import CommitCard from "./commit/commit-card";
+import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
+import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
 
-// const data = {
-// 	nodes: [
-// 		{
-// 			id: "0",
-// 			label: "Node",
-// 			x: 55,
-// 			y: 55,
-// 		},
-// 		{
-// 			id: "1",
-// 			label: "Node",
-// 			x: 55,
-// 			y: 255,
-// 		},
-// 	],
-// 	edges: [
-// 		{
-// 			label: "Label",
-// 			source: "0",
-// 			target: "1",
-// 		},
-// 	],
-// };
 export interface IStateProps {
   repo?: IImportedRepository;
   requirement: IRequirement;
@@ -87,6 +64,12 @@ const useStyles = createUseStyles({
   contentCardWrapper: {}
 });
 
+export type RepositoryDetailDrawerType =
+  | "COMMIT"
+  | "REQUIREMENT"
+  | "FILE"
+  | "TRACE_LINK";
+
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
     const { t } = useTranslation();
@@ -99,17 +82,17 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementLoading,
       toggleAddRequirementModal,
       deleteRequirementDescription,
-      updateRequirement,
       match: {
-        params: { id }
+        params: { id: repoId }
       }
     } = props;
     const styles = useStyles();
     const repoName = repo?.name || "";
 
-    const [drawerType, setDrawerType] = useState<
-      null | "COMMIT" | "REQUIREMENT" | "FILE"
-    >(null);
+    const [
+      drawerType,
+      setDrawerType
+    ] = useState<null | RepositoryDetailDrawerType>(null);
 
     const [selectedCommit, setSelectedCommit] = useState<ICommit | null>(null);
 
@@ -125,7 +108,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     const selectedFileContent =
       selectedFile && repo ? repo.shaFileContentMap[selectedFile.sha] : "";
 
-    const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "FILE") =>
+    const openDrawer = (type: RepositoryDetailDrawerType) =>
       setDrawerType(type);
 
     const closeDrawer = () => setDrawerType(null);
@@ -155,11 +138,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           breadcrumbName: "倉庫"
         },
         {
-          path: RouteConstants.REPOSITORY_DETAIL(id),
-          breadcrumbName: id
+          path: RouteConstants.REPOSITORY_DETAIL(repoId),
+          breadcrumbName: repoId
         }
       ];
-    }, [id]);
+    }, [repoId]);
 
     const pageHeaderConfig = useMemo(() => {
       if (repo) {
@@ -175,69 +158,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       }
     }, [repo]);
 
-    const drawerContent = useMemo(() => {
-      if (drawerType === "COMMIT") {
-        return (
-          <ConnectedCommitDetail commit={selectedCommit!} repoName={repoName} />
-        );
-      } else if (drawerType === "REQUIREMENT") {
-        return (
-          <ConnectedRequirementDetail
-            repoName={repoName}
-            onDescriptionUpdate={(descId: string, descriptionText: string) => {
-              const oldDescriptions: IRequirementDescription[] =
-                requirement.descriptions;
-              const newDescriptions: IRequirementDescription[] = [];
-              for (const oldDesc of oldDescriptions) {
-                if (oldDesc.id === descId) {
-                  newDescriptions.push({
-                    ...oldDesc,
-                    text: descriptionText
-                  });
-                } else {
-                  newDescriptions.push({ ...oldDesc });
-                }
-              }
-              const newRequirement: IRequirement = {
-                ...requirement,
-                descriptions: newDescriptions
-              };
-              updateRequirement(newRequirement);
-            }}
-            description={selectedRequirementDescription!}
-          />
-        );
-      } else if (drawerType === "FILE") {
-        return (
-          <>
-            {selectedFile ? (
-              <ConnectedFileDetail
-                repoName={repoName}
-                fileNode={selectedFile}
-                fileContent={selectedFileContent}
-              />
-            ) : (
-              <Empty />
-            )}
-          </>
-        );
-      } else return null;
-    }, [
-      repoName,
-      updateRequirement,
-      selectedCommit,
-      selectedFile,
-      selectedRequirementDescription,
-      drawerType,
-      requirement,
-      selectedFileContent
-    ]);
-
     const drawerTitle = useMemo(() => {
       if (drawerType === "COMMIT") {
         return `ID: ${selectedCommit?.sha}`;
       } else if (drawerType === "REQUIREMENT") {
-        return `ID: ${selectedRequirementDescription?.id}`;
+        return `ID: ${selectedRequirementDescription?._id}`;
       } else if (drawerType === "FILE") {
         return selectedFile?.path;
       } else return <Skeleton.Input />;
@@ -256,15 +181,32 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
 
     return (
       <Spin spinning={loading} className={styles.spining}>
-        <ConnectedAddRequirementModal />
+        {requirement && <AddRequirementModal requirementId={requirement._id} />}
         <Drawer
           destroyOnClose
-          width={"80vw"}
+          width={"90vw"}
           visible={drawerVisible}
           onClose={closeDrawer}
           title={drawerTitle}
         >
-          {drawerContent}
+          {drawerType && (
+            <DrawerContent
+              repoId={repoId}
+              repoName={repoName}
+              commit={selectedCommit}
+              file={
+                selectedFile
+                  ? {
+                      ...selectedFile,
+                      content: selectedFileContent
+                    }
+                  : null
+              }
+              description={selectedRequirementDescription}
+              drawerType={drawerType}
+              requirementId={requirement._id}
+            />
+          )}
         </Drawer>
         <PageHeader
           breadcrumb={{ routes }}
@@ -275,9 +217,22 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         >
           {repo ? <RepoDetailDescription repo={repo} /> : <Skeleton />}
         </PageHeader>
-        <div style={{ width: "100%", background: "#fff" }}>
-          <Tabs defaultActiveKey={"1"} type="card" className={styles.content}>
-            <Tabs.TabPane tab={t("commit")} key="1">
+        <div
+          style={{
+            width: "100%",
+            background: "#fff",
+            minHeight: "80vh"
+          }}
+        >
+          <Tabs
+            defaultActiveKey={"TRACE_LINK"}
+            type="card"
+            className={styles.content}
+          >
+            <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
+              <TraceLinkTable repoName={repoName} />
+            </Tabs.TabPane>
+            <Tabs.TabPane tab={t("commit")} key="COMMIT">
               {!!repo ? (
                 <CommitCard
                   commits={repo.commits}
@@ -290,7 +245,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 <Skeleton />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab={t("requirement")} key="2">
+            <Tabs.TabPane tab={t("requirement")} key="REQUIREMENT">
               {!!requirement ? (
                 <RequirementCard
                   loading={deleteRequirementLoading}
@@ -308,7 +263,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 <Skeleton />
               )}
             </Tabs.TabPane>
-            <Tabs.TabPane tab={"文件"} key={"file"}>
+            <Tabs.TabPane tab={"文件"} key={"FILE"}>
               {repo ? (
                 <RepositoryFiles
                   onFileNodeClick={node => {
@@ -328,11 +283,9 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                 />
               )}
             </Tabs.TabPane>
-            {/* <Tabs.TabPane tab="圖" key="3">
-            <GGEditor>
-              <Flow style={{ width: 500, height: 500 }} data={data} />
-            </GGEditor>
-          </Tabs.TabPane> */}
+            <Tabs.TabPane tab="圖" key="GRAPH">
+              <TraceLinkGraph />
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </Spin>

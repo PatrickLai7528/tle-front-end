@@ -84,9 +84,9 @@ const RecentRepos: FunctionComponent<IRecentReposProps> = memo(
       } else {
         return repos.map(repo => {
           return (
-            <Col span={8} key={repo.id}>
+            <Col span={8} key={repo._id}>
               <SimpleRepoCard
-                repoId={repo.id}
+                repoId={repo._id}
                 description={repo.description}
                 repositoryName={repo.name}
                 language={repo.language}

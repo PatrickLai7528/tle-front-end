@@ -49,7 +49,18 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
     const { fetchAllRepositories, loadMoreRepositories, loadMoreTimes } = props;
 
     useEffect(() => {
-      fetchAllRepositories();
+      console.log(" in repo ");
+      const doFetch = async () => {
+        try {
+          await fetchAllRepositories();
+        } catch (e) {
+          if (process.env.NODE_ENV !== "production") {
+            console.log(e);
+          }
+        }
+      };
+
+      doFetch();
     }, [fetchAllRepositories]);
 
     const onLoadMore = useCallback(() => {

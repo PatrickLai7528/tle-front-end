@@ -55,18 +55,25 @@ export const isRepoImported = (
 };
 
 export const sendImportedRepository = (
-  importedRepo: IImportedRepository
-): AppThunk<void, ImportRepositoryActionTypes> => async dispatch => {
+  importedRepo: Omit<IImportedRepository, "_id">
+): AppThunk<void, ImportRepositoryActionTypes> => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: SEND_IMPORTED_REPOSITORY });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1200));
-
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
     const res = await fetch(`${getServerUrl()}/api/repository`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
+      credentials: "include",
       body: JSON.stringify(importedRepo)
     }).then(res => res.json());
 

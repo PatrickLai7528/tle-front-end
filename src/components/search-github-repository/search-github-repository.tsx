@@ -3,9 +3,7 @@ import React, { FunctionComponent, memo } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 
-export interface IStateProps {
-  loading: boolean;
-}
+export interface IStateProps {}
 
 export interface IDispatchProps {
   doSearch: (searchFor: string) => void;

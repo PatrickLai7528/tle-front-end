@@ -3,6 +3,9 @@ import { useLocation, Redirect } from "react-router-dom";
 import { IDispatchProps, IStateProps, IOwnProps } from ".";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 export interface IAuthRedirectProps
   extends IDispatchProps,
@@ -22,6 +25,10 @@ const AuthRedirect: FunctionComponent<IAuthRedirectProps> = memo(
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const code = params.get("code");
+
+    // const tleAppToken = localStorage.getItem("tle_app_token");
+    // cookies.set("tle_app_token", tleAppToken, { path: "/" });
+
     useEffect(() => {
       if (code) sendGitHubLogIn(code);
     }, [code, sendGitHubLogIn]);

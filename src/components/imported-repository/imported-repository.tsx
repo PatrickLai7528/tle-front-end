@@ -1,4 +1,4 @@
-import { Spin } from "antd";
+import { Spin, Empty } from "antd";
 import React, { FunctionComponent, memo, useEffect } from "react";
 import { createUseStyles } from "react-jss";
 import { IImportedRepository } from "../../types";
@@ -30,6 +30,13 @@ const useStyles = createUseStyles({
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-start"
+  },
+  empty: {
+    width: "100%",
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   }
 });
 
@@ -45,9 +52,15 @@ const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
       <Spin spinning={loading}>
         <div className={styles.importedRepository}>
           <div className={styles.repoCardList}>
-            {repositoryList.map(repo => {
-              return <RepositoryCard repo={repo} key={repo.name} />;
-            })}
+            {repositoryList && repositoryList.length !== 0 ? (
+              repositoryList.map(repo => {
+                return <RepositoryCard repo={repo} key={repo.name} />;
+              })
+            ) : (
+              <div className={styles.empty}>
+                <Empty />
+              </div>
+            )}
           </div>
         </div>
       </Spin>

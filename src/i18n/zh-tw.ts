@@ -47,5 +47,22 @@ export const zhtw = {
   "recent repository": "常用倉庫",
   notification: "通知",
   "search repository placeholder": "Search for repository",
-  search: "搜索"
+  search: "搜索",
+  home: "首頁",
+  low: "低",
+  medium: "中等",
+  high: "高",
+  "description name": "名稱",
+  "description createBy": "創建者",
+  "description lastUpdateBy": "最後更新者",
+  "description createAt": "創建日期",
+  "description lastUpdateAt": "最後更新日期",
+  "description participants": "參與者",
+  "description triggeringCondition": "觸發條件",
+  "description preCondition": "前置條件",
+  "description postCondition": "後置條件",
+  "description priority": "優先級",
+  "description normalProcess": "正常流程",
+  "description expansionProcess": "擴展流程",
+  "description specialNeeds": "特殊需求"
 };

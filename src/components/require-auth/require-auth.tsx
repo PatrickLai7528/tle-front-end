@@ -2,9 +2,16 @@ import React, {
   FunctionComponent,
   isValidElement,
   ReactChild,
-  useEffect
+  useEffect,
+  Component
 } from "react";
-import { useTranslation } from "react-i18next";
+import {
+  useTranslation,
+  Translation,
+  TranslationProps,
+  withTranslation,
+  WithTranslation
+} from "react-i18next";
 import { Redirect } from "react-router-dom";
 import { INotificationQueueItem } from "../../store/notification/types";
 
@@ -27,40 +34,44 @@ export interface IRequireAuthProps
     IDispatchProps,
     IOwnProps {}
 
-const RequireAuth: FunctionComponent<IRequireAuthProps> = (
-  props: IRequireAuthProps
-) => {
-  const { t } = useTranslation();
-  const {
-    children,
-    loggedIn,
-    redirectUrl,
-    logInFromLocalStorage,
-    pushNotification
-  } = props;
+class RequireAuth extends Component<IRequireAuthProps & WithTranslation, any> {
+  public constructor(props: IRequireAuthProps & WithTranslation) {
+    super(props);
+  }
 
-  const tokenFromLocalStorage = localStorage.getItem("tle_app_token");
-  const ghTokenFromLocalStorage = localStorage.getItem("tle_app_gh_token");
+  public componentWillMount() {
+    const { pushNotification, logInFromLocalStorage, loggedIn, t } = this.props;
+    const tokenFromLocalStorage = localStorage.getItem("tle_app_token");
+    const ghTokenFromLocalStorage = localStorage.getItem("tle_app_gh_token");
 
-  useEffect(() => {
     if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
       logInFromLocalStorage(tokenFromLocalStorage, ghTokenFromLocalStorage);
+    } else if (
+      !tokenFromLocalStorage ||
+      !ghTokenFromLocalStorage ||
+      !loggedIn
+    ) {
+      pushNotification({
+        title: t("require log in"),
+        messageOrNotification: "message",
+        type: "warning",
+        duration: 4.5
+      });
     }
-  }, [tokenFromLocalStorage, ghTokenFromLocalStorage, logInFromLocalStorage]);
-
-  if (loggedIn) {
-    return <>{isValidElement(children) ? children : null}</>;
-  } else if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
-    return <>{isValidElement(children) ? children : null}</>;
-  } else {
-    pushNotification({
-      title: t("require log in"),
-      messageOrNotification: "message",
-      type: "warning",
-      duration: 4.5
-    });
-    return <Redirect to={redirectUrl} />;
   }
-};
 
-export default RequireAuth;
+  public render() {
+    const { children, loggedIn, redirectUrl } = this.props;
+    const tokenFromLocalStorage = localStorage.getItem("tle_app_token");
+    const ghTokenFromLocalStorage = localStorage.getItem("tle_app_gh_token");
+    if (loggedIn) {
+      return <>{isValidElement(children) ? children : null}</>;
+    } else if (tokenFromLocalStorage && ghTokenFromLocalStorage) {
+      return <>{isValidElement(children) ? children : null}</>;
+    } else {
+      return <Redirect to={redirectUrl} />;
+    }
+  }
+}
+
+export default withTranslation()(RequireAuth);

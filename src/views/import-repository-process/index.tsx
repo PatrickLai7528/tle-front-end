@@ -5,21 +5,19 @@ import {
   MapStateToProps
 } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
+import { RouteConstants } from "../../routes/constants";
 import {
   sendImportedRepository,
   startImportRepository,
   stopImport
 } from "../../store/import-repository/action";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
+import { pushNotification } from "../../store/notification/actions";
 import { NotificationActions } from "../../store/notification/types";
 import { RootState } from "../../store/reducers";
 import { postRequirement } from "../../store/requirement/actions";
 import { RequirementActions } from "../../store/requirement/types";
-import {
-  generateInitialTraceLink,
-  sendInitTraceLink,
-  toggleInitTraceLinkModal
-} from "../../store/trace-link/actions";
+import { sendInitTraceLink } from "../../store/trace-link/actions";
 import { TraceLinkActions } from "../../store/trace-link/types";
 import {
   IImportedRepository,
@@ -32,8 +30,6 @@ import ImportRepositoryProcess, {
   IOwnProps,
   IStateProps
 } from "./import-repository-process";
-import { pushNotification } from "../../store/notification/actions";
-import { RouteConstants } from "../../routes/constants";
 
 const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState,
@@ -51,9 +47,8 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     requirementReducer: { loading: postRequirementLoading },
     traceLinkReducer: {
       loading: sendTraceLinkLoading,
-      initTraceLinkLoading,
-      initTraceLinkMartix,
-      initTraceLinkConfirmed
+      initTraceLinkConfirmed,
+      initTraceLinkMartix
     }
   } = state;
 
@@ -81,7 +76,6 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
     importProccess,
     importedRepostiroy: importedRepository,
     importDone: !!importDone,
-    genInitTraceLinkLoading: initTraceLinkLoading,
     initTraceLinkMatrix: initTraceLinkMartix,
     initTraceLinkConfirmed: initTraceLinkConfirmed
   };
@@ -100,21 +94,16 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
 ) => {
   return {
     startImport: repoRes => dispatch(startImportRepository(repoRes)),
-    generateInitTraceLinkMatrix: (files, requirement) =>
-      dispatch(generateInitialTraceLink(files, requirement)),
-    toggleInitTraceLinkModal: () => dispatch(toggleInitTraceLinkModal()),
     stopImport: () => dispatch(stopImport()),
     confirmImport: (
-      repo: IImportedRepository,
-      requirement: IRequirement,
-      matrix: ITraceLinkMatrix
+      repo: Omit<IImportedRepository, "_id">,
+      requirement: Omit<IRequirement, "_id">,
+      matrix: Omit<ITraceLinkMatrix, "_id">
     ) =>
       batch(async () => {
-        await Promise.all([
-          dispatch(sendImportedRepository(repo)),
-          dispatch(postRequirement(requirement)),
-          dispatch(sendInitTraceLink(matrix))
-        ]);
+        await dispatch(sendImportedRepository(repo));
+        await dispatch(postRequirement(requirement));
+        await dispatch(sendInitTraceLink(matrix));
         dispatch(
           pushNotification({
             title: "導入成功",
