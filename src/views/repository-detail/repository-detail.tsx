@@ -26,6 +26,7 @@ import RequirementCard from "./requirement/requirement-card";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
 import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
 import { RequirementDetail } from "../../components/requirement/requirement-detail";
+import { DrawerContent } from "./drawer-content";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -65,6 +66,8 @@ const useStyles = createUseStyles({
   contentCardWrapper: {}
 });
 
+export type RepositoryDetailDrawerType = "COMMIT" | "REQUIREMENT" | "FILE";
+
 const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
   (props: IRepositoryDetailProps) => {
     const { t } = useTranslation();
@@ -85,9 +88,10 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     const styles = useStyles();
     const repoName = repo?.name || "";
 
-    const [drawerType, setDrawerType] = useState<
-      null | "COMMIT" | "REQUIREMENT" | "FILE"
-    >(null);
+    const [
+      drawerType,
+      setDrawerType
+    ] = useState<null | RepositoryDetailDrawerType>(null);
 
     const [selectedCommit, setSelectedCommit] = useState<ICommit | null>(null);
 
@@ -103,7 +107,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
     const selectedFileContent =
       selectedFile && repo ? repo.shaFileContentMap[selectedFile.sha] : "";
 
-    const openDrawer = (type: "COMMIT" | "REQUIREMENT" | "FILE") =>
+    const openDrawer = (type: RepositoryDetailDrawerType) =>
       setDrawerType(type);
 
     const closeDrawer = () => setDrawerType(null);
@@ -153,67 +157,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       }
     }, [repo]);
 
-    const drawerContent = useMemo(() => {
-      if (drawerType === "COMMIT") {
-        return (
-          <ConnectedCommitDetail commit={selectedCommit!} repoName={repoName} />
-        );
-      } else if (drawerType === "REQUIREMENT") {
-        return (
-          <RequirementDetail
-            repoId={repoId}
-            requirementId={requirement._id}
-            repoName={repoName}
-            onDescriptionUpdate={(descId: string, descriptionText: string) => {
-              const oldDescriptions: IRequirementDescription[] =
-                requirement.descriptions;
-              const newDescriptions: IRequirementDescription[] = [];
-              for (const oldDesc of oldDescriptions) {
-                if (oldDesc._id === descId) {
-                  newDescriptions.push({
-                    ...oldDesc,
-                    name: descriptionText
-                  });
-                } else {
-                  newDescriptions.push({ ...oldDesc });
-                }
-              }
-              const newRequirement: IRequirement = {
-                ...requirement,
-                descriptions: newDescriptions
-              };
-              updateRequirement(newRequirement);
-            }}
-            description={selectedRequirementDescription!}
-          />
-        );
-      } else if (drawerType === "FILE") {
-        return (
-          <>
-            {selectedFile ? (
-              <ConnectedFileDetail
-                repoId={repoId}
-                repoName={repoName}
-                fileNode={selectedFile}
-                fileContent={selectedFileContent}
-              />
-            ) : (
-              <Empty />
-            )}
-          </>
-        );
-      } else return null;
-    }, [
-      repoName,
-      updateRequirement,
-      selectedCommit,
-      selectedFile,
-      selectedRequirementDescription,
-      drawerType,
-      requirement,
-      selectedFileContent
-    ]);
-
     const drawerTitle = useMemo(() => {
       if (drawerType === "COMMIT") {
         return `ID: ${selectedCommit?.sha}`;
@@ -240,12 +183,29 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
         {requirement && <AddRequirementModal requirementId={requirement._id} />}
         <Drawer
           destroyOnClose
-          width={"80vw"}
+          width={"90vw"}
           visible={drawerVisible}
           onClose={closeDrawer}
           title={drawerTitle}
         >
-          {drawerContent}
+          {drawerType && (
+            <DrawerContent
+              repoId={repoId}
+              repoName={repoName}
+              commit={selectedCommit}
+              file={
+                selectedFile
+                  ? {
+                      ...selectedFile,
+                      content: selectedFileContent
+                    }
+                  : null
+              }
+              description={selectedRequirementDescription}
+              drawerType={drawerType}
+              requirementId={requirement._id}
+            />
+          )}
         </Drawer>
         <PageHeader
           breadcrumb={{ routes }}

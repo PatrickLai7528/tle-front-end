@@ -1,14 +1,14 @@
-import React from "react";
-import { IDescriptionHistory, IRequirementDescription } from "../../types";
 import { Table } from "antd";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../store/reducers";
-import { AppThunk, AppDispatch } from "../../store/store";
-import { RequirementActions } from "../../store/requirement/types";
-import { fetchDescriptionHistory } from "../../store/requirement/actions";
 import { flatten } from "lodash";
 import moment from "moment";
+import React from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { fetchDescriptionHistory } from "../../store/requirement/actions";
+import { RequirementActions } from "../../store/requirement/types";
+import { AppDispatch } from "../../store/store";
+import { IDescriptionHistory, IRequirementDescription } from "../../types";
 
 export interface IHistoryTableProps {
   requirementId: string;

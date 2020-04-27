@@ -16,7 +16,6 @@ export interface IOwnProps {
   description: IRequirementDescription;
   repoName: string;
   repoId: string;
-  onDescriptionUpdate: (id: string, descriptionText: string) => void;
   requirementId: string;
 }
 
