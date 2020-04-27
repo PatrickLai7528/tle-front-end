@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { ITraceLink, ITraceLinkMatrix } from "../../types";
 import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
-import { TraceLinkCard } from "../trace-link-card";
+import { TraceLinkCard } from "../trace-link";
 export interface IStateProps {
   visible: boolean;
 }

@@ -80,7 +80,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementLoading,
       toggleAddRequirementModal,
       deleteRequirementDescription,
-      updateRequirement,
       match: {
         params: { id: repoId }
       }

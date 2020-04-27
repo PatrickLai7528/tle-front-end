@@ -1,19 +1,8 @@
-import {
-  Alert,
-  Button,
-  Col,
-  Input,
-  PageHeader,
-  Row,
-  Tabs,
-  Tooltip,
-  Result,
-  Modal
-} from "antd";
+import { Button, Col, Modal, PageHeader, Row, Tabs, Tooltip } from "antd";
 import React, { FC, memo, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
-import { RouteComponentProps, Prompt } from "react-router-dom";
+import { Prompt, RouteComponentProps } from "react-router-dom";
 import { ImportProcessStep } from "../../components/import-process-step";
 import {
   ImportProccess,
@@ -23,18 +12,10 @@ import {
   IImportedRepository,
   IRequirement,
   IRequirementDescription,
-  ITraceLinkMatrix,
-  ITraceLink,
-  IFileTreeNode
+  ITraceLinkMatrix
 } from "../../types";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
-import { TraceLinkCard } from "./../../components/trace-link-card";
 import BasicInfoDescriptions from "./basic-info-descriptions";
-import { ConnectedEditInitTraceLinkModal } from "../../components/edit-init-trace-link-modal";
-import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
-import { v4 as uuid } from "uuid";
-import { RequirementForm } from "../../components/requirement/requirement-form";
-import { RequirementCard } from "../../components/requirement/requirement-card";
 import { TraceLinkTabsContent } from "./trace-link-tabs-content";
 
 export interface IStateProps {

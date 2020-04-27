@@ -21,7 +21,7 @@ import {
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { createUseStyles } from "react-jss";
 import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
-import { TraceLinkCard } from "../../components/trace-link-card";
+import TraceLinkCard from "../../components/trace-link/trace-link-card";
 
 export interface ITraceLinkTabsContentProps {
   importedRepository?: Partial<IImportedRepository>;
