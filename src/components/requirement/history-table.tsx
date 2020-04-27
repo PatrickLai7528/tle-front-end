@@ -8,38 +8,12 @@ import { RequirementActions } from "../../store/requirement/types";
 import { fetchDescriptionHistory } from "../../store/requirement/actions";
 import { flatten } from "lodash";
 import moment from "moment";
+import { useTranslation } from "react-i18next";
 
 export interface IHistoryTableProps {
   requirementId: string;
   descriptionId: string;
 }
-
-const columns = [
-  {
-    title: "更新時間",
-    dataIndex: "createAt",
-    key: "createAt",
-    ellipsis: true
-  },
-  {
-    title: "字段",
-    dataIndex: "field",
-    key: "field",
-    ellipsis: true
-  },
-  {
-    title: "更新前",
-    dataIndex: "before",
-    key: "before",
-    ellipsis: true
-  },
-  {
-    title: "更新後",
-    dataIndex: "after",
-    key: "after",
-    ellipsis: true
-  }
-];
 
 type DescriptionKeys = keyof IRequirementDescription;
 type TableData = {
@@ -51,16 +25,43 @@ type TableData = {
 
 export const HistoryTable: React.FC<IHistoryTableProps> = React.memo(
   (props: IHistoryTableProps) => {
+    const { t } = useTranslation();
+    const columns = React.useMemo(() => {
+      return [
+        {
+          title: "更新時間",
+          dataIndex: "createAt",
+          key: "createAt",
+          ellipsis: true
+        },
+        {
+          title: "字段",
+          dataIndex: "field",
+          key: "field",
+          ellipsis: true,
+          render: (text: string) => t(`description ${text}`)
+        },
+        {
+          title: "更新前",
+          dataIndex: "before",
+          key: "before",
+          ellipsis: true
+        },
+        {
+          title: "更新後",
+          dataIndex: "after",
+          key: "after",
+          ellipsis: true
+        }
+      ];
+    }, [t]);
     const { descriptionId, requirementId } = props;
-
     const loading = useSelector<RootState, boolean>(
       state => state.requirementReducer.loading
     );
-
     const histories = useSelector<RootState, IDescriptionHistory[]>(
       state => state.requirementReducer.histories || []
     );
-
     const dispatch = useDispatch<AppDispatch<RequirementActions>>();
 
     const data: TableData[] = React.useMemo(() => {
@@ -89,6 +90,7 @@ export const HistoryTable: React.FC<IHistoryTableProps> = React.memo(
 
     return (
       <Table
+        pagination={false}
         size={"small"}
         columns={columns}
         dataSource={data}

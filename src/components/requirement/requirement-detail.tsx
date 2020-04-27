@@ -104,12 +104,16 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
             useTooltips
           />
         </div>
-        <Typography.Title level={3}>修改紀錄</Typography.Title>
+        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+          修改紀錄
+        </Typography.Title>
         <HistoryTable
           requirementId={requirementId}
           descriptionId={description._id}
         />
-        <Typography.Title level={3}>追踪線索</Typography.Title>
+        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+          追踪線索
+        </Typography.Title>
         {traceLinksContent}
       </div>
     );
