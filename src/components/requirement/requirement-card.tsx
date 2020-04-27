@@ -14,11 +14,7 @@ export interface IRequirementCardProps {
   useCard?: boolean;
   useTooltips?: boolean;
   editable?: boolean;
-  // onButtonClick?: (
-  // 	description:
-  // 		| IRequirementDescription
-  // 		| Omit<IRequirementDescription, "_id">
-  // ) => void;
+  compareStrictly?: boolean;
 }
 
 const MomentDate = React.memo<{ date: number }>(({ date }) => {
@@ -34,6 +30,17 @@ const useStyles = createUseStyles({
     justifyContent: "flex-end"
   }
 });
+
+const didDescriptionChange = (
+  a: IRequirementDescription,
+  b: IRequirementDescription
+): boolean => {
+  return (Object.keys(a) as (keyof IRequirementDescription)[]).some(key => {
+    console.log({ a: a[key], b: b[key] }, a[key] !== b[key]);
+
+    return a[key] !== b[key];
+  });
+};
 
 // ID
 // name
@@ -56,7 +63,8 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
       useCard,
       editable,
       useTooltips,
-      onUpdateDescription
+      onUpdateDescription,
+      compareStrictly
     } = props;
     const styles = useStyles();
     const {
@@ -132,7 +140,19 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
 
         const onBlur = () => {
           setEditables(prev => ({ ...prev, [key]: false }));
-          if (typeof onUpdateDescription === "function") {
+
+          const shouldUpdate =
+            (compareStrictly &&
+              didDescriptionChange(
+                description as IRequirementDescription,
+                {
+                  ...description,
+                  ...valueState
+                } as IRequirementDescription
+              )) ||
+            !compareStrictly;
+
+          if (typeof onUpdateDescription === "function" && shouldUpdate) {
             onUpdateDescription({
               ...description,
               ...valueState
@@ -256,4 +276,8 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
   }
 );
 
-RequirementCard.defaultProps = { useCard: true, editable: false };
+RequirementCard.defaultProps = {
+  useCard: true,
+  editable: false,
+  compareStrictly: true
+};
