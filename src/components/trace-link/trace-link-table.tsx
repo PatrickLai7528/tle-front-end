@@ -1,5 +1,10 @@
 import React from "react";
-import { ITraceLink, IRequirementDescription, IImplement } from "../../types";
+import {
+  ITraceLink,
+  IRequirementDescription,
+  IImplement,
+  ShaFileContentMap
+} from "../../types";
 import { Table } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
@@ -8,6 +13,7 @@ import { RootState } from "../../store/reducers";
 import { TraceLinkActions } from "../../store/trace-link/types";
 import { AppDispatch } from "../../store/store";
 import { fetchRepoTraceLink } from "../../store/trace-link/actions";
+import { RequirementCard } from "../requirement/requirement-card";
 
 export interface ITraceLinkTableProps {
   repoName: string;
@@ -55,20 +61,40 @@ export const TraceLinkTable: React.FunctionComponent<ITraceLinkTableProps> = Rea
       state => state.traceLinkReducer.traceLinkMatrix?.links || []
     );
 
+    const shaFileContentMap = useSelector<
+      RootState,
+      ShaFileContentMap | undefined
+    >(
+      state =>
+        state.repositoryManagementReducer.importedRepositoryDetail
+          ?.shaFileContentMap
+    );
+
     const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
 
     React.useEffect(() => {
       if (repoName) dispatch(fetchRepoTraceLink(repoName));
     }, [repoName]);
 
-    console.log(traceLinks);
-
     return (
       <Table
+        rowKey={"_id"}
         loading={loading}
         columns={columns}
         expandable={{
-          expandedRowRender: record => <p style={{ margin: 0 }}>123</p>
+          expandedRowRender: link => {
+            const { implement, requirementDescription, _id } = link;
+            console.log(requirementDescription);
+            return (
+              <div style={{ background: "#fff" }} key={_id}>
+                <RequirementCard
+                  useCard={false}
+                  bordered={false}
+                  description={requirementDescription}
+                />
+              </div>
+            );
+          }
         }}
         dataSource={traceLinks}
       />

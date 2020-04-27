@@ -15,6 +15,7 @@ export interface IRequirementCardProps {
   useTooltips?: boolean;
   editable?: boolean;
   compareStrictly?: boolean;
+  bordered?: boolean;
 }
 
 const MomentDate = React.memo<{ date: number }>(({ date }) => {
@@ -64,7 +65,8 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
       editable,
       useTooltips,
       onUpdateDescription,
-      compareStrictly
+      compareStrictly,
+      bordered
     } = props;
     const styles = useStyles();
     const {
@@ -209,7 +211,7 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
 
     const descriptions = (
       <>
-        <Descriptions column={2} bordered size={"small"}>
+        <Descriptions column={2} bordered={bordered} size={"small"}>
           <Descriptions.Item label={"ID"} span={1}>
             {(description as any)._id || "暫無"}
           </Descriptions.Item>
@@ -279,5 +281,6 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
 RequirementCard.defaultProps = {
   useCard: true,
   editable: false,
-  compareStrictly: true
+  compareStrictly: true,
+  bordered: true
 };
