@@ -18,6 +18,7 @@ export interface IDispatchProps {
 
 export interface IOwnProps {
   repoName: string;
+  repoId: string;
   fileNode: IFileTreeNode;
   fileContent: string;
 }
@@ -35,6 +36,7 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
       repoName,
       traceLinks,
       fileContent,
+      repoId,
       fileNode
     } = props;
 
@@ -42,7 +44,7 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
       if (fileNode) {
         const doFetch = async () => {
           try {
-            fetchFileRelatedTraceLinks(repoName, fileNode.fullyQuilaifiedName);
+            fetchFileRelatedTraceLinks(repoName, fileNode.fullyQualifiedName);
           } catch (e) {
             if (process.env.NODE_ENV === "production") {
               console.log(e);
@@ -71,6 +73,7 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
       ) {
         return (
           <EditableTraceLinkArea
+            repoId={repoId}
             type="IMPLEMENT"
             traceLinks={traceLinks}
             repoName={repoName}

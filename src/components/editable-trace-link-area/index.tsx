@@ -7,10 +7,12 @@ import { RootState } from "../../store/reducers";
 import { newTraceLink as sendNewTraceLink } from "../../store/trace-link/actions";
 import { ITraceLink, IRequirementDescription } from "../../types";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { ImplementationAutoComplete } from "../implementation-auto-complete";
 
 export interface IEditableTraceLinkAreaProps {
   traceLinks: ITraceLink[];
   repoName: string;
+  repoId: string;
   type: "IMPLEMENT" | "REQUIREMENT";
 }
 
@@ -34,7 +36,7 @@ const useStyles = createUseStyles({
 
 export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProps> = memo(
   (props: IEditableTraceLinkAreaProps) => {
-    const { traceLinks, repoName, type } = props;
+    const { traceLinks, repoName, type, repoId } = props;
     const loading = useSelector<RootState, boolean>(
       state => state.traceLinkReducer.sendNewTraceLinkLoading
     );
@@ -106,7 +108,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
               style={{ marginTop: "16px", marginBottom: "16px" }}
               input={
                 <div className={styles.link}>
-                  <Input
+                  {/* <Input
                     width={"100%"}
                     value={getValueByType()}
                     onChange={e => {
@@ -115,7 +117,8 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
                         setTraceLinkByType(value);
                       }
                     }}
-                  />
+                  /> */}
+                  <ImplementationAutoComplete repoId={repoId} />
                   <div className={styles.buttons}>
                     <Button
                       onClick={async () => {

@@ -14,6 +14,7 @@ import { updateDescription } from "../../store/requirement/actions";
 export interface IOwnProps {
   description: IRequirementDescription;
   repoName: string;
+  repoId: string;
   onDescriptionUpdate: (id: string, descriptionText: string) => void;
   requirementId: string;
 }
@@ -43,7 +44,7 @@ const useStyles = createUseStyles({
 
 export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = memo(
   (props: IRequirementDetailProps) => {
-    const { repoName, requirementId, description } = props;
+    const { repoName, requirementId, description, repoId } = props;
     const styles = useStyles();
     const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
     const loading = useSelector<RootState, boolean>(
@@ -81,6 +82,7 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
       } else if (!loading && traceLinks) {
         return (
           <EditableTraceLinkArea
+            repoId={repoId}
             type="REQUIREMENT"
             repoName={repoName}
             traceLinks={traceLinks}

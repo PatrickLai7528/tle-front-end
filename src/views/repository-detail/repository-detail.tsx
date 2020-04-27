@@ -79,7 +79,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       deleteRequirementDescription,
       updateRequirement,
       match: {
-        params: { id }
+        params: { id: repoId }
       }
     } = props;
     const styles = useStyles();
@@ -133,11 +133,11 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           breadcrumbName: "倉庫"
         },
         {
-          path: RouteConstants.REPOSITORY_DETAIL(id),
-          breadcrumbName: id
+          path: RouteConstants.REPOSITORY_DETAIL(repoId),
+          breadcrumbName: repoId
         }
       ];
-    }, [id]);
+    }, [repoId]);
 
     const pageHeaderConfig = useMemo(() => {
       if (repo) {
@@ -161,6 +161,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
       } else if (drawerType === "REQUIREMENT") {
         return (
           <RequirementDetail
+            repoId={repoId}
             requirementId={requirement._id}
             repoName={repoName}
             onDescriptionUpdate={(descId: string, descriptionText: string) => {
@@ -191,6 +192,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           <>
             {selectedFile ? (
               <ConnectedFileDetail
+                repoId={repoId}
                 repoName={repoName}
                 fileNode={selectedFile}
                 fileContent={selectedFileContent}
