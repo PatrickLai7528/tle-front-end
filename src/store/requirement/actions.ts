@@ -22,6 +22,39 @@ import {
 } from "./types";
 import { getServerUrl } from "../../configs/get-url";
 
+export const fetchDescriptionHistory = (
+  requirementId: string,
+  descriptionId: string
+): AppThunk<void, RequirementActionTypes> => async (dispatch, getState) => {
+  dispatch({ type: "FETCH_DESCRIPTION_HISTORY" });
+  try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const options: RequestInit = {
+      credentials: "include",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        Accept: "application/json"
+      }
+    };
+    const url = `${getServerUrl()}/api/requirement/history?requirementId=${requirementId}&descriptionId=${descriptionId}`;
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: "FETCH_DESCRIPTION_HISTORY_SUCCESS",
+        payload: res.payload
+      });
+    } else {
+      dispatch({ type: "FETCH_DESCRIPTION_HISTORY_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") console.log(e);
+    dispatch({ type: "FETCH_DESCRIPTION_HISTORY_FAILURE" });
+  }
+};
+
 export const updateDescription = (
   requirementId: string,
   description: IRequirementDescription

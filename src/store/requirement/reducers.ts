@@ -17,7 +17,8 @@ import {
   UPDATE_REQUIREMENT_SUCCESS,
   IUpdateRequirementSuccessAction,
   UPDATE_REQUIREMENT_FAILURE,
-  IPostRequirementFailureAction
+  IPostRequirementFailureAction,
+  IFetchDescriptionHistorySuccessAction
 } from "./types";
 
 const initialState: IRequirementState = {
@@ -33,6 +34,24 @@ export const requirementReducer = (
   action: RequirementActions
 ): IRequirementState => {
   switch (action.type) {
+    case "FETCH_DESCRIPTION_HISTORY":
+      return {
+        ...state,
+        loading: true,
+        error: false
+      };
+    case "FETCH_DESCRIPTION_HISTORY_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        histories: (action as IFetchDescriptionHistorySuccessAction).payload
+      };
+    case "FETCH_DESCRIPTION_HISTORY_FAILURE":
+      return {
+        ...state,
+        loading: false,
+        error: true
+      };
     case "UPDATE_DESCRIPTION":
       return {
         ...state,

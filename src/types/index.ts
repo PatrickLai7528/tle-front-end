@@ -1,5 +1,16 @@
 import { ProgramLanguage } from "./../utils/language-color";
 
+export interface IDescriptionHistory {
+  _id: string;
+  ownerId: string;
+  requirementId: string;
+  descriptionId: string;
+  oldDescription: IRequirementDescription;
+  newDescription: Partial<IRequirementDescription>;
+  createAt: number;
+  lastUpdateAt: number;
+}
+
 export interface IUserActivity {
   _id: string;
   avatarUrl: string;

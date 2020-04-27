@@ -10,6 +10,7 @@ import { TraceLinkActions } from "../../store/trace-link/types";
 import { fetchRequirementRelatedTraceLinks } from "../../store/trace-link/actions";
 import { AppDispatch } from "../../store/store";
 import { updateDescription } from "../../store/requirement/actions";
+import { HistoryTable } from "./history-table";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -103,6 +104,11 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
             useTooltips
           />
         </div>
+        <Typography.Title level={3}>修改紀錄</Typography.Title>
+        <HistoryTable
+          requirementId={requirementId}
+          descriptionId={description._id}
+        />
         <Typography.Title level={3}>追踪線索</Typography.Title>
         {traceLinksContent}
       </div>
