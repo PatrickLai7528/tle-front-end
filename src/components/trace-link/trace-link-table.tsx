@@ -6,7 +6,7 @@ import {
   ShaFileContentMap,
   IFileTreeNode
 } from "../../types";
-import { Table, Empty, Typography } from "antd";
+import { Table, Empty, Typography, Divider } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { useSelector, useDispatch } from "react-redux";
@@ -87,6 +87,7 @@ const ExpandArea: React.FunctionComponent<IExpandAreaProps> = React.memo(
           bordered={false}
           description={description}
         />
+        <Divider style={{ marginTop: "16px" }} />
         <Typography.Title level={4}>實現代碼</Typography.Title>
         {code ? <HighlightCode language="Java" code={code} /> : <Empty />}
       </div>

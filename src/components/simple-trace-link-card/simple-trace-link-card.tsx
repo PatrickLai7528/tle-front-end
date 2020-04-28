@@ -9,6 +9,7 @@ import React, {
 import { createUseStyles, useTheme } from "react-jss";
 import { CustomTheme } from "../../theme";
 import { ITraceLink } from "../../types";
+import { RequirementCard } from "../requirement/requirement-card";
 export interface ISimpleTraceLinkCardProps {
   traceLink: ITraceLink;
   showImplement?: boolean;
@@ -33,9 +34,9 @@ const useStyle = createUseStyles<CustomTheme>(theme => ({
     alignItems: "center"
   },
   traceLinkDescription: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start"
+    // display: "flex",
+    // flexDirection: "row",
+    // justifyContent: "flex-start",
   },
   operations: {
     flexGrow: 1,
@@ -116,9 +117,12 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
                   {input ? (
                     input
                   ) : (
-                    <Typography.Paragraph strong>
-                      {traceLink.requirementDescription.name}
-                    </Typography.Paragraph>
+                    // <Typography.Paragraph strong>
+                    //   {traceLink.requirementDescription.name}
+                    // </Typography.Paragraph>
+                    <RequirementCard
+                      description={traceLink.requirementDescription}
+                    />
                   )}
                 </Typography>
               )}
