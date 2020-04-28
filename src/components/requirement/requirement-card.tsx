@@ -248,26 +248,26 @@ export const RequirementCard: React.FunctionComponent<IRequirementCardProps> = R
           <Descriptions.Item label="參與者" span={2}>
             {renderItem("participants", participants)}
           </Descriptions.Item>
-          <Descriptions.Item label="觸發條件" span={3}>
+          <Descriptions.Item label="觸發條件" span={2}>
             {renderItem(
               "triggeringCondition",
               triggeringCondition,
               EditableTextArea
             )}
           </Descriptions.Item>
-          <Descriptions.Item label="前置條件" span={3}>
+          <Descriptions.Item label="前置條件" span={2}>
             {renderItem("preCondition", preCondition, EditableTextArea)}
           </Descriptions.Item>
-          <Descriptions.Item label="後置條件" span={3}>
+          <Descriptions.Item label="後置條件" span={2}>
             {renderItem("postCondition", postCondition, EditableTextArea)}
           </Descriptions.Item>
-          <Descriptions.Item label="正常流程" span={3}>
+          <Descriptions.Item label="正常流程" span={2}>
             {renderItem("normalProcess", normalProcess, EditableTextArea)}
           </Descriptions.Item>
-          <Descriptions.Item label="擴展流程" span={3}>
+          <Descriptions.Item label="擴展流程" span={2}>
             {renderItem("expansionProcess", expansionProcess, EditableTextArea)}
           </Descriptions.Item>
-          <Descriptions.Item label="特殊需求" span={3}>
+          <Descriptions.Item label="特殊需求" span={2}>
             {renderItem("specialNeeds", specialNeeds, EditableTextArea)}
           </Descriptions.Item>
         </Descriptions>
