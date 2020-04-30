@@ -11,7 +11,6 @@ import { ImplementationSelect } from "../select/implementation";
 import { RequirementAutoComplete } from "../select/requirement";
 
 export interface IEditableTraceLinkAreaProps {
-  traceLinks: ITraceLink[];
   repoName: string;
   repoId: string;
   type: "IMPLEMENT" | "REQUIREMENT";
@@ -40,7 +39,6 @@ const useStyles = createUseStyles({
 export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProps> = memo(
   (props: IEditableTraceLinkAreaProps) => {
     const {
-      traceLinks,
       repoName,
       type,
       repoId,
@@ -181,15 +179,6 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
             />
           </Spin>
         )}
-        {traceLinks.map(link => (
-          <SimpleTraceLinkCard
-            showOperation
-            key={link._id}
-            traceLink={link}
-            showRequirement={type !== "REQUIREMENT"}
-            showImplement={type !== "IMPLEMENT"}
-          />
-        ))}
       </>
     );
   }

@@ -11,6 +11,7 @@ import { AppDispatch } from "../../store/store";
 import { updateDescription } from "../../store/requirement/actions";
 import { HistoryTable } from "./history-table";
 import { fetchDescriptionRelatedTraceLinks } from "../../store/trace-link/actions";
+import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -72,18 +73,26 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
         );
       } else if (!loading) {
         return (
-          <EditableTraceLinkArea
-            requirementDescription={description}
-            repoId={repoId}
-            type="REQUIREMENT"
-            repoName={repoName}
-            traceLinks={traceLinks || []}
-          />
+          <>
+            <EditableTraceLinkArea
+              requirementDescription={description}
+              repoId={repoId}
+              type="REQUIREMENT"
+              repoName={repoName}
+            />
+            {traceLinks.map(link => (
+              <SimpleTraceLinkCard
+                showOperation
+                key={link._id}
+                traceLink={link}
+                showRequirement={false}
+                showImplement={true}
+              />
+            ))}
+          </>
         );
       }
     }, [traceLinks, loading, description]);
-
-    console.log(traceLinks);
 
     return (
       <div className={styles.requirementDetail}>

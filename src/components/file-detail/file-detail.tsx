@@ -3,6 +3,7 @@ import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
 import { IFileTreeNode, ITraceLink } from "../../types";
 import { EditableTraceLinkArea } from "../editable-trace-link-area";
 import { HighlightCode } from "../highlight-code";
+import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IStateProps {
   traceLinks: ITraceLink[];
@@ -67,13 +68,23 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
         );
       } else if (!loading && fileNode && traceLinks) {
         return (
-          <EditableTraceLinkArea
-            repoId={repoId}
-            fullyQualifiedFileName={fileNode.fullyQualifiedName}
-            type="IMPLEMENT"
-            traceLinks={traceLinks}
-            repoName={repoName}
-          />
+          <>
+            <EditableTraceLinkArea
+              repoId={repoId}
+              fullyQualifiedFileName={fileNode.fullyQualifiedName}
+              type="IMPLEMENT"
+              repoName={repoName}
+            />
+            {traceLinks.map(link => (
+              <SimpleTraceLinkCard
+                showOperation
+                key={link._id}
+                traceLink={link}
+                showRequirement={true}
+                showImplement={false}
+              />
+            ))}
+          </>
         );
       } else {
         return <Empty />;
