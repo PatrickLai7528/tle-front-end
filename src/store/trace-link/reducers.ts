@@ -24,8 +24,9 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   IFetchFileRelatedTraceLinkSuccessAction,
   FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
-  IFetchRequirementRelatedTraceLinkSuccessAction,
-  ISendInitTraceLinkFailureAction
+  IFetchDescriptionRelatedTraceLinkSuccessAction,
+  ISendInitTraceLinkFailureAction,
+  INewTraceLinkSuccessAction
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -59,7 +60,11 @@ export const traceLinkReducer = (
     case "NEW_TRACE_LINK_SUCCESS":
       return {
         ...state,
-        sendNewTraceLinkLoading: false
+        sendNewTraceLinkLoading: false,
+        requirementRelatedTraceLinks: [
+          ...state.requirementRelatedTraceLinks,
+          (action as INewTraceLinkSuccessAction).payload
+        ]
       };
     case "NEW_TRACE_LINK_FAILURE":
       return {
@@ -67,21 +72,21 @@ export const traceLinkReducer = (
         sendNewTraceLinkLoading: false,
         error: true
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK":
       return {
         ...state,
         loading: true,
         error: false
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS":
       return {
         ...state,
         loading: false,
         requirementRelatedTraceLinks: [
-          ...(action as IFetchRequirementRelatedTraceLinkSuccessAction).payload
+          ...(action as IFetchDescriptionRelatedTraceLinkSuccessAction).payload
         ]
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE":
       return {
         ...state,
         loading: false,

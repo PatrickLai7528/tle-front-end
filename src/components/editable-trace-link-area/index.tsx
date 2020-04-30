@@ -15,6 +15,8 @@ export interface IEditableTraceLinkAreaProps {
   repoName: string;
   repoId: string;
   type: "IMPLEMENT" | "REQUIREMENT";
+  requirementDescription?: IRequirementDescription;
+  implementation?: IImplement;
 }
 
 const useStyles = createUseStyles({
@@ -37,7 +39,14 @@ const useStyles = createUseStyles({
 
 export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProps> = memo(
   (props: IEditableTraceLinkAreaProps) => {
-    const { traceLinks, repoName, type, repoId } = props;
+    const {
+      traceLinks,
+      repoName,
+      type,
+      repoId,
+      requirementDescription,
+      implementation
+    } = props;
     const loading = useSelector<RootState, boolean>(
       state => state.traceLinkReducer.sendNewTraceLinkLoading
     );
@@ -72,26 +81,23 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
     };
 
     const initTraceLinkByType = () => {
-      if (type === "REQUIREMENT") {
-        const { _id, ...others } = (traceLinks[0] || {}).requirementDescription;
+      if (type === "REQUIREMENT" && requirementDescription) {
         setNewTraceLink({
           requirementDescription: {
-            ...others
-          } as IRequirementDescription,
+            ...requirementDescription
+          },
           implement: {
-            _id: uuidv4(),
             fullyQualifiedName: "",
             type: "CLASS"
-          }
+          } as IImplement // ingore _id,
         });
-      } else if (type === "IMPLEMENT") {
-        const { _id, ...others } = (traceLinks[0] || {}).implement;
+      } else if (type === "IMPLEMENT" && implementation) {
         setNewTraceLink({
           requirementDescription: {
             name: "",
             lastUpdateAt: Date.now()
           } as IRequirementDescription,
-          implement: { ...others } as IImplement
+          implement: { ...implementation }
         });
       }
     };

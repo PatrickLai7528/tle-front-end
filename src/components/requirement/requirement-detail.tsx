@@ -7,10 +7,10 @@ import { RequirementCard } from "./requirement-card";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { TraceLinkActions } from "../../store/trace-link/types";
-import { fetchRequirementRelatedTraceLinks } from "../../store/trace-link/actions";
 import { AppDispatch } from "../../store/store";
 import { updateDescription } from "../../store/requirement/actions";
 import { HistoryTable } from "./history-table";
+import { fetchDescriptionRelatedTraceLinks } from "../../store/trace-link/actions";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -56,40 +56,34 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
     );
 
     const fetchTraceLinks = (repoName: string, descriptionId: string) =>
-      dispatch(fetchRequirementRelatedTraceLinks(repoName, descriptionId));
+      dispatch(fetchDescriptionRelatedTraceLinks(repoName, descriptionId));
 
     const onUpdateDescription = (description: IRequirementDescription) =>
       dispatch(updateDescription(requirementId, description));
 
     useEffect(() => {
-      const doFetch = async () => {
-        try {
-          await fetchTraceLinks(repoName, description._id);
-        } catch (e) {
-          if (process.env.NODE_ENV !== "production") {
-            console.log(e);
-          }
-        }
-      };
-      doFetch();
-    }, [repoName, fetchRequirementRelatedTraceLinks, description]);
+      fetchTraceLinks(repoName, description._id);
+    }, [repoName, fetchDescriptionRelatedTraceLinks, description]);
 
     const traceLinksContent = useMemo(() => {
       if (loading) {
         return (
           <Skeleton title={false} avatar={false} paragraph={{ rows: 5 }} />
         );
-      } else if (!loading && traceLinks) {
+      } else if (!loading) {
         return (
           <EditableTraceLinkArea
+            requirementDescription={description}
             repoId={repoId}
             type="REQUIREMENT"
             repoName={repoName}
-            traceLinks={traceLinks}
+            traceLinks={traceLinks || []}
           />
         );
       }
-    }, [traceLinks, loading]);
+    }, [traceLinks, loading, description]);
+
+    console.log(traceLinks);
 
     return (
       <div className={styles.requirementDetail}>

@@ -1,12 +1,10 @@
 import { getServerUrl } from "../../configs/get-url";
-import { traceLinks } from "../../stubs/trace-link";
-import { traceLinkMatrix } from "./../../stubs/trace-link-matrix";
 import {
   ICommit,
   IFileTreeNode,
   IRequirement,
-  ITraceLinkMatrix,
-  ITraceLink
+  ITraceLink,
+  ITraceLinkMatrix
 } from "./../../types/index";
 import { AppDispatch, AppThunk } from "./../store";
 import {
@@ -19,10 +17,6 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   FETCH_REPO_TRACE_LINK,
   FETCH_REPO_TRACE_LINK_FAILURE,
-  FETCH_REPO_TRACE_LINK_SUCCESS,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE,
-  FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
   GENERATE_INIT_TRACE_LINK,
   GENERATE_INIT_TRACE_LINK_SUCCESS,
   GENERATE_INTI_TRACE_LINK_FAILURE,
@@ -44,7 +38,6 @@ export const newTraceLink = (
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "NEW_TRACE_LINK" });
   try {
-    // await new Promise(resolve => setTimeout(resolve, 1400));
     const {
       authReducer: { token }
     } = getState();
@@ -65,7 +58,7 @@ export const newTraceLink = (
     };
     const res = await fetch(url, options).then(res => res.json());
     if (res && res.success) {
-      dispatch({ type: "NEW_TRACE_LINK_SUCCESS" });
+      dispatch({ type: "NEW_TRACE_LINK_SUCCESS", payload: res.payload });
     } else {
       dispatch({ type: "NEW_TRACE_LINK_FAILURE", meta: res.meta });
     }
@@ -77,18 +70,18 @@ export const newTraceLink = (
   }
 };
 
-export const fetchRequirementRelatedTraceLinks = (
+export const fetchDescriptionRelatedTraceLinks = (
   repoName: string,
-  requirementId: string
+  descriptionId: string
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
-  dispatch({ type: FETCH_REQUIREMENT_RELATED_TRACE_LINK });
+  dispatch({ type: "FETCH_DESCRIPTION_RELATED_TRACE_LINK" });
   try {
     const {
       authReducer: { token }
     } = getState();
     if (!token) throw new Error("no token");
     const res = await fetch(
-      `${getServerUrl()}/api/tracelink?requirementId=${requirementId}&repoName=${repoName}`,
+      `${getServerUrl()}/api/tracelink?descriptionId=${descriptionId}&repoName=${repoName}`,
       {
         credentials: "include",
         headers: {
@@ -98,12 +91,12 @@ export const fetchRequirementRelatedTraceLinks = (
     ).then(res => res.json());
     if (res && res.success) {
       dispatch({
-        type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
+        type: "FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS",
         payload: res.payload
       });
     } else {
       dispatch({
-        type: "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE",
+        type: "FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE",
         meta: res.meta
       });
     }
@@ -111,7 +104,7 @@ export const fetchRequirementRelatedTraceLinks = (
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
     }
-    dispatch({ type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE });
+    dispatch({ type: "FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE" });
   }
 };
 
