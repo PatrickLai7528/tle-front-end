@@ -1,9 +1,8 @@
-import { Col, Divider, Empty, Row, Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
+import { Col, Divider, Empty, Row, Typography } from "antd";
+import React, { FunctionComponent, memo, useEffect } from "react";
 import { IFileTreeNode, ITraceLink } from "../../types";
-import { EditableTraceLinkArea } from "../editable-trace-link-area";
 import { HighlightCode } from "../highlight-code";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { TraceLinkContent } from "./trace-link-content";
 
 export interface IStateProps {
   traceLinks: ITraceLink[];
@@ -56,46 +55,17 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
       }
     }, [repoName, fetchFileRelatedTraceLinks, fileNode]);
 
-    const traceLinksContent = useMemo(() => {
-      if (loading) {
-        return (
-          <Skeleton
-            title={false}
-            avatar={false}
-            active
-            paragraph={{ rows: 5 }}
-          />
-        );
-      } else if (!loading && fileNode && traceLinks) {
-        return (
-          <>
-            <EditableTraceLinkArea
-              repoId={repoId}
-              fullyQualifiedFileName={fileNode.fullyQualifiedName}
-              type="IMPLEMENT"
-              repoName={repoName}
-            />
-            {traceLinks.map(link => (
-              <SimpleTraceLinkCard
-                showOperation
-                key={link._id}
-                traceLink={link}
-                showRequirement={true}
-                showImplement={false}
-              />
-            ))}
-          </>
-        );
-      } else {
-        return <Empty />;
-      }
-    }, [loading, fileNode, traceLinks]);
-
     return (
       <Row>
         <Col span={24}>
           <Typography.Title level={3}>追踪線索</Typography.Title>
-          {traceLinksContent}
+          <TraceLinkContent
+            repoName={repoName}
+            repoId={repoId}
+            traceLinks={traceLinks}
+            loading={loading}
+            fileNode={fileNode}
+          />
           <Divider />
           <Typography.Title level={3}>源代碼</Typography.Title>
           {!!fileNode ? (
