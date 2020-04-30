@@ -12,6 +12,7 @@ import { updateDescription } from "../../store/requirement/actions";
 import { HistoryTable } from "./history-table";
 import { fetchDescriptionRelatedTraceLinks } from "../../store/trace-link/actions";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { TraceLinkContent } from "./trace-link-content";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -40,6 +41,9 @@ const useStyles = createUseStyles({
   },
   requirementArea: {
     margin: { bottom: "16px" }
+  },
+  typographyTitle: {
+    margin: { top: "24px" }
   }
 });
 
@@ -66,34 +70,6 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
       fetchTraceLinks(repoName, description._id);
     }, [repoName, fetchDescriptionRelatedTraceLinks, description]);
 
-    const traceLinksContent = useMemo(() => {
-      if (loading) {
-        return (
-          <Skeleton title={false} avatar={false} paragraph={{ rows: 5 }} />
-        );
-      } else if (!loading) {
-        return (
-          <>
-            <EditableTraceLinkArea
-              requirementDescription={description}
-              repoId={repoId}
-              type="REQUIREMENT"
-              repoName={repoName}
-            />
-            {traceLinks.map(link => (
-              <SimpleTraceLinkCard
-                showOperation
-                key={link._id}
-                traceLink={link}
-                showRequirement={false}
-                showImplement={true}
-              />
-            ))}
-          </>
-        );
-      }
-    }, [traceLinks, loading, description]);
-
     return (
       <div className={styles.requirementDetail}>
         <Typography.Title level={3}>需求描述</Typography.Title>
@@ -106,17 +82,23 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
             useTooltips
           />
         </div>
-        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+        <Typography.Title level={3} className={styles.typographyTitle}>
           修改紀錄
         </Typography.Title>
         <HistoryTable
           requirementId={requirementId}
           descriptionId={description._id}
         />
-        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+        <Typography.Title level={3} className={styles.typographyTitle}>
           追踪線索
         </Typography.Title>
-        {traceLinksContent}
+        <TraceLinkContent
+          loading={loading}
+          repoName={repoName}
+          repoId={repoId}
+          description={description}
+          traceLinks={traceLinks}
+        />
       </div>
     );
   }
