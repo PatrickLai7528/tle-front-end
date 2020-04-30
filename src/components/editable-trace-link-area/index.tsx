@@ -7,8 +7,8 @@ import { RootState } from "../../store/reducers";
 import { newTraceLink as sendNewTraceLink } from "../../store/trace-link/actions";
 import { ITraceLink, IRequirementDescription, IImplement } from "../../types";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
-import { ImplementationAutoComplete } from "../auto-complete/implementation";
-import { RequirementAutoComplete } from "../auto-complete/requirement";
+import { ImplementationSelect } from "../select/implementation";
+import { RequirementAutoComplete } from "../select/requirement";
 
 export interface IEditableTraceLinkAreaProps {
   traceLinks: ITraceLink[];
@@ -16,7 +16,7 @@ export interface IEditableTraceLinkAreaProps {
   repoId: string;
   type: "IMPLEMENT" | "REQUIREMENT";
   requirementDescription?: IRequirementDescription;
-  implementation?: IImplement;
+  fullyQualifiedFileName?: string;
 }
 
 const useStyles = createUseStyles({
@@ -45,7 +45,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
       type,
       repoId,
       requirementDescription,
-      implementation
+      fullyQualifiedFileName
     } = props;
     const loading = useSelector<RootState, boolean>(
       state => state.traceLinkReducer.sendNewTraceLinkLoading
@@ -91,13 +91,16 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
             type: "CLASS"
           } as IImplement // ingore _id,
         });
-      } else if (type === "IMPLEMENT" && implementation) {
+      } else if (type === "IMPLEMENT" && fullyQualifiedFileName) {
         setNewTraceLink({
           requirementDescription: {
             name: "",
             lastUpdateAt: Date.now()
           } as IRequirementDescription,
-          implement: { ...implementation }
+          implement: {
+            fullyQualifiedName: fullyQualifiedFileName,
+            type: "CLASS"
+          } as IImplement // ignore _id,
         });
       }
     };
@@ -113,7 +116,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
     const getAutoCompleteByTypes = () => {
       if (type === "REQUIREMENT") {
         return (
-          <ImplementationAutoComplete
+          <ImplementationSelect
             onChange={setTraceLinkByType}
             value={getValueByType() as string}
             repoId={repoId}
@@ -147,7 +150,11 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
                       onClick={async () => {
                         if (newTraceLink) {
                           await dispatch(
-                            sendNewTraceLink(repoName, newTraceLink)
+                            sendNewTraceLink(
+                              repoName,
+                              newTraceLink,
+                              type === "IMPLEMENT" ? "FILE" : "REQUIREMENT"
+                            )
                           );
                           setNewTraceLink(null);
                         }

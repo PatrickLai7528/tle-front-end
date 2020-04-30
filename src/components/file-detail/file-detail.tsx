@@ -65,15 +65,11 @@ const FileDetail: FunctionComponent<IFileDetailProps> = memo(
             paragraph={{ rows: 5 }}
           />
         );
-      } else if (
-        !loading &&
-        fileNode &&
-        traceLinks &&
-        traceLinks.length !== 0
-      ) {
+      } else if (!loading && fileNode && traceLinks) {
         return (
           <EditableTraceLinkArea
             repoId={repoId}
+            fullyQualifiedFileName={fileNode.fullyQualifiedName}
             type="IMPLEMENT"
             traceLinks={traceLinks}
             repoName={repoName}
