@@ -4,15 +4,14 @@ import { fetchAllImplNames } from "../../store/implementation/actions";
 import { ImplementationActions } from "../../store/implementation/types";
 import { RootState } from "../../store/reducers";
 import { AppDispatch } from "../../store/store";
-import { BaseAutoComplete, IBaseAutoCompleteProps } from "./base";
+import { BaseSelect, IBaseSelectProps } from "./base";
 
-export interface IImplementationAutoCompleteProps
-  extends IBaseAutoCompleteProps {
+export interface IImplementationSelectProps extends IBaseSelectProps {
   repoId: string;
 }
 
-export const ImplementationAutoComplete: React.FunctionComponent<IImplementationAutoCompleteProps> = React.memo(
-  (props: IImplementationAutoCompleteProps) => {
+export const ImplementationSelect: React.FunctionComponent<IImplementationSelectProps> = React.memo(
+  (props: IImplementationSelectProps) => {
     const { repoId, ...baseProps } = props;
 
     const filenames: string[] = useSelector<RootState, string[]>(
@@ -25,6 +24,6 @@ export const ImplementationAutoComplete: React.FunctionComponent<IImplementation
       dispatch(fetchAllImplNames(repoId));
     }, [repoId]);
 
-    return <BaseAutoComplete {...baseProps} options={filenames} />;
+    return <BaseSelect {...baseProps} options={filenames} />;
   }
 );
