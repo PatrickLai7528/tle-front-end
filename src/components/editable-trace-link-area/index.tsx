@@ -5,9 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../store/reducers";
 import { newTraceLink as sendNewTraceLink } from "../../store/trace-link/actions";
-import { ITraceLink, IRequirementDescription } from "../../types";
+import { ITraceLink, IRequirementDescription, IImplement } from "../../types";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
-import { ImplementationAutoComplete } from "../implementation-auto-complete";
+import { ImplementationAutoComplete } from "../auto-complete/implementation";
+import { RequirementAutoComplete } from "../auto-complete/requirement";
 
 export interface IEditableTraceLinkAreaProps {
   traceLinks: ITraceLink[];
@@ -43,33 +44,40 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
     const dispatch = useDispatch();
     const styles = useStyles();
 
-    const [newTraceLink, setNewTraceLink] = useState<ITraceLink | null>(null);
+    const [newTraceLink, setNewTraceLink] = useState<Omit<
+      ITraceLink,
+      "_id"
+    > | null>(null);
 
     const setTraceLinkByType = (value: string) => {
       if (type === "REQUIREMENT" && newTraceLink) {
+        const { _id, ...others } = newTraceLink.implement;
         setNewTraceLink({
           ...newTraceLink,
           implement: {
-            ...newTraceLink.implement,
+            ...others,
             fullyQualifiedName: value
-          }
+          } as IImplement
         });
       } else if (type === "IMPLEMENT" && newTraceLink) {
+        const { _id, ...others } = newTraceLink.requirementDescription;
         setNewTraceLink({
           ...newTraceLink,
           requirementDescription: {
-            ...newTraceLink.requirementDescription,
+            ...others,
             name: value
-          }
+          } as IRequirementDescription
         });
       }
     };
 
     const initTraceLinkByType = () => {
       if (type === "REQUIREMENT") {
+        const { _id, ...others } = (traceLinks[0] || {}).requirementDescription;
         setNewTraceLink({
-          _id: uuidv4(),
-          requirementDescription: traceLinks[0].requirementDescription,
+          requirementDescription: {
+            ...others
+          } as IRequirementDescription,
           implement: {
             _id: uuidv4(),
             fullyQualifiedName: "",
@@ -77,14 +85,13 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
           }
         });
       } else if (type === "IMPLEMENT") {
+        const { _id, ...others } = (traceLinks[0] || {}).implement;
         setNewTraceLink({
-          _id: uuidv4(),
           requirementDescription: {
-            _id: uuidv4(),
             name: "",
             lastUpdateAt: Date.now()
           } as IRequirementDescription,
-          implement: (traceLinks[0] || {}).implement
+          implement: { ...others } as IImplement
         });
       }
     };
@@ -94,6 +101,26 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
         return newTraceLink.implement.fullyQualifiedName;
       } else if (type === "IMPLEMENT" && newTraceLink) {
         return newTraceLink.requirementDescription.name;
+      }
+    };
+
+    const getAutoCompleteByTypes = () => {
+      if (type === "REQUIREMENT") {
+        return (
+          <ImplementationAutoComplete
+            onChange={setTraceLinkByType}
+            value={getValueByType() as string}
+            repoId={repoId}
+          />
+        );
+      } else if (type === "IMPLEMENT") {
+        return (
+          <RequirementAutoComplete
+            onChange={setTraceLinkByType}
+            value={getValueByType() as string}
+            repoName={repoName}
+          />
+        );
       }
     };
 
@@ -108,21 +135,7 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
               style={{ marginTop: "16px", marginBottom: "16px" }}
               input={
                 <div className={styles.link}>
-                  {/* <Input
-                    width={"100%"}
-                    value={getValueByType()}
-                    onChange={e => {
-                      const { value } = e.target;
-                      if (value) {
-                        setTraceLinkByType(value);
-                      }
-                    }}
-                  /> */}
-                  <ImplementationAutoComplete
-                    onChange={setTraceLinkByType}
-                    value={getValueByType() as string}
-                    repoId={repoId}
-                  />
+                  {getAutoCompleteByTypes()}
                   <div className={styles.buttons}>
                     <Button
                       onClick={async () => {
@@ -149,7 +162,6 @@ export const EditableTraceLinkArea: FunctionComponent<IEditableTraceLinkAreaProp
                 </div>
               }
               type="ADDED"
-              key={newTraceLink._id}
               traceLink={newTraceLink}
               showRequirement={type !== "REQUIREMENT"}
               showImplement={type !== "IMPLEMENT"}

@@ -40,12 +40,35 @@ import {
 
 export const newTraceLink = (
   repoName: string,
-  traceLink: ITraceLink
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+  traceLink: Omit<ITraceLink, "_id">
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "NEW_TRACE_LINK" });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1400));
-    dispatch({ type: "NEW_TRACE_LINK_SUCCESS" });
+    // await new Promise(resolve => setTimeout(resolve, 1400));
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const url = `${getServerUrl()}/api/tracelink/new`;
+    const options: RequestInit = {
+      method: "POST",
+      body: JSON.stringify({
+        repoName,
+        newTraceLink: traceLink
+      }),
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      }
+    };
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "NEW_TRACE_LINK_SUCCESS" });
+    } else {
+      dispatch({ type: "NEW_TRACE_LINK_FAILURE", meta: res.meta });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);
@@ -57,14 +80,33 @@ export const newTraceLink = (
 export const fetchRequirementRelatedTraceLinks = (
   repoName: string,
   requirementId: string
-): AppThunk<void, TraceLinkActionTypes> => async dispatch => {
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: FETCH_REQUIREMENT_RELATED_TRACE_LINK });
   try {
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    dispatch({
-      type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
-      payload: traceLinks.splice(3, 6)
-    });
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const res = await fetch(
+      `${getServerUrl()}/api/tracelink?requirementId=${requirementId}&repoName=${repoName}`,
+      {
+        credentials: "include",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    ).then(res => res.json());
+    if (res && res.success) {
+      dispatch({
+        type: FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS,
+        payload: res.payload
+      });
+    } else {
+      dispatch({
+        type: "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE",
+        meta: res.meta
+      });
+    }
   } catch (e) {
     if (process.env.NODE_ENV !== "production") {
       console.log(e);

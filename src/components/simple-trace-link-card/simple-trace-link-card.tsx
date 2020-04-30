@@ -11,7 +11,7 @@ import { CustomTheme } from "../../theme";
 import { ITraceLink } from "../../types";
 import { RequirementCard } from "../requirement/requirement-card";
 export interface ISimpleTraceLinkCardProps {
-  traceLink: ITraceLink;
+  traceLink: ITraceLink | Omit<ITraceLink, "_id">;
   showImplement?: boolean;
   showRequirement?: boolean;
   type?: "ADDED" | "REMOVED";
@@ -33,10 +33,10 @@ const useStyle = createUseStyles<CustomTheme>(theme => ({
     justifyContent: "flex-start",
     alignItems: "center"
   },
-  traceLinkDescription: {
-    // display: "flex",
-    // flexDirection: "row",
-    // justifyContent: "flex-start",
+  implement: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-start"
   },
   operations: {
     flexGrow: 1,
@@ -86,6 +86,10 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
     }, [type, style]);
 
     const cardTitle = useMemo(() => {
+      const text = (traceLink as any)._id
+        ? `#${(traceLink as any)._id}`
+        : "暫無";
+
       return (
         <div>
           {!!type && (
@@ -95,7 +99,7 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
               {type === "ADDED" ? "ADD" : "REMOVE"}
             </Tag>
           )}
-          {`#${traceLink._id}`}
+          {text}
         </div>
       );
     }, [type, traceLink]);
@@ -110,42 +114,42 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
         <Card.Meta
           title={cardTitle}
           description={
-            <div className={styles.traceLinkDescription}>
+            <div>
               {showRequirement && (
                 <Typography style={{ width: "100%" }}>
                   <Typography.Text>需求描述</Typography.Text>
                   {input ? (
                     input
                   ) : (
-                    // <Typography.Paragraph strong>
-                    //   {traceLink.requirementDescription.name}
-                    // </Typography.Paragraph>
                     <RequirementCard
+                      useCard={false}
                       description={traceLink.requirementDescription}
                     />
                   )}
                 </Typography>
               )}
               {showImplement && showRequirement && <Divider />}
-              {showImplement && (
-                <>
-                  <Typography style={{ width: "100%" }}>
-                    <Typography.Text>實現類或函數</Typography.Text>
-                    {input ? (
-                      input
-                    ) : (
-                      <Typography.Paragraph strong>
-                        {traceLink.implement.fullyQualifiedName}
-                      </Typography.Paragraph>
-                    )}
-                  </Typography>
-                </>
-              )}
-              {!!showOperation && (
-                <div className={styles.operations}>
-                  <Button type="danger">刪除</Button>
-                </div>
-              )}
+              <div className={styles.implement}>
+                {showImplement && (
+                  <>
+                    <Typography style={{ width: "100%" }}>
+                      <Typography.Text>實現類或函數</Typography.Text>
+                      {input ? (
+                        input
+                      ) : (
+                        <Typography.Paragraph strong>
+                          {traceLink.implement.fullyQualifiedName}
+                        </Typography.Paragraph>
+                      )}
+                    </Typography>
+                  </>
+                )}
+                {!!showOperation && (
+                  <div className={styles.operations}>
+                    <Button type="danger">刪除</Button>
+                  </div>
+                )}
+              </div>
             </div>
           }
         />
