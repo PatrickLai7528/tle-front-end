@@ -34,7 +34,8 @@ import {
 
 export const newTraceLink = (
   repoName: string,
-  traceLink: Omit<ITraceLink, "_id">
+  traceLink: Omit<ITraceLink, "_id">,
+  type: "FILE" | "REQUIREMENT"
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "NEW_TRACE_LINK" });
   try {
@@ -58,7 +59,10 @@ export const newTraceLink = (
     };
     const res = await fetch(url, options).then(res => res.json());
     if (res && res.success) {
-      dispatch({ type: "NEW_TRACE_LINK_SUCCESS", payload: res.payload });
+      dispatch({
+        type: "NEW_TRACE_LINK_SUCCESS",
+        payload: { type, link: res.payload }
+      });
     } else {
       dispatch({ type: "NEW_TRACE_LINK_FAILURE", meta: res.meta });
     }

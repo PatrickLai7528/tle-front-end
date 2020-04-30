@@ -58,14 +58,26 @@ export const traceLinkReducer = (
         error: false
       };
     case "NEW_TRACE_LINK_SUCCESS":
-      return {
-        ...state,
-        sendNewTraceLinkLoading: false,
-        requirementRelatedTraceLinks: [
-          ...state.requirementRelatedTraceLinks,
-          (action as INewTraceLinkSuccessAction).payload
-        ]
-      };
+      const payload = (action as INewTraceLinkSuccessAction).payload;
+      if (payload.type === "REQUIREMENT") {
+        const newState = {
+          ...state,
+          sendNewTraceLinkLoading: false,
+          requirementRelatedTraceLinks: [
+            ...state.requirementRelatedTraceLinks,
+            payload.link
+          ]
+        };
+        return newState;
+      } else if (payload.type === "FILE") {
+        const newState = {
+          ...state,
+          sendNewTraceLinkLoading: false,
+          fileRelatedTraceLinks: [...state.fileRelatedTraceLinks, payload.link]
+        };
+        return newState;
+      }
+      return { ...state };
     case "NEW_TRACE_LINK_FAILURE":
       return {
         ...state,

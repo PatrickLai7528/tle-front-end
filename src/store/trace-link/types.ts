@@ -49,7 +49,7 @@ export interface INewTraceLinkAction {
 }
 export interface INewTraceLinkSuccessAction {
   type: typeof NEW_TRACE_LINK_SUCCESS;
-  payload: ITraceLink; // with id
+  payload: { type: "FILE" | "REQUIREMENT"; link: ITraceLink }; // with id
 }
 export interface INewTraceLinkFailureAction {
   type: typeof NEW_TRACE_LINK_FAILURE;
