@@ -1,8 +1,15 @@
 import React from "react";
-import { IFileTreeNode, ITraceLink } from "../../types";
+import {
+  IFileTreeNode,
+  ITraceLink,
+  IRequirementDescription
+} from "../../types";
 import { Skeleton, Empty } from "antd";
 import { EditableTraceLinkArea } from "../editable-trace-link-area";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { SelectRequirement } from "../add-trace-link/select-requirement";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
 
 export interface ITraceLinkContentProps {
   loading: boolean;
@@ -15,6 +22,12 @@ export interface ITraceLinkContentProps {
 export const TraceLinkContent: React.FC<ITraceLinkContentProps> = React.memo(
   (props: ITraceLinkContentProps) => {
     const { loading, fileNode, traceLinks, repoId, repoName } = props;
+
+    const descriptions: IRequirementDescription[] = useSelector<
+      RootState,
+      IRequirementDescription[]
+    >(state => state.requirementReducer.requirement?.descriptions || []);
+
     if (loading) {
       return (
         <Skeleton title={false} avatar={false} active paragraph={{ rows: 5 }} />
@@ -22,11 +35,10 @@ export const TraceLinkContent: React.FC<ITraceLinkContentProps> = React.memo(
     } else if (!loading && fileNode && traceLinks) {
       return (
         <>
-          <EditableTraceLinkArea
-            repoId={repoId}
-            fullyQualifiedFileName={fileNode.fullyQualifiedName}
-            type="IMPLEMENT"
+          <SelectRequirement
+            fullyQualifiedName={fileNode.fullyQualifiedName}
             repoName={repoName}
+            descriptions={descriptions}
           />
           {traceLinks.map(link => (
             <SimpleTraceLinkCard

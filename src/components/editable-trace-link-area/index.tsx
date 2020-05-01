@@ -1,14 +1,13 @@
-import { Button, Input, Spin } from "antd";
+import { Button, Spin } from "antd";
 import React, { FunctionComponent, memo, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { useDispatch, useSelector } from "react-redux";
-import { v4 as uuidv4 } from "uuid";
 import { RootState } from "../../store/reducers";
 import { newTraceLink as sendNewTraceLink } from "../../store/trace-link/actions";
-import { ITraceLink, IRequirementDescription, IImplement } from "../../types";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { IImplement, IRequirementDescription, ITraceLink } from "../../types";
 import { ImplementationSelect } from "../select/implementation";
 import { RequirementAutoComplete } from "../select/requirement";
+import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface IEditableTraceLinkAreaProps {
   repoName: string;
