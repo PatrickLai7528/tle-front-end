@@ -5,7 +5,6 @@ import {
   IRequirementDescription
 } from "../../types";
 import { Skeleton, Empty } from "antd";
-import { EditableTraceLinkArea } from "../editable-trace-link-area";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 import { SelectRequirement } from "../add-trace-link/select-requirement";
 import { useSelector } from "react-redux";
