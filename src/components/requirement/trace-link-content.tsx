@@ -1,15 +1,14 @@
-import React from "react";
 import { Skeleton } from "antd";
-import { EditableTraceLinkArea } from "../editable-trace-link-area";
-import {
-  IRequirementDescription,
-  ITraceLink,
-  IFileTreeNode
-} from "../../types";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
-import { SelectImplement } from "../add-trace-link/select-implement";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
+import {
+  IFileTreeNode,
+  IRequirementDescription,
+  ITraceLink
+} from "../../types";
+import { SelectImplement } from "../add-trace-link/select-implement";
+import { SimpleTraceLinkCard } from "../simple-trace-link-card";
 
 export interface ITraceLinkContentProps {
   loading: boolean;

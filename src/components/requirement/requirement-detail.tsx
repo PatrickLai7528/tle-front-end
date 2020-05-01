@@ -1,17 +1,15 @@
-import { Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
+import { Typography } from "antd";
+import React, { FunctionComponent, memo, useEffect } from "react";
 import { createUseStyles } from "react-jss";
-import { IRequirementDescription, ITraceLink } from "../../types";
-import { EditableTraceLinkArea } from "../editable-trace-link-area";
-import { RequirementCard } from "./requirement-card";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { TraceLinkActions } from "../../store/trace-link/types";
-import { AppDispatch } from "../../store/store";
 import { updateDescription } from "../../store/requirement/actions";
-import { HistoryTable } from "./history-table";
+import { AppDispatch } from "../../store/store";
 import { fetchDescriptionRelatedTraceLinks } from "../../store/trace-link/actions";
-import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { IRequirementDescription, ITraceLink } from "../../types";
+import { HistoryTable } from "./history-table";
+import { RequirementCard } from "./requirement-card";
 import { TraceLinkContent } from "./trace-link-content";
 
 export interface IOwnProps {
