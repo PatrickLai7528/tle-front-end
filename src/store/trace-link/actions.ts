@@ -32,6 +32,41 @@ import {
   UPDATE_INIT_TRACE_LINK
 } from "./types";
 
+export const deltetTraceLink = (
+  matrixId: string,
+  traceLink: ITraceLink
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
+  dispatch({ type: "DELETE_TRACE_LINK" });
+  try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const url = `${getServerUrl()}/api/tracelink`;
+    const options: RequestInit = {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ matrixId, traceLink })
+    };
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "DELETE_TRACE_LINK_SUCCESS" });
+    } else {
+      dispatch({ type: "DELETE_TRACE_LINK_FALIURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "NEW_TRACE_LINK_FAILURE" });
+  }
+};
+
 export const newTraceLink = (
   repoName: string,
   traceLink: Omit<ITraceLink, "_id">,

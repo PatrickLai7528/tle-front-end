@@ -44,6 +44,20 @@ export const NEW_TRACE_LINK = "NEW_TRACE_LINK";
 export const NEW_TRACE_LINK_SUCCESS = "NEW_TRACE_LINK_SUCCESS";
 export const NEW_TRACE_LINK_FAILURE = "NEW_TRACE_LINK_FAILURE";
 
+export const DELETE_TRACE_LINK = "DELETE_TRACE_LINK";
+export const DELETE_TRACE_LINK_SUCCESS = "DELETE_TRACE_LINK_SUCCESS";
+export const DELETE_TRACE_LINK_FAILURE = "DELETE_TRACE_LINK_FALIURE";
+
+export interface IDeleteTraceLinkAction {
+  type: typeof DELETE_TRACE_LINK;
+}
+export interface IDeleteTraceLinkSuccessAction {
+  type: typeof DELETE_TRACE_LINK_SUCCESS;
+}
+export interface IDeleteTraceLinkFailureAction {
+  type: typeof DELETE_TRACE_LINK_FAILURE;
+}
+
 export interface INewTraceLinkAction {
   type: typeof NEW_TRACE_LINK;
 }
@@ -191,7 +205,10 @@ export type TraceLinkActions =
   | IFetchDescriptionRelatedTraceLinkFailureAction
   | INewTraceLinkAction
   | INewTraceLinkSuccessAction
-  | INewTraceLinkFailureAction;
+  | INewTraceLinkFailureAction
+  | IDeleteTraceLinkAction
+  | IDeleteTraceLinkSuccessAction
+  | IDeleteTraceLinkFailureAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -217,4 +234,7 @@ export type TraceLinkActionTypes =
   | typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE
   | typeof NEW_TRACE_LINK
   | typeof NEW_TRACE_LINK_SUCCESS
-  | typeof NEW_TRACE_LINK_FAILURE;
+  | typeof NEW_TRACE_LINK_FAILURE
+  | typeof DELETE_TRACE_LINK
+  | typeof DELETE_TRACE_LINK_SUCCESS
+  | typeof DELETE_TRACE_LINK_FAILURE;
