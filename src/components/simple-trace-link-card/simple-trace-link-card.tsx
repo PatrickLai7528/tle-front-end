@@ -16,7 +16,6 @@ export interface ISimpleTraceLinkCardProps {
   showRequirement?: boolean;
   type?: "ADDED" | "REMOVED";
   showOperation?: boolean;
-  input?: ReactNode;
   style?: CSSProperties;
 }
 
@@ -68,7 +67,6 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
       showRequirement,
       type,
       showOperation,
-      input,
       style
     } = props;
     const theme: CustomTheme = useTheme() as CustomTheme;
@@ -118,14 +116,10 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
               {showRequirement && (
                 <Typography style={{ width: "100%" }}>
                   <Typography.Text>需求描述</Typography.Text>
-                  {input ? (
-                    input
-                  ) : (
-                    <RequirementCard
-                      useCard={false}
-                      description={traceLink.requirementDescription}
-                    />
-                  )}
+                  <RequirementCard
+                    useCard={false}
+                    description={traceLink.requirementDescription}
+                  />
                 </Typography>
               )}
               {showImplement && showRequirement && <Divider />}
@@ -134,13 +128,9 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
                   <>
                     <Typography style={{ width: "100%" }}>
                       <Typography.Text>實現類或函數</Typography.Text>
-                      {input ? (
-                        input
-                      ) : (
-                        <Typography.Paragraph strong>
-                          {traceLink.implement.fullyQualifiedName}
-                        </Typography.Paragraph>
-                      )}
+                      <Typography.Paragraph strong>
+                        {traceLink.implement.fullyQualifiedName}
+                      </Typography.Paragraph>
                     </Typography>
                   </>
                 )}
