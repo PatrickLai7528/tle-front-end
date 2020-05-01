@@ -73,7 +73,7 @@ export const traceLinkReducer = (
         const newState = {
           ...state,
           sendNewTraceLinkLoading: false,
-          fileRelatedTraceLinks: [...state.fileRelatedTraceLinks, payload.link]
+          fileRelatedTraceLinks: [payload.link, ...state.fileRelatedTraceLinks]
         };
         return newState;
       }
