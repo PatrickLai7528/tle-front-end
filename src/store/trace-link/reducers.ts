@@ -26,7 +26,8 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
   IFetchDescriptionRelatedTraceLinkSuccessAction,
   ISendInitTraceLinkFailureAction,
-  INewTraceLinkSuccessAction
+  INewTraceLinkSuccessAction,
+  IDeleteTraceLinkSuccessAction
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -43,7 +44,8 @@ const initialState: ITraceLinkState = {
   fileRelatedTraceLinks: [],
   requirementRelatedTraceLinks: [],
 
-  sendNewTraceLinkLoading: false
+  sendNewTraceLinkLoading: false,
+  deleteTraceLinkLoading: false
 };
 
 export const traceLinkReducer = (
@@ -51,6 +53,42 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case "DELETE_TRACE_LINK":
+      return {
+        ...state,
+        deleteTraceLinkLoading: true,
+        error: false
+      };
+    case "DELETE_TRACE_LINK_SUCCESS": {
+      const payload = (action as IDeleteTraceLinkSuccessAction).payload;
+      if (payload.type === "REQUIREMENT") {
+        const newState = {
+          ...state,
+          deleteTraceLinkLoading: false,
+          requirementRelatedTraceLinks: [
+            ...state.requirementRelatedTraceLinks.filter(
+              link => link._id.toString() !== payload.link._id.toString()
+            )
+          ]
+        };
+        return newState;
+      } else if (payload.type === "FILE") {
+        const newState = {
+          ...state,
+          deleteTraceLinkLoading: false,
+          fileRelatedTraceLinks: [
+            ...state.fileRelatedTraceLinks.filter(
+              link => link._id.toString() !== payload.link._id.toString()
+            )
+          ]
+        };
+        return newState;
+      }
+      return { ...state };
+    }
+    case "DELETE_TRACE_LINK_FALIURE": {
+      return { ...state, deleteTraceLinkLoading: false, error: true };
+    }
     case "NEW_TRACE_LINK":
       return {
         ...state,
@@ -64,8 +102,8 @@ export const traceLinkReducer = (
           ...state,
           sendNewTraceLinkLoading: false,
           requirementRelatedTraceLinks: [
-            ...state.requirementRelatedTraceLinks,
-            payload.link
+            payload.link,
+            ...state.requirementRelatedTraceLinks
           ]
         };
         return newState;

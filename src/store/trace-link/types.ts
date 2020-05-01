@@ -53,6 +53,7 @@ export interface IDeleteTraceLinkAction {
 }
 export interface IDeleteTraceLinkSuccessAction {
   type: typeof DELETE_TRACE_LINK_SUCCESS;
+  payload: { type: "FILE" | "REQUIREMENT"; link: ITraceLink };
 }
 export interface IDeleteTraceLinkFailureAction {
   type: typeof DELETE_TRACE_LINK_FAILURE;
@@ -166,6 +167,7 @@ export interface ITraceLinkState {
   fileRelatedTraceLinks: ITraceLink[];
   requirementRelatedTraceLinks: ITraceLink[];
   sendNewTraceLinkLoading: boolean;
+  deleteTraceLinkLoading: boolean;
 }
 
 export interface IFetchRepoTraceLinkAction {

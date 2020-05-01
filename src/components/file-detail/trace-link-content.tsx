@@ -42,6 +42,7 @@ export const TraceLinkContent: React.FC<ITraceLinkContentProps> = React.memo(
           {traceLinks.map(link => (
             <SimpleTraceLinkCard
               showOperation
+              deleteType="FILE"
               key={link._id}
               traceLink={link}
               showRequirement={true}

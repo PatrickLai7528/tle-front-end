@@ -32,9 +32,10 @@ import {
   UPDATE_INIT_TRACE_LINK
 } from "./types";
 
-export const deltetTraceLink = (
+export const deleteTraceLink = (
   matrixId: string,
-  traceLink: ITraceLink
+  traceLink: ITraceLink,
+  type: "FILE" | "REQUIREMENT"
 ): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "DELETE_TRACE_LINK" });
   try {
@@ -55,7 +56,10 @@ export const deltetTraceLink = (
     };
     const res = await fetch(url, options).then(res => res.json());
     if (res && res.success) {
-      dispatch({ type: "DELETE_TRACE_LINK_SUCCESS" });
+      dispatch({
+        type: "DELETE_TRACE_LINK_SUCCESS",
+        payload: { type: type, link: traceLink }
+      });
     } else {
       dispatch({ type: "DELETE_TRACE_LINK_FALIURE", meta: res.meta });
     }

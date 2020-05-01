@@ -1,4 +1,4 @@
-import { Skeleton } from "antd";
+import { Skeleton, Spin } from "antd";
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
@@ -46,11 +46,15 @@ export const TraceLinkContent: React.FunctionComponent<ITraceLinkContentProps> =
       }
     );
 
+    const deleteTraceLinkLoading = useSelector<RootState, boolean>(
+      state => state.traceLinkReducer.deleteTraceLinkLoading
+    );
+
     if (loading) {
       return <Skeleton title={false} avatar={false} paragraph={{ rows: 5 }} />;
     } else {
       return (
-        <>
+        <Spin spinning={deleteTraceLinkLoading}>
           <SelectImplement
             repoName={repoName}
             description={description}
@@ -59,13 +63,14 @@ export const TraceLinkContent: React.FunctionComponent<ITraceLinkContentProps> =
           {traceLinks.map(link => (
             <SimpleTraceLinkCard
               showOperation
+              deleteType="REQUIREMENT"
               key={link._id}
               traceLink={link}
               showRequirement={false}
               showImplement={true}
             />
           ))}
-        </>
+        </Spin>
       );
     }
   }
