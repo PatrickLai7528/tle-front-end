@@ -9,9 +9,11 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
+import { ImplementStatisticBarChart } from "../../components/graph/implement-statistic-bar-chart";
 import { RepositoryFiles } from "../../components/repository-files";
 import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
+import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -20,14 +22,12 @@ import {
   IRequirement,
   IRequirementDescription
 } from "../../types";
+import { findNodeByName } from "../../utils/trees";
 import CommitCard from "./commit/commit-card";
 import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
-import { CodeCouplingChart } from "../../components/graph/code-coupling-chart";
-import { ImplementRequirementBarChart } from "../../components/graph/implement-requirement-bar-chart";
-import { findNodeByName } from "../../utils/trees";
+import { RequirementStatisticBarChart } from "./../../components/graph/requirement-statistic-bar-chart";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -250,6 +250,21 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("requirement")} key="REQUIREMENT">
+              <RequirementStatisticBarChart
+                onClick={(descriptionName: string) => {
+                  let descriptionFound: IRequirementDescription | null = null;
+                  for (const description of requirement.descriptions || []) {
+                    if (description.name === descriptionName) {
+                      descriptionFound = description;
+                    }
+                  }
+
+                  if (descriptionFound) {
+                    setSelectedRequirementDescription(descriptionFound);
+                    openDrawer("REQUIREMENT");
+                  }
+                }}
+              />
               {!!requirement ? (
                 <RequirementCard
                   loading={deleteRequirementLoading}
@@ -268,7 +283,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={"文件"} key={"FILE"}>
-              <ImplementRequirementBarChart
+              <ImplementStatisticBarChart
                 style={{ marginTop: "16px" }}
                 onClick={(fullyQualifiedName: string) => {
                   const node = findNodeByName(

@@ -3,8 +3,8 @@ import { data } from "./data";
 import { createUseStyles, useTheme } from "react-jss";
 import { Row, Col } from "antd";
 import { CustomTheme } from "../../theme";
-import { RequirementImplementBarChart } from "./requirement-implement-bar-chart";
-import { ImplementRequirementBarChart } from "../graph/implement-requirement-bar-chart";
+import { RequirementStatisticBarChart } from "../graph/requirement-statistic-bar-chart";
+import { ImplementStatisticBarChart } from "../graph/implement-statistic-bar-chart";
 import { CodeCouplingChart } from "../graph/code-coupling-chart";
 import { CommitLinkChangeChart } from "./commit-link-change-chart";
 
@@ -21,10 +21,10 @@ export const TraceLinkGraph: FunctionComponent<ITraceLinkGraphProps> = memo(
     return (
       <Row gutter={[16, 16]}>
         <Col span={12}>
-          <RequirementImplementBarChart />
+          <RequirementStatisticBarChart />
         </Col>
         <Col span={12}>
-          <ImplementRequirementBarChart />
+          <ImplementStatisticBarChart />
         </Col>
         <Col span={12}>
           <CodeCouplingChart />

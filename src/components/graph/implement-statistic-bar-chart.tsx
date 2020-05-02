@@ -10,19 +10,20 @@ import { IStatistic } from "../../types";
 import { ChartTitle } from "./chart-title";
 import { Spin } from "antd";
 
-export interface IImplementRequirementBarChartProps {
+export interface IImplementStatisticBarChartProps {
   style?: React.CSSProperties;
   onClick?: (fullyQualifiedName: string) => void;
 }
 
-export const ImplementRequirementBarChart: FC<IImplementRequirementBarChartProps> = memo(
-  (props: IImplementRequirementBarChartProps) => {
+const cols = {
+  sales: {
+    tickInterval: 20
+  }
+};
+
+export const ImplementStatisticBarChart: FC<IImplementStatisticBarChartProps> = memo(
+  (props: IImplementStatisticBarChartProps) => {
     const { style, onClick } = props;
-    const cols = {
-      sales: {
-        tickInterval: 20
-      }
-    };
 
     const data = useSelector<RootState, IStatistic[]>(state =>
       state.statisticReducer.fileStatistics.sort((a, b) => b.value - a.value)
@@ -83,4 +84,4 @@ export const ImplementRequirementBarChart: FC<IImplementRequirementBarChartProps
   }
 );
 
-ImplementRequirementBarChart.defaultProps = { style: {} };
+ImplementStatisticBarChart.defaultProps = { style: {} };
