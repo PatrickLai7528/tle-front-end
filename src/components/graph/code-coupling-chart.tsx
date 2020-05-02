@@ -16,6 +16,7 @@ export interface ICodeCouplingChartProps {}
 export const CodeCouplingChart: FunctionComponent<ICodeCouplingChartProps> = memo(
   (props: ICodeCouplingChartProps) => {
     const ds = new DataSet();
+
     const dv = ds.createView().source(data, {
       type: "graph",
       edges: d => d.links
@@ -27,6 +28,7 @@ export const CodeCouplingChart: FunctionComponent<ICodeCouplingChartProps> = mem
       weight: true,
       marginRatio: 0.3
     });
+
     const scale = {
       x: {
         sync: true
@@ -35,6 +37,7 @@ export const CodeCouplingChart: FunctionComponent<ICodeCouplingChartProps> = mem
         sync: true
       }
     };
+
     return (
       <Chart
         data={data}

@@ -1,7 +1,7 @@
 import { Axis, Chart, Geom, Tooltip } from "bizcharts";
 import React, { memo, FC } from "react";
 import { createUseStyles } from "react-jss";
-import { ChartTitle } from "./chart-title";
+import { ChartTitle } from "../graph/chart-title";
 
 const data = [
   {

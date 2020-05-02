@@ -1,3 +1,4 @@
+import { statisticReducer } from "./statistic/reducers";
 import { userActivityReducer } from "./user-activity/reducers";
 import { notificationReducer } from "./notification/reducers";
 import { traceLinkReducer } from "./trace-link/reducers";
@@ -18,7 +19,8 @@ const rootReducer = combineReducers({
   traceLinkReducer,
   notificationReducer,
   userActivityReducer,
-  implementationReducer
+  implementationReducer,
+  statisticReducer
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

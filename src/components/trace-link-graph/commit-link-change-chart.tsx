@@ -1,6 +1,6 @@
 import { Axis, Chart, Geom, Legend, Tooltip } from "bizcharts";
 import React, { FunctionComponent, memo } from "react";
-import { ChartTitle } from "./chart-title";
+import { ChartTitle } from "../graph/chart-title";
 
 export interface ICommitLinkChangeChartProps {}
 

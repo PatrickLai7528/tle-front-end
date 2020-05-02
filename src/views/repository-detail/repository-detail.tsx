@@ -25,6 +25,9 @@ import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
+import { CodeCouplingChart } from "../../components/graph/code-coupling-chart";
+import { ImplementRequirementBarChart } from "../../components/graph/implement-requirement-bar-chart";
+import { findNodeByName } from "../../utils/trees";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -230,6 +233,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             className={styles.content}
           >
             <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
+              {/* <CodeCouplingChart /> */}
               <TraceLinkTable repoName={repoName} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("commit")} key="COMMIT">
@@ -264,6 +268,19 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={"文件"} key={"FILE"}>
+              <ImplementRequirementBarChart
+                style={{ marginTop: "16px" }}
+                onClick={(fullyQualifiedName: string) => {
+                  const node = findNodeByName(
+                    repo?.trees || [],
+                    fullyQualifiedName
+                  );
+                  if (node) {
+                    setSelectedFile(node);
+                    openDrawer("FILE");
+                  }
+                }}
+              />
               {repo ? (
                 <RepositoryFiles
                   onFileNodeClick={node => {

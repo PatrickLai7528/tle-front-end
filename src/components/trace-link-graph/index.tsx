@@ -4,8 +4,8 @@ import { createUseStyles, useTheme } from "react-jss";
 import { Row, Col } from "antd";
 import { CustomTheme } from "../../theme";
 import { RequirementImplementBarChart } from "./requirement-implement-bar-chart";
-import { ImplementRequirementBarChart } from "./implement-requirement-bar-chart";
-import { CodeCouplingChart } from "./code-coupling-chart";
+import { ImplementRequirementBarChart } from "../graph/implement-requirement-bar-chart";
+import { CodeCouplingChart } from "../graph/code-coupling-chart";
 import { CommitLinkChangeChart } from "./commit-link-change-chart";
 
 export interface ITraceLinkGraphProps {}
