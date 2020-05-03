@@ -26,8 +26,8 @@ const AuthRedirect: FunctionComponent<IAuthRedirectProps> = memo(
     const params = new URLSearchParams(location.search);
     const code = params.get("code");
 
-    // const tleAppToken = localStorage.getItem("tle_app_token");
-    // cookies.set("tle_app_token", tleAppToken, { path: "/" });
+    const tleAppToken = localStorage.getItem("tle_app_token");
+    cookies.set("tle_app_token", tleAppToken, { path: "/" });
 
     useEffect(() => {
       if (code) sendGitHubLogIn(code);
