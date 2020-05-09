@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
 import { RootState } from "../../store/reducers";
-import { RepositoryManagementActions } from "../../store/repository/types";
+import { RepositoryActions } from "../../store/repository/types";
 import Repository, {
   IDispatchProps,
   IOwnProps,
@@ -32,7 +32,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<
     RootState,
     any,
-    RepositoryManagementActions | ImportRepositoryAcitons
+    RepositoryActions | ImportRepositoryAcitons
   >
 ) => {
   return {

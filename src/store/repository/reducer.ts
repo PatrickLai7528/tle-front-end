@@ -1,7 +1,7 @@
 import {
   ILoadMoreRepositorySuccessAction,
   IRepositoryManagementState,
-  RepositoryManagementActions,
+  RepositoryActions,
   IFetchRepositoryFromGitHubSuccessAction,
   IFetchImportedRepositorySuccessAction,
   FETCH_IMPORTED_REPOSITORY_DETAIL,
@@ -10,7 +10,8 @@ import {
   FETCH_RECENT_REPOSITORY,
   IFetchRecentRepositorySuccessAction,
   FETCH_RECENT_REPOSITORY_SUCCESS,
-  FETCH_RECENT_REPOSITORY_FAILURE
+  FETCH_RECENT_REPOSITORY_FAILURE,
+  IDeleteRepositorySuccessAction
 } from "./types";
 
 const initialState: IRepositoryManagementState = {
@@ -23,9 +24,23 @@ const initialState: IRepositoryManagementState = {
 
 export const repositoryManagementReducer = (
   state = initialState,
-  action: RepositoryManagementActions
+  action: RepositoryActions
 ): IRepositoryManagementState => {
   switch (action.type) {
+    case "DELETE_REPOSITORY":
+      return { ...state, deleteRepoLoading: true };
+    case "DELETE_REPOSITORY_SUCCESS": {
+      const { payload } = action as IDeleteRepositorySuccessAction;
+      return {
+        ...state,
+        deleteRepoLoading: false,
+        importedRepositoryList: [
+          ...state.importedRepositoryList.filter(repo => repo._id !== payload)
+        ]
+      };
+    }
+    case "DELETE_REPOSITORY_FAILURE":
+      return { ...state, deleteRepoLoading: false, error: true };
     case FETCH_RECENT_REPOSITORY:
       return {
         ...state,

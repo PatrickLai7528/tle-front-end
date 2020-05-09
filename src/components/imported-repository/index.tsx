@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../store/reducers";
 import { fetchImportedRepositoryList } from "../../store/repository/action";
-import { RepositoryManagementActions } from "../../store/repository/types";
+import { RepositoryActions } from "../../store/repository/types";
 import ImportedRepository, {
   IDispatchProps,
   IOwnProps,
@@ -19,7 +19,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
-  dispatch: ThunkDispatch<RootState, any, RepositoryManagementActions>
+  dispatch: ThunkDispatch<RootState, any, RepositoryActions>
 ) => {
   return {
     fetchImportedRepositoryList: () => dispatch(fetchImportedRepositoryList())

@@ -64,5 +64,8 @@ export const zhtw = {
   "description priority": "優先級",
   "description normalProcess": "正常流程",
   "description expansionProcess": "擴展流程",
-  "description specialNeeds": "特殊需求"
+  "description specialNeeds": "特殊需求",
+  operation: "操作",
+  delete: "刪除",
+  "confirm delete?": "確認刪除？"
 };

@@ -11,7 +11,7 @@ import {
   IRequirementDescription
 } from "../../types";
 import { ThunkDispatch } from "redux-thunk";
-import { RepositoryManagementActions } from "../../store/repository/types";
+import { RepositoryActions } from "../../store/repository/types";
 import { fetchImportedRepositoryDetail } from "../../store/repository/action";
 import {
   fetchRepoRequirement,
@@ -39,7 +39,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<
     RootState,
     any,
-    RepositoryManagementActions | RequirementActions
+    RepositoryActions | RequirementActions
   >,
   {
     match: {
