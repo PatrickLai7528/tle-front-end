@@ -6,7 +6,7 @@ import { requirementReducer } from "./requirement/reducers";
 import { combineReducers } from "redux";
 import { authReducer } from "./auth/reducers";
 import { importRepositoryReducer } from "./import-repository/reducer";
-import { repositoryManagementReducer } from "./repository-management/reducer";
+import { repositoryManagementReducer } from "./repository/reducer";
 import { searchReducer } from "./search-github-repository/reducers";
 import { implementationReducer } from "./implementation/reducers";
 

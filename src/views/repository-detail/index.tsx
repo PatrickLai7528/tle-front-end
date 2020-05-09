@@ -11,8 +11,8 @@ import {
   IRequirementDescription
 } from "../../types";
 import { ThunkDispatch } from "redux-thunk";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
-import { fetchImportedRepositoryDetail } from "../../store/repository-management/action";
+import { RepositoryManagementActions } from "../../store/repository/types";
+import { fetchImportedRepositoryDetail } from "../../store/repository/action";
 import {
   fetchRepoRequirement,
   toggleAddRequirementModal,

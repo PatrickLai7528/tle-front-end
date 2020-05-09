@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { fetchRecentRepository } from "../../store/repository-management/action";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
+import { fetchRecentRepository } from "../../store/repository/action";
+import { RepositoryManagementActions } from "../../store/repository/types";
 import { AppDispatch } from "../../store/store";
 import RecentRepoList, {
   IDispatchProps,

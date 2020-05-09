@@ -1,5 +1,5 @@
-import { IGHRepositoryRes } from "./../../types/github-api/repository";
-import { IImportedRepository, IRecentRepo } from "./../../types/index";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
+import { IImportedRepository, IRecentRepo } from "../../types/index";
 export const FETCH_REPOSITORY_FROM_GITHUB = "FETCH_REPOSITORY_FROM_GITHUB";
 export const FETCH_REPOSITORY_FROM_GITHUB_SUCCESS =
   "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS";

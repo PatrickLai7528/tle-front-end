@@ -1,8 +1,8 @@
 import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "../../store/reducers";
-import { fetchImportedRepositoryList } from "../../store/repository-management/action";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
+import { fetchImportedRepositoryList } from "../../store/repository/action";
+import { RepositoryManagementActions } from "../../store/repository/types";
 import ImportedRepository, {
   IDispatchProps,
   IOwnProps,

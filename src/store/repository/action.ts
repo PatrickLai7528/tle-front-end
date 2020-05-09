@@ -1,6 +1,6 @@
-import { getServerUrl } from "./../../configs/get-url";
-import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
-import { AppThunk } from "./../store";
+import { getServerUrl } from "../../configs/get-url";
+import { gitHubAuthConfigs } from "../../configs/github-auth.config";
+import { AppThunk } from "../store";
 import {
   FETCH_IMPORTED_REPOSITORY_DETAIL,
   FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE,
