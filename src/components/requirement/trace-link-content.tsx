@@ -25,7 +25,7 @@ export const TraceLinkContent: React.FunctionComponent<ITraceLinkContentProps> =
     const fullyQualifiedNames: string[] = useSelector<RootState, string[]>(
       state => {
         const {
-          repositoryManagementReducer: { importedRepositoryDetail }
+          repositoryReducer: { importedRepositoryDetail }
         } = state;
 
         if (!importedRepositoryDetail) return [];

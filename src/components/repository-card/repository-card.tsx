@@ -54,7 +54,7 @@ const RepositoryCard: FunctionComponent<IRepositoryCardProps> = memo(
     const shortLastCommitSha = lastCommitSha.substr(0, 6);
 
     const deleteLoading = useSelector<RootState, boolean>(
-      state => !!state.repositoryManagementReducer.deleteRepoLoading
+      state => !!state.repositoryReducer.deleteRepoLoading
     );
     const dispatch = useDispatch<AppDispatch<RepositoryActions>>();
 

@@ -20,8 +20,8 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
 ) => {
   return {
     gitHubAccessToken: state.authReducer.gitHubAccessToken,
-    rawRepositories: state.repositoryManagementReducer.rawRepositories,
-    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
+    rawRepositories: state.repositoryReducer.rawRepositories,
+    loadMoreTimes: state.repositoryReducer.loadMoreTimes,
     importDone: state.importRepositoryReducer.importDone,
     importStarted: state.importRepositoryReducer.importStarted,
     importProcess: state.importRepositoryReducer.importProccess

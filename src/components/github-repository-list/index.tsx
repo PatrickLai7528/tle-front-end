@@ -14,7 +14,7 @@ const mapStateToProps: MapStateToProps<
     searchReducer: { searchResult, loading: searchLoading }
   } = state;
   const {
-    repositoryManagementReducer: { rawRepositories, fetchGHRepoLoading }
+    repositoryReducer: { rawRepositories, fetchGHRepoLoading }
   } = state;
   return {
     loading: searchLoading || fetchGHRepoLoading,

@@ -30,8 +30,7 @@ export const ImplementStatisticBarChart: FC<IImplementStatisticBarChartProps> = 
     );
 
     const repoId = useSelector<RootState, string>(
-      state =>
-        state.repositoryManagementReducer.importedRepositoryDetail?._id || ""
+      state => state.repositoryReducer.importedRepositoryDetail?._id || ""
     );
 
     const loading = useSelector<RootState, boolean>(

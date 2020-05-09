@@ -28,8 +28,8 @@ const mapStateToProps: MapStateToProps<
 > = state => {
   return {
     requirement: state.requirementReducer.requirement as IRequirement,
-    loading: !!state.repositoryManagementReducer.loading,
-    repo: state.repositoryManagementReducer
+    loading: !!state.repositoryReducer.loading,
+    repo: state.repositoryReducer
       .importedRepositoryDetail as IImportedRepository,
     deleteRequirementLoading: state.requirementReducer.deleteRequirementLoading
   };

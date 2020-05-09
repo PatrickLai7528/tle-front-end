@@ -22,7 +22,7 @@ const initialState: IRepositoryManagementState = {
   fetchGHRepoLoading: false
 };
 
-export const repositoryManagementReducer = (
+export const repositoryReducer = (
   state = initialState,
   action: RepositoryActions
 ): IRepositoryManagementState => {

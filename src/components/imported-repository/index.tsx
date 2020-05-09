@@ -13,8 +13,8 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
   state: RootState
 ) => {
   return {
-    repositoryList: state.repositoryManagementReducer.importedRepositoryList,
-    loading: !!state.repositoryManagementReducer.loading
+    repositoryList: state.repositoryReducer.importedRepositoryList,
+    loading: !!state.repositoryReducer.loading
   };
 };
 

@@ -48,13 +48,11 @@ const ExpandArea: React.FunctionComponent<IExpandAreaProps> = React.memo(
       ShaFileContentMap | undefined
     >(
       state =>
-        state.repositoryManagementReducer.importedRepositoryDetail
-          ?.shaFileContentMap
+        state.repositoryReducer.importedRepositoryDetail?.shaFileContentMap
     );
 
     const fileNodes = useSelector<RootState, IFileTreeNode[]>(
-      state =>
-        state.repositoryManagementReducer.importedRepositoryDetail?.trees || []
+      state => state.repositoryReducer.importedRepositoryDetail?.trees || []
     );
 
     const code: string | null = React.useMemo(() => {

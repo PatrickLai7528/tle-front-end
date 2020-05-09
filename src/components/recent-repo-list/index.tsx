@@ -15,8 +15,8 @@ const mapStateToProps: MapStateToProps<
   RootState
 > = state => {
   return {
-    loading: !!state.repositoryManagementReducer.loading,
-    repos: state.repositoryManagementReducer.recentRepos || []
+    loading: !!state.repositoryReducer.loading,
+    repos: state.repositoryReducer.recentRepos || []
   };
 };
 
