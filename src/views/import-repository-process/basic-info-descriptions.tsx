@@ -30,6 +30,25 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
       branches
     } = repo || ({} as any);
 
+    const renderDescription = () => {
+      // {importDone ? (
+      //   !!description ? (
+      //     <RepositoryDescription description={description} />
+      //   ) : (
+      //     <Skeleton.Input active />
+      //   )
+      // ) : (
+      //   <span>無描述</span>
+      // )}
+      if (importDone && !description) {
+        return <span>無描述</span>;
+      } else if (importDone && description) {
+        return <RepositoryDescription description={description} />;
+      } else {
+        return <Skeleton.Input active />;
+      }
+    };
+
     return (
       <Descriptions bordered>
         <Descriptions.Item label="名稱">
@@ -50,15 +69,7 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
           )}
         </Descriptions.Item>
         <Descriptions.Item label="描述" span={3}>
-          {importDone ? (
-            !!description ? (
-              <RepositoryDescription description={description} />
-            ) : (
-              <Skeleton.Input active />
-            )
-          ) : (
-            <span>無描述</span>
-          )}
+          {renderDescription()}
         </Descriptions.Item>
         <Descriptions.Item label="其它分支" span={3}>
           {!!branches && Array.isArray(branches) ? (

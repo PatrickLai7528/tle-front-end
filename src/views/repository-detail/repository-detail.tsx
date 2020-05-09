@@ -28,6 +28,7 @@ import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
 import { RequirementStatisticBarChart } from "./../../components/graph/requirement-statistic-bar-chart";
+import { AllGraph } from "../../components/graph/all-graph";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -228,10 +229,13 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           }}
         >
           <Tabs
-            defaultActiveKey={"TRACE_LINK"}
+            defaultActiveKey={"GRAPH"}
             type="card"
             className={styles.content}
           >
+            <Tabs.TabPane tab="圖" key="GRAPH">
+              <AllGraph />
+            </Tabs.TabPane>
             <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
               {/* <CodeCouplingChart /> */}
               <TraceLinkTable repoName={repoName} />
@@ -250,7 +254,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("requirement")} key="REQUIREMENT">
-              <RequirementStatisticBarChart
+              {/* <RequirementStatisticBarChart
                 onClick={(descriptionName: string) => {
                   let descriptionFound: IRequirementDescription | null = null;
                   for (const description of requirement.descriptions || []) {
@@ -264,7 +268,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                     openDrawer("REQUIREMENT");
                   }
                 }}
-              />
+              /> */}
               {!!requirement ? (
                 <RequirementCard
                   loading={deleteRequirementLoading}
@@ -283,7 +287,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={"文件"} key={"FILE"}>
-              <ImplementStatisticBarChart
+              {/* <ImplementStatisticBarChart
                 style={{ marginTop: "16px" }}
                 onClick={(fullyQualifiedName: string) => {
                   const node = findNodeByName(
@@ -295,7 +299,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                     openDrawer("FILE");
                   }
                 }}
-              />
+              /> */}
               {repo ? (
                 <RepositoryFiles
                   onFileNodeClick={node => {
@@ -314,9 +318,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                   paragraph={{ rows: 5 }}
                 />
               )}
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="圖" key="GRAPH">
-              <TraceLinkGraph />
             </Tabs.TabPane>
           </Tabs>
         </div>
