@@ -9,15 +9,20 @@ import {
   ILogInData,
   IRegistryData
 } from "./types";
+import Cookies from "universal-cookie";
+
+const cookies = new Cookies();
 
 export const toggleAuthModal = (): AuthActions => {
   return { type: "TOGGLE_AUTH_MODAL" };
 };
 
-export const loggedIn = (token: string, ghToken: string) => ({
-  type: "LOGGED_IN",
-  payload: { token, ghToken }
-});
+export const loggedIn = (token: string, ghToken: string) => {
+  return {
+    type: "LOGGED_IN",
+    payload: { token, ghToken }
+  };
+};
 
 export const fetchGHProfile = (
   gitHubAccessToken: string

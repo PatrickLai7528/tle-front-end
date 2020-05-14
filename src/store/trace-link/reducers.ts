@@ -24,8 +24,10 @@ import {
   FETCH_FILE_RELATED_TRACE_LINK_SUCCESS,
   IFetchFileRelatedTraceLinkSuccessAction,
   FETCH_FILE_RELATED_TRACE_LINK_FAILURE,
-  IFetchRequirementRelatedTraceLinkSuccessAction,
-  ISendInitTraceLinkFailureAction
+  IFetchDescriptionRelatedTraceLinkSuccessAction,
+  ISendInitTraceLinkFailureAction,
+  INewTraceLinkSuccessAction,
+  IDeleteTraceLinkSuccessAction
 } from "./types";
 import { ITraceLinkMatrix } from "../../types";
 
@@ -42,7 +44,8 @@ const initialState: ITraceLinkState = {
   fileRelatedTraceLinks: [],
   requirementRelatedTraceLinks: [],
 
-  sendNewTraceLinkLoading: false
+  sendNewTraceLinkLoading: false,
+  deleteTraceLinkLoading: false
 };
 
 export const traceLinkReducer = (
@@ -50,6 +53,42 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case "DELETE_TRACE_LINK":
+      return {
+        ...state,
+        deleteTraceLinkLoading: true,
+        error: false
+      };
+    case "DELETE_TRACE_LINK_SUCCESS": {
+      const payload = (action as IDeleteTraceLinkSuccessAction).payload;
+      if (payload.type === "REQUIREMENT") {
+        const newState = {
+          ...state,
+          deleteTraceLinkLoading: false,
+          requirementRelatedTraceLinks: [
+            ...state.requirementRelatedTraceLinks.filter(
+              link => link._id.toString() !== payload.link._id.toString()
+            )
+          ]
+        };
+        return newState;
+      } else if (payload.type === "FILE") {
+        const newState = {
+          ...state,
+          deleteTraceLinkLoading: false,
+          fileRelatedTraceLinks: [
+            ...state.fileRelatedTraceLinks.filter(
+              link => link._id.toString() !== payload.link._id.toString()
+            )
+          ]
+        };
+        return newState;
+      }
+      return { ...state };
+    }
+    case "DELETE_TRACE_LINK_FALIURE": {
+      return { ...state, deleteTraceLinkLoading: false, error: true };
+    }
     case "NEW_TRACE_LINK":
       return {
         ...state,
@@ -57,31 +96,47 @@ export const traceLinkReducer = (
         error: false
       };
     case "NEW_TRACE_LINK_SUCCESS":
-      return {
-        ...state,
-        sendNewTraceLinkLoading: false
-      };
+      const payload = (action as INewTraceLinkSuccessAction).payload;
+      if (payload.type === "REQUIREMENT") {
+        const newState = {
+          ...state,
+          sendNewTraceLinkLoading: false,
+          requirementRelatedTraceLinks: [
+            payload.link,
+            ...state.requirementRelatedTraceLinks
+          ]
+        };
+        return newState;
+      } else if (payload.type === "FILE") {
+        const newState = {
+          ...state,
+          sendNewTraceLinkLoading: false,
+          fileRelatedTraceLinks: [payload.link, ...state.fileRelatedTraceLinks]
+        };
+        return newState;
+      }
+      return { ...state };
     case "NEW_TRACE_LINK_FAILURE":
       return {
         ...state,
         sendNewTraceLinkLoading: false,
         error: true
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK":
       return {
         ...state,
         loading: true,
         error: false
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS":
       return {
         ...state,
         loading: false,
         requirementRelatedTraceLinks: [
-          ...(action as IFetchRequirementRelatedTraceLinkSuccessAction).payload
+          ...(action as IFetchDescriptionRelatedTraceLinkSuccessAction).payload
         ]
       };
-    case "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE":
+    case "FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE":
       return {
         ...state,
         loading: false,

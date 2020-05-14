@@ -6,6 +6,8 @@ import { ConnectedRepositoryDetailView } from "../views/repository-detail";
 import { ConnectedImportRepositoryProcess } from "../views/import-repository-process";
 import { ConnectedWorkPlaceView } from "../views/workplace";
 import { RouteConstants } from "./constants";
+import { Error } from "../views/error";
+
 const { Content: AntdContent } = Layout;
 
 export interface IContentProps {}
@@ -42,6 +44,7 @@ const Content: FunctionComponent<IContentProps> = memo(
               path={RouteConstants.IMPORT_PROCESS()}
               component={ConnectedImportRepositoryProcess}
             />
+            <Route exact path={RouteConstants.ERROR()} component={Error} />
             <Route exact path="/authed">
               <Redirect to={RouteConstants.WORKPLACE} />
             </Route>

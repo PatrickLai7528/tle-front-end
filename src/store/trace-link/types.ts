@@ -33,38 +33,54 @@ export const FETCH_FILE_RELATED_TRACE_LINK_SUCCESS =
 export const FETCH_FILE_RELATED_TRACE_LINK_FAILURE =
   "FETCH_FILE_RELATED_TRACE_LINK_FAILURE";
 
-export const FETCH_REQUIREMENT_RELATED_TRACE_LINK =
-  "FETCH_REQUIREMENT_RELATED_TRACE_LINK";
-export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS =
-  "FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS";
-export const FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE =
-  "FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE";
+export const FETCH_DESCRIPTION_RELATED_TRACE_LINK =
+  "FETCH_DESCRIPTION_RELATED_TRACE_LINK";
+export const FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS =
+  "FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS";
+export const FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE =
+  "FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE";
 
 export const NEW_TRACE_LINK = "NEW_TRACE_LINK";
 export const NEW_TRACE_LINK_SUCCESS = "NEW_TRACE_LINK_SUCCESS";
 export const NEW_TRACE_LINK_FAILURE = "NEW_TRACE_LINK_FAILURE";
+
+export const DELETE_TRACE_LINK = "DELETE_TRACE_LINK";
+export const DELETE_TRACE_LINK_SUCCESS = "DELETE_TRACE_LINK_SUCCESS";
+export const DELETE_TRACE_LINK_FAILURE = "DELETE_TRACE_LINK_FALIURE";
+
+export interface IDeleteTraceLinkAction {
+  type: typeof DELETE_TRACE_LINK;
+}
+export interface IDeleteTraceLinkSuccessAction {
+  type: typeof DELETE_TRACE_LINK_SUCCESS;
+  payload: { type: "FILE" | "REQUIREMENT"; link: ITraceLink };
+}
+export interface IDeleteTraceLinkFailureAction {
+  type: typeof DELETE_TRACE_LINK_FAILURE;
+}
 
 export interface INewTraceLinkAction {
   type: typeof NEW_TRACE_LINK;
 }
 export interface INewTraceLinkSuccessAction {
   type: typeof NEW_TRACE_LINK_SUCCESS;
+  payload: { type: "FILE" | "REQUIREMENT"; link: ITraceLink }; // with id
 }
 export interface INewTraceLinkFailureAction {
   type: typeof NEW_TRACE_LINK_FAILURE;
 }
 
-export interface IFetchRequirementRelatedTraceLinkAction {
-  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK;
+export interface IFetchDescriptionRelatedTraceLinkAction {
+  type: typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK;
 }
 
-export interface IFetchRequirementRelatedTraceLinkSuccessAction {
-  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS;
+export interface IFetchDescriptionRelatedTraceLinkSuccessAction {
+  type: typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS;
   payload: ITraceLink[];
 }
 
-export interface IFetchRequirementRelatedTraceLinkFailureAction {
-  type: typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE;
+export interface IFetchDescriptionRelatedTraceLinkFailureAction {
+  type: typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE;
 }
 
 export interface IFetchFileRelatedTraceLinkAction {
@@ -151,6 +167,7 @@ export interface ITraceLinkState {
   fileRelatedTraceLinks: ITraceLink[];
   requirementRelatedTraceLinks: ITraceLink[];
   sendNewTraceLinkLoading: boolean;
+  deleteTraceLinkLoading: boolean;
 }
 
 export interface IFetchRepoTraceLinkAction {
@@ -185,12 +202,15 @@ export type TraceLinkActions =
   | IFetchFileRelatedTraceLinkAction
   | IFetchFileRelatedTraceLinkSuccessAction
   | IFetchFileRelatedTraceLinkFailureAction
-  | IFetchRequirementRelatedTraceLinkAction
-  | IFetchRequirementRelatedTraceLinkSuccessAction
-  | IFetchRequirementRelatedTraceLinkFailureAction
+  | IFetchDescriptionRelatedTraceLinkAction
+  | IFetchDescriptionRelatedTraceLinkSuccessAction
+  | IFetchDescriptionRelatedTraceLinkFailureAction
   | INewTraceLinkAction
   | INewTraceLinkSuccessAction
-  | INewTraceLinkFailureAction;
+  | INewTraceLinkFailureAction
+  | IDeleteTraceLinkAction
+  | IDeleteTraceLinkSuccessAction
+  | IDeleteTraceLinkFailureAction;
 
 export type TraceLinkActionTypes =
   | typeof FETCH_REPO_TRACE_LINK
@@ -211,9 +231,12 @@ export type TraceLinkActionTypes =
   | typeof FETCH_FILE_RELATED_TRACE_LINK
   | typeof FETCH_FILE_RELATED_TRACE_LINK_SUCCESS
   | typeof FETCH_FILE_RELATED_TRACE_LINK_FAILURE
-  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK
-  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_SUCCESS
-  | typeof FETCH_REQUIREMENT_RELATED_TRACE_LINK_FAILURE
+  | typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK
+  | typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK_SUCCESS
+  | typeof FETCH_DESCRIPTION_RELATED_TRACE_LINK_FAILURE
   | typeof NEW_TRACE_LINK
   | typeof NEW_TRACE_LINK_SUCCESS
-  | typeof NEW_TRACE_LINK_FAILURE;
+  | typeof NEW_TRACE_LINK_FAILURE
+  | typeof DELETE_TRACE_LINK
+  | typeof DELETE_TRACE_LINK_SUCCESS
+  | typeof DELETE_TRACE_LINK_FAILURE;

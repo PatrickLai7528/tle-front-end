@@ -1,22 +1,24 @@
-import { Button, Card, Divider, Tag, Typography } from "antd";
-import React, {
-  CSSProperties,
-  FunctionComponent,
-  memo,
-  ReactNode,
-  useMemo
-} from "react";
+import { Button, Card, Divider, Tag, Typography, Popconfirm } from "antd";
+import React, { CSSProperties, FunctionComponent, memo, useMemo } from "react";
 import { createUseStyles, useTheme } from "react-jss";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { AppDispatch } from "../../store/store";
+import { TraceLinkActions } from "../../store/trace-link/types";
 import { CustomTheme } from "../../theme";
 import { ITraceLink } from "../../types";
+import { RequirementCard } from "../requirement/requirement-card";
+import { deleteTraceLink } from "../../store/trace-link/actions";
+import "./styles.css";
+
 export interface ISimpleTraceLinkCardProps {
-  traceLink: ITraceLink;
+  traceLink: ITraceLink | Omit<ITraceLink, "_id">;
   showImplement?: boolean;
   showRequirement?: boolean;
   type?: "ADDED" | "REMOVED";
   showOperation?: boolean;
-  input?: ReactNode;
   style?: CSSProperties;
+  deleteType?: "FILE" | "REQUIREMENT";
 }
 
 const bodyStyle = { padding: "8px 12px" };
@@ -32,7 +34,7 @@ const useStyle = createUseStyles<CustomTheme>(theme => ({
     justifyContent: "flex-start",
     alignItems: "center"
   },
-  traceLinkDescription: {
+  implementAndOperations: {
     display: "flex",
     flexDirection: "row",
     justifyContent: "flex-start"
@@ -67,8 +69,8 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
       showRequirement,
       type,
       showOperation,
-      input,
-      style
+      style,
+      deleteType
     } = props;
     const theme: CustomTheme = useTheme() as CustomTheme;
     const styles = useStyle({ theme });
@@ -84,7 +86,24 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
         : style;
     }, [type, style]);
 
+    const dispatch = useDispatch<AppDispatch<TraceLinkActions>>();
+
+    const matrixId = useSelector<RootState, string>(
+      state => state.traceLinkReducer.traceLinkMatrix?._id as string
+    );
+
+    const handleDelete = () => {
+      if (matrixId && traceLink && deleteType)
+        dispatch(
+          deleteTraceLink(matrixId, traceLink as ITraceLink, deleteType)
+        );
+    };
+
     const cardTitle = useMemo(() => {
+      const text = (traceLink as any)._id
+        ? `#${(traceLink as any)._id}`
+        : "暫無";
+
       return (
         <div>
           {!!type && (
@@ -94,7 +113,7 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
               {type === "ADDED" ? "ADD" : "REMOVE"}
             </Tag>
           )}
-          {`#${traceLink._id}`}
+          {text}
         </div>
       );
     }, [type, traceLink]);
@@ -109,40 +128,42 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
         <Card.Meta
           title={cardTitle}
           description={
-            <div className={styles.traceLinkDescription}>
+            <>
               {showRequirement && (
                 <Typography style={{ width: "100%" }}>
                   <Typography.Text>需求描述</Typography.Text>
-                  {input ? (
-                    input
-                  ) : (
-                    <Typography.Paragraph strong>
-                      {traceLink.requirementDescription.name}
-                    </Typography.Paragraph>
-                  )}
+                  <RequirementCard
+                    useCard={false}
+                    description={traceLink.requirementDescription}
+                  />
                 </Typography>
               )}
               {showImplement && showRequirement && <Divider />}
-              {showImplement && (
-                <>
-                  <Typography style={{ width: "100%" }}>
-                    <Typography.Text>實現類或函數</Typography.Text>
-                    {input ? (
-                      input
-                    ) : (
+              <div className={styles.implementAndOperations}>
+                {showImplement && (
+                  <>
+                    <Typography style={{ width: "100%" }}>
+                      <Typography.Text>實現類或函數</Typography.Text>
                       <Typography.Paragraph strong>
                         {traceLink.implement.fullyQualifiedName}
                       </Typography.Paragraph>
-                    )}
-                  </Typography>
-                </>
-              )}
-              {!!showOperation && (
+                    </Typography>
+                  </>
+                )}
                 <div className={styles.operations}>
-                  <Button type="danger">刪除</Button>
+                  {!!showOperation && (
+                    <Popconfirm
+                      title="確認刪除？"
+                      onConfirm={handleDelete}
+                      okText="確認"
+                      cancelText="取消"
+                    >
+                      <Button type="danger">刪除</Button>
+                    </Popconfirm>
+                  )}
                 </div>
-              )}
-            </div>
+              </div>
+            </>
           }
         />
       </Card>

@@ -1,16 +1,16 @@
-import { Skeleton, Typography } from "antd";
-import React, { FunctionComponent, memo, useEffect, useMemo } from "react";
+import { Typography } from "antd";
+import React, { FunctionComponent, memo, useEffect } from "react";
 import { createUseStyles } from "react-jss";
-import { IRequirementDescription, ITraceLink } from "../../types";
-import { EditableTraceLinkArea } from "../editable-trace-link-area";
-import { RequirementCard } from "./requirement-card";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { TraceLinkActions } from "../../store/trace-link/types";
-import { fetchRequirementRelatedTraceLinks } from "../../store/trace-link/actions";
-import { AppDispatch } from "../../store/store";
 import { updateDescription } from "../../store/requirement/actions";
+import { AppDispatch } from "../../store/store";
+import { fetchDescriptionRelatedTraceLinks } from "../../store/trace-link/actions";
+import { TraceLinkActions } from "../../store/trace-link/types";
+import { IRequirementDescription, ITraceLink } from "../../types";
 import { HistoryTable } from "./history-table";
+import { RequirementCard } from "./requirement-card";
+import { TraceLinkContent } from "./trace-link-content";
 
 export interface IOwnProps {
   description: IRequirementDescription;
@@ -39,6 +39,9 @@ const useStyles = createUseStyles({
   },
   requirementArea: {
     margin: { bottom: "16px" }
+  },
+  typographyTitle: {
+    margin: { top: "24px" }
   }
 });
 
@@ -56,40 +59,14 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
     );
 
     const fetchTraceLinks = (repoName: string, descriptionId: string) =>
-      dispatch(fetchRequirementRelatedTraceLinks(repoName, descriptionId));
+      dispatch(fetchDescriptionRelatedTraceLinks(repoName, descriptionId));
 
     const onUpdateDescription = (description: IRequirementDescription) =>
       dispatch(updateDescription(requirementId, description));
 
     useEffect(() => {
-      const doFetch = async () => {
-        try {
-          await fetchTraceLinks(repoName, description._id);
-        } catch (e) {
-          if (process.env.NODE_ENV !== "production") {
-            console.log(e);
-          }
-        }
-      };
-      doFetch();
-    }, [repoName, fetchRequirementRelatedTraceLinks, description]);
-
-    const traceLinksContent = useMemo(() => {
-      if (loading) {
-        return (
-          <Skeleton title={false} avatar={false} paragraph={{ rows: 5 }} />
-        );
-      } else if (!loading && traceLinks) {
-        return (
-          <EditableTraceLinkArea
-            repoId={repoId}
-            type="REQUIREMENT"
-            repoName={repoName}
-            traceLinks={traceLinks}
-          />
-        );
-      }
-    }, [traceLinks, loading]);
+      fetchTraceLinks(repoName, description._id);
+    }, [repoName, fetchDescriptionRelatedTraceLinks, description]);
 
     return (
       <div className={styles.requirementDetail}>
@@ -103,17 +80,23 @@ export const RequirementDetail: FunctionComponent<IRequirementDetailProps> = mem
             useTooltips
           />
         </div>
-        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+        <Typography.Title level={3} className={styles.typographyTitle}>
           修改紀錄
         </Typography.Title>
         <HistoryTable
           requirementId={requirementId}
           descriptionId={description._id}
         />
-        <Typography.Title level={3} style={{ marginTop: "24px" }}>
+        <Typography.Title level={3} className={styles.typographyTitle}>
           追踪線索
         </Typography.Title>
-        {traceLinksContent}
+        <TraceLinkContent
+          loading={loading}
+          repoName={repoName}
+          repoId={repoId}
+          description={description}
+          traceLinks={traceLinks}
+        />
       </div>
     );
   }

@@ -42,7 +42,7 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
       importedRepository,
       loading: sendImportedRepositoryLoading
     },
-    repositoryManagementReducer: { rawRepositories },
+    repositoryReducer: { rawRepositories },
     searchReducer: { searchResult },
     requirementReducer: { loading: postRequirementLoading },
     traceLinkReducer: {

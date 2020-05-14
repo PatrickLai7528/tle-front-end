@@ -1,5 +1,5 @@
 import React, { FunctionComponent, memo } from "react";
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Tag } from "antd";
 import { List } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { IRequirement, IRequirementDescription } from "../../../types";
@@ -77,7 +77,7 @@ const RequirementCard: FunctionComponent<IRequirementCardProps> = memo(
               ]}
             >
               <List.Item.Meta
-                title={desc.name}
+                title={<>{desc.name}</>}
                 description={`Update at ${moment(desc.lastUpdateAt).fromNow()}`}
               />
             </List.Item>

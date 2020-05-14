@@ -11,8 +11,8 @@ import {
   IRequirementDescription
 } from "../../types";
 import { ThunkDispatch } from "redux-thunk";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
-import { fetchImportedRepositoryDetail } from "../../store/repository-management/action";
+import { RepositoryActions } from "../../store/repository/types";
+import { fetchImportedRepositoryDetail } from "../../store/repository/action";
 import {
   fetchRepoRequirement,
   toggleAddRequirementModal,
@@ -28,8 +28,8 @@ const mapStateToProps: MapStateToProps<
 > = state => {
   return {
     requirement: state.requirementReducer.requirement as IRequirement,
-    loading: !!state.repositoryManagementReducer.loading,
-    repo: state.repositoryManagementReducer
+    loading: !!state.repositoryReducer.loading,
+    repo: state.repositoryReducer
       .importedRepositoryDetail as IImportedRepository,
     deleteRequirementLoading: state.requirementReducer.deleteRequirementLoading
   };
@@ -39,7 +39,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<
     RootState,
     any,
-    RepositoryManagementActions | RequirementActions
+    RepositoryActions | RequirementActions
   >,
   {
     match: {

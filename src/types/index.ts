@@ -1,5 +1,10 @@
 import { ProgramLanguage } from "./../utils/language-color";
 
+export interface IStatistic {
+  label: string;
+  value: number;
+}
+
 export interface IDescriptionHistory {
   _id: string;
   ownerId: string;
@@ -22,7 +27,6 @@ export interface IImplement {
   _id: string;
   type: "METHOD" | "CLASS";
   fullyQualifiedName: string;
-  traced?: boolean;
 }
 
 export interface ITraceLink {

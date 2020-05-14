@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
-import { fetchRecentRepository } from "../../store/repository-management/action";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
+import { fetchRecentRepository } from "../../store/repository/action";
+import { RepositoryActions } from "../../store/repository/types";
 import { AppDispatch } from "../../store/store";
 import RecentRepoList, {
   IDispatchProps,
@@ -15,13 +15,13 @@ const mapStateToProps: MapStateToProps<
   RootState
 > = state => {
   return {
-    loading: !!state.repositoryManagementReducer.loading,
-    repos: state.repositoryManagementReducer.recentRepos || []
+    loading: !!state.repositoryReducer.loading,
+    repos: state.repositoryReducer.recentRepos || []
   };
 };
 
 const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
-  dispatch: AppDispatch<RepositoryManagementActions>
+  dispatch: AppDispatch<RepositoryActions>
 ) => {
   return {
     fetchRecentRepos: () => dispatch(fetchRecentRepository())

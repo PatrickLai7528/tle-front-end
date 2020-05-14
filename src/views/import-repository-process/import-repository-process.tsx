@@ -17,6 +17,7 @@ import {
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import BasicInfoDescriptions from "./basic-info-descriptions";
 import { TraceLinkTabsContent } from "./trace-link-tabs-content";
+import { RouteConstants } from "../../routes/constants";
 
 export interface IStateProps {
   repositoryRes: IGHRepositoryRes;
@@ -135,8 +136,9 @@ const ImportRepositoryProcess: FC<IImportRepositoryProcessProps> = memo(
     >([]);
 
     useEffect(() => {
-      startImport(repositoryRes);
-    }, [startImport, repositoryRes]);
+      if (repositoryRes) startImport(repositoryRes);
+      else history.push(RouteConstants.ERROR("發生錯誤", "請重新選擇倉庫"));
+    }, [startImport, repositoryRes, history]);
 
     const confirmImportButtonDisable =
       !initTraceLinkConfirmed || !importDone || !initTraceLinkMatrix;

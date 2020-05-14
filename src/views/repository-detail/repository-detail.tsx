@@ -9,9 +9,11 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
+import { ImplementStatisticBarChart } from "../../components/graph/implement-statistic-bar-chart";
 import { RepositoryFiles } from "../../components/repository-files";
 import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
 import { TraceLinkGraph } from "../../components/trace-link-graph";
+import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
 import { RouteConstants } from "../../routes/constants";
 import {
   ICommit,
@@ -20,11 +22,13 @@ import {
   IRequirement,
   IRequirementDescription
 } from "../../types";
+import { findNodeByName } from "../../utils/trees";
 import CommitCard from "./commit/commit-card";
 import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
+import { RequirementStatisticBarChart } from "./../../components/graph/requirement-statistic-bar-chart";
+import { AllGraph } from "../../components/graph/all-graph";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -225,11 +229,15 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           }}
         >
           <Tabs
-            defaultActiveKey={"TRACE_LINK"}
+            defaultActiveKey={"GRAPH"}
             type="card"
             className={styles.content}
           >
+            <Tabs.TabPane tab="圖" key="GRAPH">
+              <AllGraph />
+            </Tabs.TabPane>
             <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
+              {/* <CodeCouplingChart /> */}
               <TraceLinkTable repoName={repoName} />
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("commit")} key="COMMIT">
@@ -246,6 +254,21 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("requirement")} key="REQUIREMENT">
+              {/* <RequirementStatisticBarChart
+                onClick={(descriptionName: string) => {
+                  let descriptionFound: IRequirementDescription | null = null;
+                  for (const description of requirement.descriptions || []) {
+                    if (description.name === descriptionName) {
+                      descriptionFound = description;
+                    }
+                  }
+
+                  if (descriptionFound) {
+                    setSelectedRequirementDescription(descriptionFound);
+                    openDrawer("REQUIREMENT");
+                  }
+                }}
+              /> */}
               {!!requirement ? (
                 <RequirementCard
                   loading={deleteRequirementLoading}
@@ -264,6 +287,19 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
               )}
             </Tabs.TabPane>
             <Tabs.TabPane tab={"文件"} key={"FILE"}>
+              {/* <ImplementStatisticBarChart
+                style={{ marginTop: "16px" }}
+                onClick={(fullyQualifiedName: string) => {
+                  const node = findNodeByName(
+                    repo?.trees || [],
+                    fullyQualifiedName
+                  );
+                  if (node) {
+                    setSelectedFile(node);
+                    openDrawer("FILE");
+                  }
+                }}
+              /> */}
               {repo ? (
                 <RepositoryFiles
                   onFileNodeClick={node => {
@@ -282,9 +318,6 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
                   paragraph={{ rows: 5 }}
                 />
               )}
-            </Tabs.TabPane>
-            <Tabs.TabPane tab="圖" key="GRAPH">
-              <TraceLinkGraph />
             </Tabs.TabPane>
           </Tabs>
         </div>

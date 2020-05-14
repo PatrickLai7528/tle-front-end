@@ -1,5 +1,5 @@
-import { IGHRepositoryRes } from "./../../types/github-api/repository";
-import { IImportedRepository, IRecentRepo } from "./../../types/index";
+import { IGHRepositoryRes } from "../../types/github-api/repository";
+import { IImportedRepository, IRecentRepo } from "../../types/index";
 export const FETCH_REPOSITORY_FROM_GITHUB = "FETCH_REPOSITORY_FROM_GITHUB";
 export const FETCH_REPOSITORY_FROM_GITHUB_SUCCESS =
   "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS";
@@ -23,6 +23,10 @@ export const FETCH_IMPORTED_REPOSITORY_DETAIL_SUCCESS =
 export const FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE =
   "FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE";
 
+export const DELETE_REPOSITORY = "DELETE_REPOSITORY";
+export const DELETE_REPOSITORY_SUCCESS = "DELETE_REPOSITORY_SUCCESS";
+export const DELETE_REPOSITORY_FAILURE = "DELETE_REPOSITORY_FAILURE";
+
 export const FETCH_RECENT_REPOSITORY = "FETCH_RECENT_REPOSITORY";
 export const FETCH_RECENT_REPOSITORY_SUCCESS =
   "FETCH_RECENT_REPOSITORY_SUCCESS";
@@ -38,7 +42,21 @@ export interface IRepositoryManagementState {
   importedRepositoryDetail?: IImportedRepository;
   recentRepos: IRecentRepo[];
 
+  deleteRepoLoading?: boolean;
   fetchGHRepoLoading: boolean;
+}
+
+export interface IDeleteRepositoryAction {
+  type: typeof DELETE_REPOSITORY;
+}
+
+export interface IDeleteRepositorySuccessAction {
+  type: typeof DELETE_REPOSITORY_SUCCESS;
+  payload: string;
+}
+
+export interface IDeleteRepositoryFailureAction {
+  type: typeof DELETE_REPOSITORY_FAILURE;
 }
 
 export interface IFetchRecentRepositoryAction {
@@ -108,7 +126,7 @@ export interface ILoadMoreRepositoryFailureAction {
   meta: string;
 }
 
-export type RepositoryManagementActions =
+export type RepositoryActions =
   | IFetchRepositoryFromGitHubAction
   | IFetchRepositoryFromGitHubSuccessAction
   | IFetchRepositoryFromGitHubFailureAction
@@ -123,9 +141,12 @@ export type RepositoryManagementActions =
   | IFetchImportedRepositoryDetailFailureAction
   | IFetchRecentRepositoryAction
   | IFetchRecentRepositorySuccessAction
-  | IFetchRecentRepositoryFailureAction;
+  | IFetchRecentRepositoryFailureAction
+  | IDeleteRepositoryAction
+  | IDeleteRepositorySuccessAction
+  | IDeleteRepositoryFailureAction;
 
-export type RepositoryManagementActionTypes =
+export type RepositoryActionTypes =
   | typeof FETCH_REPOSITORY_FROM_GITHUB
   | typeof FETCH_REPOSITORY_FROM_GITHUB_SUCCESS
   | typeof FETCH_REPOSITORY_FROM_GITHUB_FAILRUE
@@ -140,4 +161,7 @@ export type RepositoryManagementActionTypes =
   | typeof FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE
   | typeof FETCH_RECENT_REPOSITORY
   | typeof FETCH_RECENT_REPOSITORY_SUCCESS
-  | typeof FETCH_RECENT_REPOSITORY_FAILURE;
+  | typeof FETCH_RECENT_REPOSITORY_FAILURE
+  | typeof DELETE_REPOSITORY
+  | typeof DELETE_REPOSITORY_SUCCESS
+  | typeof DELETE_REPOSITORY_FAILURE;

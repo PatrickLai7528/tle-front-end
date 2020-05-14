@@ -2,8 +2,7 @@ import { Axis, Chart, Geom, Legend, Tooltip } from "bizcharts";
 import React, { FunctionComponent, memo } from "react";
 import { ChartTitle } from "./chart-title";
 
-export interface ICommitLinkChangeChartProps {}
-
+export interface ICommitStatisticLineChartProps {}
 const data = [
   {
     month: "Jan",
@@ -126,9 +125,8 @@ const data = [
     temperature: 4.8
   }
 ];
-
-export const CommitLinkChangeChart: FunctionComponent<ICommitLinkChangeChartProps> = memo(
-  (props: ICommitLinkChangeChartProps) => {
+export const CommitStatisticLineChart: FunctionComponent<ICommitStatisticLineChartProps> = memo(
+  (props: ICommitStatisticLineChartProps) => {
     const cols = {
       month: {
         range: [0, 1]

@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
 import { ImportRepositoryAcitons } from "../../store/import-repository/types";
 import { RootState } from "../../store/reducers";
-import { RepositoryManagementActions } from "../../store/repository-management/types";
+import { RepositoryActions } from "../../store/repository/types";
 import Repository, {
   IDispatchProps,
   IOwnProps,
@@ -11,7 +11,7 @@ import Repository, {
 import {
   fetchAllRepositoryFromGitHub,
   loadMoreRepository
-} from "../../store/repository-management/action";
+} from "../../store/repository/action";
 import { IGHRepositoryRes } from "../../types/github-api/repository";
 import { startImportRepository } from "../../store/import-repository/action";
 
@@ -20,8 +20,8 @@ const mapStateToProps: MapStateToProps<IStateProps, IOwnProps, RootState> = (
 ) => {
   return {
     gitHubAccessToken: state.authReducer.gitHubAccessToken,
-    rawRepositories: state.repositoryManagementReducer.rawRepositories,
-    loadMoreTimes: state.repositoryManagementReducer.loadMoreTimes,
+    rawRepositories: state.repositoryReducer.rawRepositories,
+    loadMoreTimes: state.repositoryReducer.loadMoreTimes,
     importDone: state.importRepositoryReducer.importDone,
     importStarted: state.importRepositoryReducer.importStarted,
     importProcess: state.importRepositoryReducer.importProccess
@@ -32,7 +32,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
   dispatch: ThunkDispatch<
     RootState,
     any,
-    RepositoryManagementActions | ImportRepositoryAcitons
+    RepositoryActions | ImportRepositoryAcitons
   >
 ) => {
   return {

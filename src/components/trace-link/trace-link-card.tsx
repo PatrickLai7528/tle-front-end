@@ -3,7 +3,7 @@ import { Button, Card, Input, List, Typography } from "antd";
 import React, { FunctionComponent, memo, useState } from "react";
 import { createUseStyles } from "react-jss";
 import { v4 as uuidv4 } from "uuid";
-import { IRequirementDescription, ITraceLink } from "../../types";
+import { IRequirementDescription, ITraceLink, IImplement } from "../../types";
 
 export interface ITraceLinkCardProps {
   requirement: IRequirementDescription;
@@ -79,11 +79,9 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
                       _id: uuidv4(),
                       requirementDescription: requirement,
                       implement: {
-                        traced: true,
-                        _id: uuidv4(),
                         type: "CLASS",
                         fullyQualifiedName: newImplValue
-                      }
+                      } as IImplement
                     });
                     // onAddImplement(traceLink, newImplValue);
                     setNewImplValue("");

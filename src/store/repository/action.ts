@@ -1,6 +1,6 @@
-import { getServerUrl } from "./../../configs/get-url";
-import { gitHubAuthConfigs } from "./../../configs/github-auth.config";
-import { AppThunk } from "./../store";
+import { getServerUrl } from "../../configs/get-url";
+import { gitHubAuthConfigs } from "../../configs/github-auth.config";
+import { AppThunk } from "../store";
 import {
   FETCH_IMPORTED_REPOSITORY_DETAIL,
   FETCH_IMPORTED_REPOSITORY_DETAIL_FAILURE,
@@ -8,12 +8,39 @@ import {
   FETCH_RECENT_REPOSITORY,
   FETCH_RECENT_REPOSITORY_FAILURE,
   FETCH_RECENT_REPOSITORY_SUCCESS,
-  RepositoryManagementActionTypes
+  RepositoryActionTypes
 } from "./types";
+
+export const deleteRepository = (
+  repoId: string
+): AppThunk<void, RepositoryActionTypes> => async (dispatch, getState) => {
+  dispatch({ type: "DELETE_REPOSITORY" });
+  try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const res = await fetch(`${getServerUrl()}/api/repository/${repoId}`, {
+      credentials: "include",
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    }).then(res => res.json());
+    if (res && res.success) {
+      dispatch({ type: "DELETE_REPOSITORY_SUCCESS", payload: repoId });
+    } else {
+      dispatch({ type: "DELETE_REPOSITORY_FAILURE", meta: res.meta });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "DELETE_REPOSITORY_FAILURE" });
+  }
+};
 
 export const fetchRecentRepository = (): AppThunk<
   void,
-  RepositoryManagementActionTypes
+  RepositoryActionTypes
 > => async (dispatch, getState) => {
   dispatch({ type: FETCH_RECENT_REPOSITORY });
   try {
@@ -43,10 +70,7 @@ export const fetchRecentRepository = (): AppThunk<
 
 export const fetchImportedRepositoryDetail = (
   repoId: string
-): AppThunk<void, RepositoryManagementActionTypes> => async (
-  dispatch,
-  getState
-) => {
+): AppThunk<void, RepositoryActionTypes> => async (dispatch, getState) => {
   dispatch({ type: FETCH_IMPORTED_REPOSITORY_DETAIL });
   try {
     const {
@@ -79,7 +103,7 @@ export const fetchImportedRepositoryDetail = (
 
 export const fetchImportedRepositoryList = (): AppThunk<
   void,
-  RepositoryManagementActionTypes
+  RepositoryActionTypes
 > => async (dispatch, getState) => {
   dispatch({ type: "FETCH_IMPORTED_REPOSITORY_LIST" });
   try {
@@ -114,7 +138,7 @@ export const fetchImportedRepositoryList = (): AppThunk<
 
 export const fetchAllRepositoryFromGitHub = (): AppThunk<
   void,
-  RepositoryManagementActionTypes
+  RepositoryActionTypes
 > => async (dispatch, getState) => {
   dispatch({ type: "FETCH_REPOSITORY_FROM_GITHUB" });
   try {
@@ -143,10 +167,7 @@ export const fetchAllRepositoryFromGitHub = (): AppThunk<
 
 export const loadMoreRepository = (
   loadMoreTimes: number
-): AppThunk<void, RepositoryManagementActionTypes> => async (
-  dispatch,
-  getState
-) => {
+): AppThunk<void, RepositoryActionTypes> => async (dispatch, getState) => {
   dispatch({ type: "LOAD_MORE_REPOSITORY" });
   try {
     const {
