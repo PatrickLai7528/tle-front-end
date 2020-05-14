@@ -69,7 +69,10 @@ const LogInForm: FunctionComponent<ILogInFormProps> = memo(
         <Form.Item
           label={t("email")}
           name={"email"}
-          rules={[{ required: true, message: t("email placeholder") }]}
+          rules={[
+            { required: true, message: t("email placeholder") },
+            { type: "email", message: t("require email format") }
+          ]}
         >
           <Input
             placeholder={t("email placeholder")}
