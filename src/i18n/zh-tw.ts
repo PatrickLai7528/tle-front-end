@@ -67,5 +67,10 @@ export const zhtw = {
   "description specialNeeds": "特殊需求",
   operation: "操作",
   delete: "刪除",
-  "confirm delete?": "確認刪除？"
+  "confirm delete?": "確認刪除？",
+  "require email format": "請輸入郵箱",
+  "password format": "需為8至16位, 包含數字,大寫,小寫,符號至少各一個",
+  "confirm password": "確認密碼",
+  "please confirm password": "請確認密碼",
+  "password not the same": "兩次輸入密碼不一致"
 };
