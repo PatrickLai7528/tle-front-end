@@ -5,7 +5,11 @@ import {
   IUpdateImportingRepositoryAction,
   ISendImportedRepositoryFailureAction,
   IIsRepoImprtedSuccessAction,
-  IIsRepoImprtedFailureAction
+  IIsRepoImprtedFailureAction,
+  IFinishCloneBranchesAction,
+  IFinishCloneCommitsAction,
+  IFinishCloneFileStructureAction,
+  IFinishCloneFileContentAction
 } from "./types";
 
 const initialState: IImportRepositoryState = {
@@ -97,26 +101,50 @@ export const importRepositoryReducer = (
           ...newRepo
         }
       };
-    case "FINISH_CLONE_BRANCHES":
+    case "FINISH_CLONE_BRANCHES": {
+      const {
+        payload: { branches }
+      } = action as IFinishCloneBranchesAction;
+      const repo: IImportedRepository = state.importedRepository as IImportedRepository;
       return {
         ...state,
-        importProccess: "BRANCHES"
+        importProccess: "BRANCHES",
+        importedRepository: { ...repo, branches }
       };
-    case "FINISH_CLONE_COMMITS":
+    }
+    case "FINISH_CLONE_COMMITS": {
+      const {
+        payload: { commits }
+      } = action as IFinishCloneCommitsAction;
+      const repo: IImportedRepository = state.importedRepository as IImportedRepository;
       return {
         ...state,
-        importProccess: "COMMITS"
+        importProccess: "COMMITS",
+        importedRepository: { ...repo, commits }
       };
-    case "FINISH_CLONE_FILE_STRUCTURE":
+    }
+    case "FINISH_CLONE_FILE_STRUCTURE": {
+      const {
+        payload: { files }
+      } = action as IFinishCloneFileStructureAction;
+      const repo: IImportedRepository = state.importedRepository as IImportedRepository;
       return {
         ...state,
-        importProccess: "FILE_STUCTURE"
+        importProccess: "FILE_STUCTURE",
+        importedRepository: { ...repo, trees: files }
       };
-    case "FINISH_CLONE_FILE_CONTENT":
+    }
+    case "FINISH_CLONE_FILE_CONTENT": {
+      const {
+        payload: { map }
+      } = action as IFinishCloneFileContentAction;
+      const repo: IImportedRepository = state.importedRepository as IImportedRepository;
       return {
         ...state,
-        importProccess: "FILE_CONTENT"
+        importProccess: "FILE_CONTENT",
+        importedRepository: { ...repo, shaFileContentMap: map }
       };
+    }
     default:
       return { ...state };
   }

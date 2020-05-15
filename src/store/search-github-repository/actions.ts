@@ -1,4 +1,4 @@
-import { gitHubAuthConfigs } from "../../configs/github-auth.config";
+import { getGitHubServiceUrl } from "./../../configs/get-url";
 import {
   SearchRepositoryActionTypes,
   SEARCH_GITHUB_REPOSITORY,
@@ -18,14 +18,11 @@ export const searchGitHubRepository = (
     const {
       authReducer: { gitHubAccessToken, ghProfile }
     } = getState();
-    console.log(gitHubAccessToken);
-    console.log(ghProfile?.login);
     if (gitHubAccessToken && ghProfile?.login) {
-      const queryString = `?q=${searchFor}+user:${ghProfile.login}`;
-      const res = await fetch(`${gitHubAuthConfigs.search}${queryString}`, {
+      const queryString = `?q=${searchFor}&ghId=${ghProfile.login}&token=${gitHubAccessToken}`;
+      const res = await fetch(`${getGitHubServiceUrl()}/search${queryString}`, {
         headers: {
-          accept: "application/json",
-          Authorization: `token ${gitHubAccessToken}`
+          accept: "application/json"
         }
       }).then(res => res.json());
       dispatch({
