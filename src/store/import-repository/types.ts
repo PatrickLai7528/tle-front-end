@@ -101,7 +101,7 @@ export interface IUpdateImportingRepositoryAction {
 
 export interface IFinishCloneBranchesAction {
   type: typeof FINISH_CLONE_BRANCES;
-  payload: { branches: IBranch[]; otherCommitUrls: string[] };
+  payload: { branches: IBranch[] };
 }
 
 export interface IFinishCloneCommitsAction {
@@ -111,12 +111,12 @@ export interface IFinishCloneCommitsAction {
 
 export interface IFinishCloneFileStructureAction {
   type: typeof FINISH_CLONE_FILE_STRUCTURE;
-  payload: { files: IFileTreeNode[]; shaNodes: { sha: string; url: string }[] };
+  payload: { files: IFileTreeNode[] };
 }
 
 export interface IFinishCloneFileContentAction {
   type: typeof FINISH_CLONE_FILE_CONTENT;
-  payload: ShaFileContentMap;
+  payload: { map: ShaFileContentMap };
 }
 
 export type ImportRepositoryAcitons =

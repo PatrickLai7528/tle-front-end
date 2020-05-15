@@ -1,4 +1,4 @@
-import { getServerUrl } from "../../configs/get-url";
+import { getServerUrl, getGitHubServiceUrl } from "../../configs/get-url";
 import { gitHubAuthConfigs } from "../../configs/github-auth.config";
 import { AppThunk } from "../store";
 import {
@@ -145,17 +145,12 @@ export const fetchAllRepositoryFromGitHub = (): AppThunk<
     const {
       authReducer: { gitHubAccessToken }
     } = getState();
-    const res = await fetch(
-      `${
-        gitHubAuthConfigs.fetch_repository
-      }?page=${1}&per_page=10&sort=updated`,
-      {
-        headers: {
-          accept: "application/json",
-          Authorization: `token ${gitHubAccessToken}`
-        }
+    const url = `${getGitHubServiceUrl()}/repos?token=${gitHubAccessToken}`;
+    const res = await fetch(url, {
+      headers: {
+        accept: "application/json"
       }
-    ).then(res => res.json());
+    }).then(res => res.json());
     dispatch({ type: "FETCH_REPOSITORY_FROM_GITHUB_SUCCESS", payload: res });
   } catch (e) {
     if (process.env.NODE_ENV === "development") {

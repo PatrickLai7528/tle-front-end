@@ -115,6 +115,7 @@ const RegistryForm: FunctionComponent<IRegistryFormProps> = memo(
                   if (password !== value) {
                     reject(t("password not the same"));
                   }
+                  resolve();
                 });
               }
             }

@@ -26,7 +26,7 @@ import {
   UPDATE_IMPORTING_REPOSITORY,
   IStopImportAction
 } from "./types";
-
+import io from "socket.io-client";
 export const stopImport = (): IStopImportAction => ({ type: "STOP_IMPORT" });
 
 export const isRepoImported = (
@@ -105,60 +105,53 @@ export const startImportRepository = (
   dispatch,
   getState
 ) => {
-  dispatch({ type: START_IMPORT_REPOSITORY });
-  try {
-    let importedRepo: Partial<IImportedRepository> = {
-      name: importThis.name,
-      currentBranch: importThis.default_branch,
-      ownerId: importThis.owner.login,
-      language: importThis.language as ProgramLanguage,
-      description: importThis.description
-    };
-    dispatch(updateImportingRepository(importedRepo));
+  const {
+    authReducer: { gitHubAccessToken }
+  } = getState();
 
-    if (getState().importRepositoryReducer.stop) return;
+  if (!gitHubAccessToken) throw new Error("no token");
 
-    const branches: IBranch[] = await dispatch(cloneBranches(importThis));
-    importedRepo = { ...importedRepo, branches: [...branches] };
-    dispatch(updateImportingRepository(importedRepo));
+  let importedRepo: Partial<IImportedRepository> = {
+    name: importThis.name,
+    currentBranch: importThis.default_branch,
+    ownerId: importThis.owner.login,
+    language: importThis.language as ProgramLanguage,
+    description: importThis.description
+  };
 
-    if (getState().importRepositoryReducer.stop) return;
+  dispatch(updateImportingRepository(importedRepo));
+  const socket = io.connect("http://localhost:3002");
+  socket.emit("startImport", importThis, gitHubAccessToken);
 
-    const commits: ICommit[] = await dispatch(cloneCommits(importThis));
-    importedRepo = { ...importedRepo, commits: [...commits] };
-    dispatch(updateImportingRepository(importedRepo));
+  socket.on("importBranchDone", (branches: IBranch[]) => {
+    dispatch({
+      type: "FINISH_CLONE_BRANCHES",
+      payload: { branches }
+    });
+  });
 
-    if (getState().importRepositoryReducer.stop) return;
+  socket.on("importCommitDone", (commits: ICommit[]) => {
+    dispatch({
+      type: "FINISH_CLONE_COMMITS",
+      payload: { commits }
+    });
+  });
 
-    const { trees, blobs } = await dispatch(
-      cloneFileStructure(importThis, branches)
-    );
-    importedRepo = { ...importedRepo, trees: [...trees] };
-    dispatch(updateImportingRepository(importedRepo));
+  socket.on("importFileStructureDone", (trees: IFileTreeNode[]) => {
+    dispatch({
+      type: "FINISH_CLONE_FILE_STRUCTURE",
+      payload: { files: trees }
+    });
+  });
 
-    if (getState().importRepositoryReducer.stop) return;
+  socket.on("importFileContentDone", (shaFileContentMap: ShaFileContentMap) => {
+    dispatch({
+      type: "FINISH_CLONE_FILE_CONTENT",
+      payload: { map: shaFileContentMap }
+    });
+  });
 
-    const shaFileContentMap: ShaFileContentMap = await dispatch(
-      cloneFileContent(importThis, blobs)
-    );
-    importedRepo = {
-      ...importedRepo,
-      shaFileContentMap: { ...shaFileContentMap }
-    };
-    dispatch(updateImportingRepository(importedRepo));
-
-    const action: IImportRepositorySuccessAction = {
-      type: "IMPORT_REPOSITORY_SUCCESS",
-      payload: importedRepo as IImportedRepository
-    };
-
-    dispatch(action);
-  } catch (e) {
-    if (process.env.NODE_ENV !== "production") {
-      console.log(e);
-    }
-    dispatch({ type: IMPORT_REPOSITORY_FAILURE });
-  }
+  socket.on("allDone", () => dispatch({ type: "IMPORT_REPOSITORY_SUCCESS" }));
 };
 
 export const cloneBranches = (
