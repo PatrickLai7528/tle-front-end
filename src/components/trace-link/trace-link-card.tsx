@@ -118,7 +118,7 @@ const TraceLinkCard: FunctionComponent<ITraceLinkCardProps> = memo(
               }
             >
               <List.Item.Meta
-                description={`#${link.implement._id}`}
+                description={link.implement._id ? `#${link.implement._id}` : ""}
                 title={link.implement.fullyQualifiedName}
               />
             </List.Item>

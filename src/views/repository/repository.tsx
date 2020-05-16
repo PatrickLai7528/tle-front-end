@@ -73,14 +73,16 @@ const Repository: FunctionComponent<IRepositoryProps> = memo(
           breadcrumb={{ routes }}
           ghost={false}
           title={t("repository management")}
-          extra={[
-            <Button key="reload" onClick={fetchAllRepositories}>
-              {t("reload")}
-            </Button>,
-            <Button key={"loadMore"} onClick={onLoadMore} type={"primary"}>
-              {t("load more")}
-            </Button>
-          ]}
+          extra={
+            [
+              // <Button key="reload" onClick={fetchAllRepositories}>
+              //   {t("reload")}
+              // </Button>,
+              // <Button key={"loadMore"} onClick={onLoadMore} type={"primary"}>
+              //   {t("load more")}
+              // </Button>
+            ]
+          }
         >
           <Row gutter={[16, 16]}>
             <Col md={{ span: 6 }} sm={{ span: 24 }}>

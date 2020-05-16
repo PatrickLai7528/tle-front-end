@@ -11,6 +11,6 @@ export const getGitHubLogInUrl = () =>
 
 export const getGitHubServiceUrl = () => {
   if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3002";
+    return "http://47.240.63.98";
   }
 };

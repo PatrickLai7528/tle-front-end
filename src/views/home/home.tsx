@@ -98,7 +98,7 @@ const Home: FunctionComponent<INewHomeProps> = memo((props: INewHomeProps) => {
                   type={"primary"}
                   onClick={toggle}
                 >
-                  {t("start using")}
+                  {"馬上登錄"}
                 </Button>
               </div>
             </Col>

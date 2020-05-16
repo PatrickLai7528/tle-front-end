@@ -1,6 +1,6 @@
 import { IFileTreeNode } from "../types";
 
-const flatten = (nodes: IFileTreeNode[]): IFileTreeNode[] => {
+export const flatten = (nodes: IFileTreeNode[]): IFileTreeNode[] => {
   const res: IFileTreeNode[] = [];
   const traverse = (node: IFileTreeNode) => {
     if (node.type === "FILE") {

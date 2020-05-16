@@ -37,8 +37,6 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
 
     useEffect(() => setTraceLinkMatrix(props.traceLinkMatrix), [props]);
 
-    console.log(traceLinkMatrix);
-
     const requirementLinkMap = useMemo(
       () => classifyTraceLinksByRequirement(traceLinkMatrix?.links || []),
       [traceLinkMatrix]

@@ -112,7 +112,6 @@ const RepositoryCard: FunctionComponent<IRepositoryCardProps> = memo(
             {t("delete")}
           </Button>
         </Popconfirm>
-        <Progress percent={50} showInfo={false} />
       </Card>
     );
   }
