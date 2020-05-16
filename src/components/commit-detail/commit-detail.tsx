@@ -1,5 +1,7 @@
 import { CaretRightOutlined } from "@ant-design/icons";
 import {
+  Button,
+  Card,
   Col,
   Collapse,
   Divider,
@@ -7,22 +9,29 @@ import {
   Row,
   Skeleton,
   Statistic,
-  Typography
+  Tooltip,
+  Typography,
+  Modal
 } from "antd";
 import React, {
   FunctionComponent,
   memo,
   useEffect,
   useMemo,
-  useRef
+  useRef,
+  useState
 } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { ICommitRelatedTraceLinks } from "../../store/trace-link/types";
-import { ICommit } from "../../types";
+import { ICommit, IRequirementDescription } from "../../types";
 import { CommitChangeInfo } from "../commit-change-info";
 import { HighlightCode } from "../highlight-code";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
+import { AddTraceLink } from "../add-trace-link";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/reducers";
+import { flatten } from "../../utils/trees";
 
 export interface IStateProps {
   traceLinks: ICommitRelatedTraceLinks;
@@ -75,6 +84,20 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       [changedFiles]
     );
 
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+
+    const fullyQualifiedNames: string[] = useSelector<RootState, string[]>(
+      state =>
+        flatten(
+          state.repositoryReducer.importedRepositoryDetail?.trees || []
+        ).map(node => node.fullyQualifiedName)
+    );
+
+    const descriptions: IRequirementDescription[] = useSelector<
+      RootState,
+      IRequirementDescription[]
+    >(state => state.requirementReducer.requirement?.descriptions || []);
+
     useEffect(() => {
       const doFetch = async () => {
         try {
@@ -91,6 +114,16 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
 
     return (
       <div className={styles.commitDetail} ref={ref}>
+        <Modal
+          closable={false}
+          visible={modalVisible}
+          onCancel={() => setModalVisible(false)}
+        >
+          <AddTraceLink
+            fullyQualifiedNames={fullyQualifiedNames}
+            descriptions={descriptions}
+          />
+        </Modal>
         <Typography.Title level={3}>代碼統計</Typography.Title>
         <Row gutter={[16, 16]}>
           <Col span={8}>
@@ -139,7 +172,29 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
           </Col>
         </Row>
         <Divider />
-        <Typography.Title level={3}>關聯的需求</Typography.Title>
+        <Typography.Title level={3}>影響的追踪線索</Typography.Title>
+        <Card>
+          <Card.Meta
+            title="操作"
+            description={
+              <>
+                <Tooltip title="變更需要確認後才會生效">
+                  <Button type="primary" size="small">
+                    確認變更
+                  </Button>
+                </Tooltip>
+                <Button
+                  type="primary"
+                  size="small"
+                  onClick={() => setModalVisible(true)}
+                  style={{ marginLeft: "8px" }}
+                >
+                  增加追踪線索
+                </Button>
+              </>
+            }
+          ></Card.Meta>
+        </Card>
         <div>
           {fetchTraceLinkLoading ? (
             <Skeleton
@@ -153,6 +208,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
               {traceLinks.added.traceLinks.map(link => (
                 <SimpleTraceLinkCard
                   key={link._id}
+                  showOperation
                   traceLink={link}
                   type={"ADDED"}
                 />
@@ -160,6 +216,7 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
               {traceLinks.removed.traceLinks.map(link => (
                 <SimpleTraceLinkCard
                   key={link._id}
+                  showOperation
                   traceLink={link}
                   type={"REMOVED"}
                 />

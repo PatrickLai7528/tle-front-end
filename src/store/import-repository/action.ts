@@ -98,6 +98,8 @@ export const startImportRepository = (
 
   if (!gitHubAccessToken) throw new Error("no token");
 
+  dispatch({ type: "START_IMPORT_REPOSITORY" });
+
   let importedRepo: Partial<IImportedRepository> = {
     name: importThis.name,
     currentBranch: importThis.default_branch,

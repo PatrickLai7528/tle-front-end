@@ -40,9 +40,9 @@ const BasicInfoDescriptions: FunctionComponent<IBasicInfoDescriptionsProps> = me
       // ) : (
       //   <span>無描述</span>
       // )}
-      if (importDone && !description) {
+      if (description === null) {
         return <span>無描述</span>;
-      } else if (importDone && description) {
+      } else if (description) {
         return <RepositoryDescription description={description} />;
       } else {
         return <Skeleton.Input active />;

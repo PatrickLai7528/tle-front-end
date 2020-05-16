@@ -233,7 +233,7 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
             type="card"
             className={styles.content}
           >
-            <Tabs.TabPane tab="圖" key="GRAPH">
+            <Tabs.TabPane tab="概要" key="GRAPH">
               <AllGraph />
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
