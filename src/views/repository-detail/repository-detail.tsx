@@ -9,10 +9,10 @@ import React, {
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
 import { RouteComponentProps } from "react-router-dom";
-import { ImplementStatisticBarChart } from "../../components/graph/implement-statistic-bar-chart";
+
 import { RepositoryFiles } from "../../components/repository-files";
+import { RepositoryOutline } from "../../components/repository-outline";
 import { AddRequirementModal } from "../../components/requirement/add-requirement-modal";
-import { TraceLinkGraph } from "../../components/trace-link-graph";
 import { TraceLinkTable } from "../../components/trace-link/trace-link-table";
 import { RouteConstants } from "../../routes/constants";
 import {
@@ -22,13 +22,10 @@ import {
   IRequirement,
   IRequirementDescription
 } from "../../types";
-import { findNodeByName } from "../../utils/trees";
 import CommitCard from "./commit/commit-card";
 import { DrawerContent } from "./drawer-content";
 import RepoDetailDescription from "./repo-detail-description";
 import RequirementCard from "./requirement/requirement-card";
-import { RequirementStatisticBarChart } from "./../../components/graph/requirement-statistic-bar-chart";
-import { AllGraph } from "../../components/graph/all-graph";
 
 export interface IStateProps {
   repo?: IImportedRepository;
@@ -229,12 +226,12 @@ const RepositoryDetail: FunctionComponent<IRepositoryDetailProps> = memo(
           }}
         >
           <Tabs
-            defaultActiveKey={"GRAPH"}
+            defaultActiveKey={"OUTLINE"}
             type="card"
             className={styles.content}
           >
-            <Tabs.TabPane tab="概要" key="GRAPH">
-              <AllGraph />
+            <Tabs.TabPane tab="概要" key="OUTLINE">
+              <RepositoryOutline />
             </Tabs.TabPane>
             <Tabs.TabPane tab={t("trace link")} key="TRACE_LINK">
               {/* <CodeCouplingChart /> */}
