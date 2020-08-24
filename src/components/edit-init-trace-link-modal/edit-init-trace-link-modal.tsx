@@ -7,7 +7,10 @@ import React, {
   useState
 } from "react";
 import { ITraceLink, ITraceLinkMatrix } from "../../types";
-import { classifyTraceLinksByRequirement } from "../../utils/trace-links";
+import {
+  classifyTraceLinksByRequirement,
+  classifyTraceLinksByRequirementName
+} from "../../utils/trace-links";
 import TraceLinkCard from "../trace-link/trace-link-card";
 export interface IStateProps {
   visible: boolean;
@@ -38,7 +41,7 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
     useEffect(() => setTraceLinkMatrix(props.traceLinkMatrix), [props]);
 
     const requirementLinkMap = useMemo(
-      () => classifyTraceLinksByRequirement(traceLinkMatrix?.links || []),
+      () => classifyTraceLinksByRequirementName(traceLinkMatrix?.links || []),
       [traceLinkMatrix]
     );
 
@@ -84,12 +87,11 @@ const EditInitTraceLinkModal: FunctionComponent<IEditInitTraceLinkModalProps> = 
         {!!traceLinkMatrix && requirementLinkMap ? (
           Object.keys(requirementLinkMap || {})
             .sort()
-            .map(requirementId => {
-              const traceLinks: ITraceLink[] =
-                requirementLinkMap[requirementId];
+            .map(name => {
+              const traceLinks: ITraceLink[] = requirementLinkMap[name];
               return (
                 <TraceLinkCard
-                  key={requirementId}
+                  key={name}
                   editable={true}
                   onAddLink={handleAddLink}
                   onDeleteLink={handleDeleteLink}

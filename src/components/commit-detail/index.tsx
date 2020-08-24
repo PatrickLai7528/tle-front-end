@@ -1,13 +1,19 @@
 import { connect, MapDispatchToProps, MapStateToProps } from "react-redux";
 import { RootState } from "../../store/reducers";
 import { AppDispatch } from "../../store/store";
-import { fetchCommitRelatedTraceLinks } from "../../store/trace-link/actions";
+import {
+  fetchCommitRelatedTraceLinks,
+  confirmCommitTraceLinkChange,
+  addCommitRelatedTraceLink,
+  removeCommitRelatedTraceLink
+} from "../../store/trace-link/actions";
 import { TraceLinkActions } from "../../store/trace-link/types";
-import { ICommit } from "../../types";
+import { ICommit, ITraceLink } from "../../types";
 import CommitDetail, {
   IDispatchProps,
   IOwnProps,
-  IStateProps
+  IStateProps,
+  NewCommitTraceLink
 } from "./commit-detail";
 
 const mapStateToProps: MapStateToProps<
@@ -30,7 +36,12 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, IOwnProps> = (
 ) => {
   return {
     fetchCommitRelatedTraceLinks: (repoName: string, commit: ICommit) =>
-      dispatch(fetchCommitRelatedTraceLinks(repoName, commit))
+      dispatch(fetchCommitRelatedTraceLinks(repoName, commit)),
+    confirm: (changes: any) => dispatch(confirmCommitTraceLinkChange(changes)),
+    addCommitRelatedTraceLink: (newLink: NewCommitTraceLink) =>
+      dispatch(addCommitRelatedTraceLink(newLink)),
+    removeCommitRelatedTraceLink: (link: ITraceLink) =>
+      dispatch(removeCommitRelatedTraceLink(link))
   };
 };
 

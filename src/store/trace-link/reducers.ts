@@ -38,6 +38,7 @@ const initialState: ITraceLinkState = {
   initTraceLinkEditModalVisible: false,
   initTraceLinkConfirmed: false,
   commitRelatedTraceLinks: {
+    confirmed: false,
     added: { traceLinks: [] },
     removed: { traceLinks: [] }
   },
@@ -53,6 +54,58 @@ export const traceLinkReducer = (
   action: TraceLinkActions
 ): ITraceLinkState => {
   switch (action.type) {
+    case "REMOVE_COMMIT_RELATED_TRACE_LINK": {
+      let { commitRelatedTraceLinks } = state;
+
+      commitRelatedTraceLinks.added.traceLinks = commitRelatedTraceLinks.added.traceLinks.filter(
+        link => link._id !== action.payload._id
+      );
+      commitRelatedTraceLinks.removed.traceLinks = commitRelatedTraceLinks.removed.traceLinks.filter(
+        link => link._id !== action.payload._id
+      );
+      return {
+        ...state,
+        commitRelatedTraceLinks: { ...commitRelatedTraceLinks }
+      };
+    }
+    case "ADD_COMMIT_RELATED_TRACE_LINK": {
+      let { commitRelatedTraceLinks } = state;
+      if (action.payload.type === "added") {
+        commitRelatedTraceLinks.added.traceLinks.push({
+          requirementDescription: action.payload.description,
+          implement: { fullyQualifiedName: action.payload.implement } as any
+        } as any);
+      } else if (action.payload.type === "removed") {
+        commitRelatedTraceLinks.removed.traceLinks.push({
+          requirementDescription: action.payload.description,
+          implement: { fullyQualifiedName: action.payload.implement } as any
+        } as any);
+      }
+      return {
+        ...state,
+        commitRelatedTraceLinks: { ...commitRelatedTraceLinks }
+      };
+    }
+    case "CONFIRM_COMMIT_TRACE_LINK_CHANGE": {
+      return {
+        ...state,
+        loading: true
+      };
+    }
+    case "CONFIRM_COMMIT_TRACE_LINK_CHANGE_SUCCESS": {
+      return {
+        ...state,
+        loading: false,
+        commitRelatedTraceLinks: action.payload
+      };
+    }
+    case "CONFIRM_COMMIT_TRACE_LINK_CHANGE_FAILURE": {
+      return {
+        ...state,
+        loading: false,
+        error: action.meta
+      };
+    }
     case "DELETE_TRACE_LINK":
       return {
         ...state,

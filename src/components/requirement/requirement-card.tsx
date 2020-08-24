@@ -40,7 +40,7 @@ const didDescriptionChange = (
   b: IRequirementDescription
 ): boolean => {
   return (Object.keys(a) as (keyof IRequirementDescription)[]).some(key => {
-    console.log({ a: a[key], b: b[key] }, a[key] !== b[key]);
+    // console.log({ a: a[key], b: b[key] }, a[key] !== b[key]);
 
     return a[key] !== b[key];
   });

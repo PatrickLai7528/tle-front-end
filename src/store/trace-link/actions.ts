@@ -1,3 +1,5 @@
+import { NewCommitTraceLink } from "./../../components/commit-detail/commit-detail";
+import { message } from "antd";
 import { getServerUrl } from "../../configs/get-url";
 import {
   ICommit,
@@ -29,8 +31,65 @@ import {
   TOGGLE_INIT_TRACE_LINK_EDIT_MODAL,
   TraceLinkActions,
   TraceLinkActionTypes,
-  UPDATE_INIT_TRACE_LINK
+  UPDATE_INIT_TRACE_LINK,
+  IAddCommitRelatedTraceLinkAction,
+  IRemoveCommitRelatedTraceLinkAction
 } from "./types";
+
+export const addCommitRelatedTraceLink = (
+  newLink: NewCommitTraceLink
+): IAddCommitRelatedTraceLinkAction => ({
+  type: "ADD_COMMIT_RELATED_TRACE_LINK",
+  payload: newLink
+});
+
+export const removeCommitRelatedTraceLink = (
+  link: ITraceLink
+): IRemoveCommitRelatedTraceLinkAction => ({
+  type: "REMOVE_COMMIT_RELATED_TRACE_LINK",
+  payload: link
+});
+
+export const confirmCommitTraceLinkChange = (
+  changes: any
+): AppThunk<void, TraceLinkActionTypes> => async (dispatch, getState) => {
+  dispatch({ type: "CONFIRM_COMMIT_TRACE_LINK_CHANGE" });
+  try {
+    const {
+      authReducer: { token }
+    } = getState();
+    if (!token) throw new Error("no token");
+    const url = `${getServerUrl()}/api/tracelink/commit/confirm`;
+    const options: RequestInit = {
+      method: "PUT",
+      credentials: "include",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ changes })
+    };
+    const res = await fetch(url, options).then(res => res.json());
+    if (res && res.success) {
+      message.success("變更已確認");
+      dispatch({
+        type: "CONFIRM_COMMIT_TRACE_LINK_CHANGE_SUCCESS",
+        payload: res.payload
+      });
+    } else {
+      dispatch({
+        type: "CONFIRM_COMMIT_TRACE_LINK_CHANGE_FAILURE",
+        meta: res.meta
+      });
+    }
+  } catch (e) {
+    if (process.env.NODE_ENV !== "production") {
+      console.log(e);
+    }
+    dispatch({ type: "CONFIRM_COMMIT_TRACE_LINK_CHANGE_SUCCESS", meta: e });
+  }
+};
 
 export const deleteTraceLink = (
   matrixId: string,

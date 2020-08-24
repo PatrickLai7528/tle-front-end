@@ -1,6 +1,7 @@
-import { Spin, Empty } from "antd";
-import React, { FunctionComponent, memo, useEffect } from "react";
+import { Empty, Spin } from "antd";
+import React, { FunctionComponent, memo, useEffect, useState } from "react";
 import { createUseStyles } from "react-jss";
+
 import { IImportedRepository } from "../../types";
 import { RepositoryCard } from "../repository-card";
 
@@ -44,6 +45,8 @@ const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
   (props: IImportedRepositoryProps) => {
     const { loading, fetchImportedRepositoryList, repositoryList } = props;
     const styles = useStyles();
+    // const [keyword, setKeyword] = useState("");
+
     useEffect(() => {
       fetchImportedRepositoryList();
     }, [fetchImportedRepositoryList]);
@@ -51,6 +54,7 @@ const ImportedRepository: FunctionComponent<IImportedRepositoryProps> = memo(
     return (
       <Spin spinning={loading}>
         <div className={styles.importedRepository}>
+          {/* <Search style={{ marginBottom: "16px" }} /> */}
           <div className={styles.repoCardList}>
             {repositoryList && repositoryList.length !== 0 ? (
               repositoryList.map(repo => {

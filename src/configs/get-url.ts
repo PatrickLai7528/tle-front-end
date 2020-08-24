@@ -10,7 +10,7 @@ export const getGitHubLogInUrl = () =>
   `${gitHubAuthConfigs.authorize_uri}?client_id=${gitHubAuthConfigs.client_id}&redirect_uri=${gitHubAuthConfigs.redirect_uri}`;
 
 export const getGitHubServiceUrl = () => {
-  if (process.env.NODE_ENV === "development") {
-    return "http://47.240.63.98";
-  }
+  // if (process.env.NODE_ENV === "development") {
+  return "http://47.240.63.98";
+  // }
 };

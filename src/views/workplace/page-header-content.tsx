@@ -70,9 +70,9 @@ const PageHeaderContent: FunctionComponent<IPageHeaderContentProps> = (
           {userBio}
         </Typography.Paragraph>
       </Typography>
-      <div className={styles.statisticArea}>
+      {/* <div className={styles.statisticArea}>
         <TracingStatistic repository={123} requirement={312} traceLink={165} />
-      </div>
+      </div> */}
     </>
   );
 };
