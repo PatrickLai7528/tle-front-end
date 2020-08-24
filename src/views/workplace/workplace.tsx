@@ -82,21 +82,21 @@ const Workplace: FunctionComponent<IWorkplaceProps> = memo(
           </div>
         </PageHeader>
         <Row className={styles.homeContent} gutter={[16, 16]}>
-          <Col lg={18} md={24} style={{ width: "100%" }}>
-            <Row style={{ width: "100%" }}>
-              <Col span={24}>
-                <ConnectedRecentRepoList style={{ marginBottom: "16px" }} />
-                <ConnectedUserActivity />
-              </Col>
-            </Row>
-          </Col>
-          <Col lg={{ span: 6 }} md={{ span: 24 }}>
-            <Row style={{ width: "100%" }}>
-              <Col span={24}>
-                <QuickAction actions={actionShortCuts} />
-              </Col>
-            </Row>
-          </Col>
+          {/* <Col lg={18} md={24} style={{ width: "100%" }}> */}
+          <Row style={{ width: "100%" }}>
+            <Col span={24}>
+              <ConnectedRecentRepoList style={{ marginBottom: "16px" }} />
+              {/* <ConnectedUserActivity /> */}
+            </Col>
+          </Row>
+          {/* </Col> */}
+          {/* <Col lg={{ span: 6 }} md={{ span: 24 }}>
+						<Row style={{ width: "100%" }}>
+							<Col span={24}>
+								<QuickAction actions={actionShortCuts} />
+							</Col>
+						</Row>
+					</Col> */}
         </Row>
       </>
     );

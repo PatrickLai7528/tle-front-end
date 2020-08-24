@@ -2,7 +2,7 @@ import io from "socket.io-client";
 import { IBranch, ICommit, IFileTreeNode } from "../../types";
 import { ProgramLanguage } from "../../utils/language-color";
 import { AppThunk } from "../store";
-import { getServerUrl } from "./../../configs/get-url";
+import { getServerUrl, getGitHubServiceUrl } from "./../../configs/get-url";
 import { IGHRepositoryRes } from "./../../types/github-api/repository";
 import { IImportedRepository, ShaFileContentMap } from "./../../types/index";
 import {
@@ -109,7 +109,8 @@ export const startImportRepository = (
   };
 
   dispatch(updateImportingRepository(importedRepo));
-  const socket = io.connect("http://localhost:3002");
+  // const socket = io.connect("http://localhost:3002");
+  const socket = io.connect(getGitHubServiceUrl());
   socket.emit("startImport", importThis, gitHubAccessToken);
 
   socket.on("importBranchDone", (branches: IBranch[]) => {

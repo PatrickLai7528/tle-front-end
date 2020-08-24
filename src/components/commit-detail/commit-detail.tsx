@@ -6,12 +6,13 @@ import {
   Collapse,
   Divider,
   Empty,
+  Modal,
   Row,
   Skeleton,
   Statistic,
   Tooltip,
   Typography,
-  Modal
+  message
 } from "antd";
 import React, {
   FunctionComponent,
@@ -23,15 +24,16 @@ import React, {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { createUseStyles } from "react-jss";
+import { useSelector } from "react-redux";
+
+import { RootState } from "../../store/reducers";
 import { ICommitRelatedTraceLinks } from "../../store/trace-link/types";
-import { ICommit, IRequirementDescription } from "../../types";
+import { ICommit, IRequirementDescription, ITraceLink } from "../../types";
+import { flatten } from "../../utils/trees";
+import { AddTraceLink } from "../add-trace-link";
 import { CommitChangeInfo } from "../commit-change-info";
 import { HighlightCode } from "../highlight-code";
 import { SimpleTraceLinkCard } from "../simple-trace-link-card";
-import { AddTraceLink } from "../add-trace-link";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/reducers";
-import { flatten } from "../../utils/trees";
 
 export interface IStateProps {
   traceLinks: ICommitRelatedTraceLinks;
@@ -40,6 +42,9 @@ export interface IStateProps {
 
 export interface IDispatchProps {
   fetchCommitRelatedTraceLinks: (repoName: string, commit: ICommit) => void;
+  confirm: (changes: any) => void;
+  addCommitRelatedTraceLink: (newLink: NewCommitTraceLink) => void;
+  removeCommitRelatedTraceLink: (link: ITraceLink) => void;
 }
 
 export interface IOwnProps {
@@ -65,6 +70,17 @@ const useStyles = createUseStyles({
   }
 });
 
+export type NewCommitTraceLink = {
+  type: "added" | "removed";
+  description: IRequirementDescription;
+  implement: string;
+};
+
+export type RemoveCommitTraceLink = {
+  type: "added" | "removed";
+  link: ITraceLink;
+};
+
 const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
   (props: ICommitDetailProps) => {
     const styles = useStyles();
@@ -74,7 +90,10 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       traceLinks,
       fetchCommitRelatedTraceLinks,
       fetchTraceLinkLoading,
-      repoName
+      repoName,
+      addCommitRelatedTraceLink,
+      removeCommitRelatedTraceLink,
+      confirm
     } = props;
     const { changedFiles, stats } = commit;
     const { t } = useTranslation();
@@ -83,8 +102,6 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       () => (changedFiles || []).map(changes => changes.sha),
       [changedFiles]
     );
-
-    const [modalVisible, setModalVisible] = useState<boolean>(false);
 
     const fullyQualifiedNames: string[] = useSelector<RootState, string[]>(
       state =>
@@ -97,6 +114,13 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
       RootState,
       IRequirementDescription[]
     >(state => state.requirementReducer.requirement?.descriptions || []);
+
+    const [modalVisible, setModalVisible] = useState<boolean>(false);
+    const [newTraceLink, setNewTraceLink] = useState<NewCommitTraceLink>({
+      type: "added",
+      description: descriptions[0],
+      implement: fullyQualifiedNames[0]
+    });
 
     useEffect(() => {
       const doFetch = async () => {
@@ -117,9 +141,19 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
         <Modal
           closable={false}
           visible={modalVisible}
+          onOk={() => {
+            console.log(newTraceLink);
+            addCommitRelatedTraceLink(newTraceLink);
+            message.success("添加成功");
+            setModalVisible(false);
+          }}
           onCancel={() => setModalVisible(false)}
         >
           <AddTraceLink
+            value={newTraceLink}
+            onChange={value => {
+              setNewTraceLink(value);
+            }}
             fullyQualifiedNames={fullyQualifiedNames}
             descriptions={descriptions}
           />
@@ -179,13 +213,19 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
             description={
               <>
                 <Tooltip title="變更需要確認後才會生效">
-                  <Button type="primary" size="small">
+                  <Button
+                    type="primary"
+                    disabled={traceLinks.confirmed}
+                    size="small"
+                    onClick={() => confirm(traceLinks)}
+                  >
                     確認變更
                   </Button>
                 </Tooltip>
                 <Button
                   type="primary"
                   size="small"
+                  disabled={traceLinks.confirmed}
                   onClick={() => setModalVisible(true)}
                   style={{ marginLeft: "8px" }}
                 >
@@ -209,6 +249,10 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
                 <SimpleTraceLinkCard
                   key={link._id}
                   showOperation
+                  onDelete={link => {
+                    message.success("刪除成功");
+                    removeCommitRelatedTraceLink(link);
+                  }}
                   traceLink={link}
                   type={"ADDED"}
                 />
@@ -217,6 +261,10 @@ const CommitDetail: FunctionComponent<ICommitDetailProps> = memo(
                 <SimpleTraceLinkCard
                   key={link._id}
                   showOperation
+                  onDelete={link => {
+                    message.success("刪除成功");
+                    removeCommitRelatedTraceLink(link);
+                  }}
                   traceLink={link}
                   type={"REMOVED"}
                 />

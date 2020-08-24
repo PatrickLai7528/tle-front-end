@@ -4,6 +4,28 @@ export type TraceLinkClassifiedByRequirement = {
   [key: string]: ITraceLink[];
 };
 
+export const classifyTraceLinksByRequirementName = (
+  traceLinks: ITraceLink[]
+): TraceLinkClassifiedByRequirement | null => {
+  let res: Partial<TraceLinkClassifiedByRequirement> = {};
+  for (const link of traceLinks) {
+    const { requirementDescription } = link;
+    if (requirementDescription) {
+      const { name } = requirementDescription;
+      if (!res[name]) {
+        res[name] = [{ ...link }];
+      } else {
+        res[name]?.push({
+          ...link
+        });
+      }
+    }
+  }
+  return !!Object.keys(res).length
+    ? (res as TraceLinkClassifiedByRequirement)
+    : null;
+};
+
 export const classifyTraceLinksByRequirement = (
   traceLinks: ITraceLink[]
 ): TraceLinkClassifiedByRequirement | null => {

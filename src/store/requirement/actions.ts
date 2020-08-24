@@ -1,3 +1,4 @@
+import { message } from "antd";
 import { IRequirement, IRequirementDescription } from "./../../types/index";
 import { ThunkDispatch } from "redux-thunk";
 import { RootState } from "./../reducers";
@@ -80,6 +81,7 @@ export const updateDescription = (
       options
     ).then(res => res.json());
     if (res && res.success) {
+      message.success("更新需求描述成功");
       dispatch({ type: "UPDATE_DESCRIPTION_SUCCESS", payload: res.payload });
     } else {
       dispatch({ type: "UPDATE_DESCRIPTION_FAILURE", meta: res.meta });

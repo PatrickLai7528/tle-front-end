@@ -1,4 +1,13 @@
 import { ProgramLanguage } from "./../utils/language-color";
+export type GraphNode = { id: string | number; name: string; value: number };
+export type GraphLink = {
+  source: string | number;
+  target: string | number;
+  sourceWeight: number;
+  targetWeight: number;
+};
+
+export type GraphData = { links: GraphLink[]; nodes: GraphNode[] };
 
 export interface IStatistic {
   label: string;

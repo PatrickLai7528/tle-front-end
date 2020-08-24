@@ -19,6 +19,7 @@ export interface ISimpleTraceLinkCardProps {
   showOperation?: boolean;
   style?: CSSProperties;
   deleteType?: "FILE" | "REQUIREMENT";
+  onDelete?: (traceLink: ITraceLink) => void;
 }
 
 const bodyStyle = { padding: "8px 12px" };
@@ -70,7 +71,8 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
       type,
       showOperation,
       style,
-      deleteType
+      deleteType,
+      onDelete
     } = props;
     const theme: CustomTheme = useTheme() as CustomTheme;
     const styles = useStyle({ theme });
@@ -93,10 +95,14 @@ const SimpleTraceLinkCard: FunctionComponent<ISimpleTraceLinkCardProps> = memo(
     );
 
     const handleDelete = () => {
-      if (matrixId && traceLink && deleteType)
-        dispatch(
-          deleteTraceLink(matrixId, traceLink as ITraceLink, deleteType)
-        );
+      if (onDelete) {
+        onDelete(traceLink as ITraceLink);
+      } else {
+        if (matrixId && traceLink && deleteType)
+          dispatch(
+            deleteTraceLink(matrixId, traceLink as ITraceLink, deleteType)
+          );
+      }
     };
 
     const cardTitle = useMemo(() => {
